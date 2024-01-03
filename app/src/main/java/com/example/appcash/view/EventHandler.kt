@@ -1,4 +1,5 @@
 package com.example.appcash.view
 
-interface IntentHandler {
+interface EventHandler {
+    fun handle(event: Event)
 }

@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">AppCash</string>
+
+    <!-- General -->
+    <string name="cancel">Отменить</string>
+    <string name="create">Создать</string>
+
+    <!-- FolderListView -->
+    <string name="my_folders">Мои папки</string>
+    <string name="new_folder">Новая папка</string>
+    <string name="folder_name">Название папки</string>
 </resources>

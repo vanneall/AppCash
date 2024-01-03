@@ -1,9 +1,19 @@
 package com.example.appcash.data
 
-import androidx.compose.ui.graphics.Color
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity
 data class Folder(
-    val id: Long,
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Long = 0,
+
+    @ColumnInfo(name = "name")
     val name: String,
-    val color: Color,
+
+    @ColumnInfo(name = "color")
+    val color: Int,
 )
