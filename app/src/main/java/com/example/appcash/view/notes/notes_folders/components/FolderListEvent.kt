@@ -9,7 +9,7 @@ sealed class FolderListEvent : Event {
     ) : FolderListEvent()
 
     data class OpenFolderEvent(
-        val index: Int
+        val folderId: Long
     ) : FolderListEvent()
 }
 
