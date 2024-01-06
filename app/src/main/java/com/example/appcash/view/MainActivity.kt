@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.appcash.view.notes.note_info.NoteInfoScreen
 import com.example.appcash.view.notes.notes_folders.NotesFoldersScreen
 import com.example.appcash.view.notes.notes_list.NotesListScreen
 import com.example.appcash.view.notes.notes_list.components.FactoryProvider
