@@ -1,4 +1,4 @@
-package com.example.appcash.view.notes.note_info.components
+package com.example.appcash.view.notes.note_info_screen.components
 
 import com.example.appcash.view.Event
 

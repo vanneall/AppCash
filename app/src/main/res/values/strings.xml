@@ -6,12 +6,14 @@
     <string name="create">Создать</string>
     <string name="search">Поиск</string>
 
-    <!-- FolderListView -->
+    <!-- FolderListScreen -->
     <string name="my_folders">Мои папки</string>
     <string name="new_folder">Новая папка</string>
     <string name="folder_name">Название папки</string>
 
-    <!-- NoteListView -->
+    <!-- NoteInfoScreen -->
+    <string name="title">Название</string>
+    <string name="content">Текст</string>
 
 
 </resources>

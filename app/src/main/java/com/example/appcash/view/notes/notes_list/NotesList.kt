@@ -43,6 +43,7 @@ import com.example.appcash.navigation.Destinations.NOTE_INFO_SCREEN
 import com.example.appcash.view.Event
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.notes.TopBar
+import com.example.appcash.view.notes.note_info_screen.components.NoteOpenOpenMode
 import com.example.appcash.view.notes.notes_list.components.NoteListEvent
 import com.example.appcash.view.notes.notes_list.components.NotesListState
 
@@ -52,7 +53,7 @@ fun NotesList(
     state: NotesListState,
     onEvent: (Event) -> Unit,
     navigateTo: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box {
         LazyColumn(
@@ -69,7 +70,7 @@ fun NotesList(
                     content = item.content,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { navigateTo("$NOTE_INFO_SCREEN/${item.id}/${state.folderId}") }
+                        .clickable { navigateTo("$NOTE_INFO_SCREEN/${NoteOpenOpenMode.EDIT.name}/${item.id}/${state.folderId}") }
                 )
                 if (index < state.notes.size - 1)
                     Divider(
@@ -80,7 +81,7 @@ fun NotesList(
             }
         }
         FloatingActionButton(
-            onClick = { navigateTo("$NOTE_INFO_SCREEN/${-1}/${state.folderId}") },
+            onClick = { navigateTo("$NOTE_INFO_SCREEN/${NoteOpenOpenMode.CREATE.name}/${-1}/${state.folderId}") },
             shape = CircleShape,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -95,7 +96,7 @@ fun NotesList(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTextField(
-    onEvent: (Event) -> Unit
+    onEvent: (Event) -> Unit,
 ) {
     val searchQuery = remember { mutableStateOf("") }
 
@@ -151,7 +152,7 @@ fun SearchTextField(
 private fun ListItem(
     title: String,
     content: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         Text(
