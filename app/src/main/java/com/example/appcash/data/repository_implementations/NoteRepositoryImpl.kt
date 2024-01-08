@@ -12,4 +12,17 @@ class NoteRepositoryImpl @Inject constructor(
     override fun getNoteById(id: Long): Flow<Note> {
         return database.getNoteDao().getNoteById(id = id)
     }
+
+    override fun insertNote(note: Note, folderId: Long) {
+        database.getNoteDao()
+            .insertTransaction(
+                note = note,
+                folderId = folderId,
+                insertNoteToFolderLink = database.getNoteToFolderLinkDao()::insertNotesToFolderLink
+            )
+    }
+
+    override fun updateNote(note: Note) {
+        database.getNoteDao().updateNote(note = note)
+    }
 }

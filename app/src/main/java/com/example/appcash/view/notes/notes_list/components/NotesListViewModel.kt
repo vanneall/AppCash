@@ -28,7 +28,7 @@ class NotesListViewModel @AssistedInject constructor(
     private val _folderName = getFolderNameByIdUseCase.invoke(id = folderId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
 
-    private val _state = MutableStateFlow(NotesListState())
+    private val _state = MutableStateFlow(NotesListState(folderId = folderId))
 
     private val _searchQuery = MutableStateFlow("")
 

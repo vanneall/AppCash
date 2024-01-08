@@ -25,7 +25,7 @@ data class NoteToFolderLink(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Long,
+    val id: Long = 0,
 
     @ColumnInfo(name = "folderId")
     val folderId: Long,

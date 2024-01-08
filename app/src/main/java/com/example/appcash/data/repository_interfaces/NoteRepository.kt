@@ -7,4 +7,8 @@ interface NoteRepository {
 
     fun getNoteById(id: Long): Flow<Note>
 
+    fun insertNote(note: Note, folderId: Long)
+
+    fun updateNote(note: Note)
+
 }

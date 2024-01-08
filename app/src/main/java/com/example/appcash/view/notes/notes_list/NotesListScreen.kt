@@ -10,19 +10,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.appcash.view.notes.notes_list.components.NoteListViewModelFactoryProvider
+import com.example.appcash.view.notes.notes_list.components.NotesListViewModel
 import dagger.hilt.android.EntryPointAccessors
 
 @Composable
-fun NotesListScreen() {
-    val factory = EntryPointAccessors.fromActivity(
-        LocalContext.current as Activity,
-        NoteListViewModelFactoryProvider::class.java
-    ).provideNoteListViewModelFactory()
-    val vm = viewModel { factory.create(2) }
-
+fun NotesListScreen(
+    viewModel: NotesListViewModel,
+    navigateBack: () -> Unit,
+    navigateTo: (String) -> Unit
+) {
     NotesList(
-        state = vm.state.collectAsState().value,
-        onEvent = vm::handle,
+        state = viewModel.state.collectAsState().value,
+        onEvent = viewModel::handle,
+        navigateTo = navigateTo,
         modifier = Modifier.padding(horizontal = 20.dp)
     )
 }
@@ -30,5 +30,5 @@ fun NotesListScreen() {
 @Preview(showBackground = true)
 @Composable
 private fun PreviewNotesListScreen() {
-    NotesListScreen()
+    //NotesListScreen()
 }

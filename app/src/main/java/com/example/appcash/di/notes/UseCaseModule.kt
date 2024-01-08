@@ -9,10 +9,14 @@ import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCase
 import com.example.appcash.domain.notes.implementations.GetNoteByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNotesUseCaseImpl
 import com.example.appcash.domain.notes.implementations.InsertFolderUseCaseImpl
+import com.example.appcash.domain.notes.implementations.InsertNoteUseCaseImpl
+import com.example.appcash.domain.notes.implementations.UpdateNoteUseCaseImpl
 import com.example.appcash.domain.notes.interfaces.GetFolderNameByIdUseCase
 import com.example.appcash.domain.notes.interfaces.GetNoteByIdUseCase
 import com.example.appcash.domain.notes.interfaces.GetNotesUseCase
 import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
+import com.example.appcash.domain.notes.interfaces.InsertNoteUseCase
+import com.example.appcash.domain.notes.interfaces.UpdateNoteUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,5 +54,17 @@ class UseCaseModule {
     @ViewModelScoped
     fun provideGetNoteByIdUseCase(repository: NoteRepository): GetNoteByIdUseCase {
         return GetNoteByIdUseCaseImpl(repository = repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideInsertNoteUseCase(repository: NoteRepository): InsertNoteUseCase {
+        return InsertNoteUseCaseImpl(repository = repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideUpdateNoteUseCase(repository: NoteRepository): UpdateNoteUseCase {
+        return UpdateNoteUseCaseImpl(repository = repository)
     }
 }

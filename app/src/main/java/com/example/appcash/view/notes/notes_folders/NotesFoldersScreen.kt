@@ -6,14 +6,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.appcash.view.notes.notes_folders.components.FoldersListViewModel
 
 @Composable
-fun NotesFoldersScreen(foldersListViewModel: FoldersListViewModel = viewModel()) {
+fun NotesFoldersScreen(
+    viewModel: FoldersListViewModel,
+    navigateTo: (String) -> Unit
+) {
     FoldersListView(
-        state = foldersListViewModel.state.collectAsState().value,
-        onEvent = foldersListViewModel::handle,
+        state = viewModel.state.collectAsState().value,
+        onEvent = viewModel::handle,
+        navigateTo = navigateTo,
         modifier = Modifier.padding(horizontal = 20.dp)
     )
 }
@@ -21,5 +24,5 @@ fun NotesFoldersScreen(foldersListViewModel: FoldersListViewModel = viewModel())
 @Preview(showBackground = true)
 @Composable
 private fun PreviewNotesFoldersScreen() {
-    NotesFoldersScreen()
+    //NotesFoldersScreen()
 }

@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
+import com.example.appcash.navigation.Destinations.NOTE_INFO_SCREEN
 import com.example.appcash.view.Event
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.notes.TopBar
@@ -50,6 +51,7 @@ import com.example.appcash.view.notes.notes_list.components.NotesListState
 fun NotesList(
     state: NotesListState,
     onEvent: (Event) -> Unit,
+    navigateTo: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box {
@@ -64,7 +66,10 @@ fun NotesList(
             itemsIndexed(state.notes) { index, item ->
                 ListItem(
                     title = item.title,
-                    content = item.content
+                    content = item.content,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { navigateTo("$NOTE_INFO_SCREEN/${item.id}/${state.folderId}") }
                 )
                 if (index < state.notes.size - 1)
                     Divider(
@@ -75,7 +80,7 @@ fun NotesList(
             }
         }
         FloatingActionButton(
-            onClick = { /*TODO Создать переход с созданием записи*/ },
+            onClick = { navigateTo("$NOTE_INFO_SCREEN/${-1}/${state.folderId}") },
             shape = CircleShape,
             modifier = Modifier
                 .align(Alignment.BottomEnd)

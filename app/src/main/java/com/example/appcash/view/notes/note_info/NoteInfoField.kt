@@ -1,5 +1,11 @@
 package com.example.appcash.view.notes.note_info
 
+import android.os.Build
+import android.util.Log
+import android.window.OnBackInvokedCallback
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,13 +16,17 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.view.Event
+import com.example.appcash.view.MainActivity
 import com.example.appcash.view.notes.TopBar
 import com.example.appcash.view.notes.note_info.components.NoteInfoEvent
 import com.example.appcash.view.notes.note_info.components.NoteInfoState
@@ -25,6 +35,7 @@ import com.example.appcash.view.notes.note_info.components.NoteInfoState
 fun NoteInfoField(
     state: NoteInfoState,
     onEvent: (Event) -> Unit,
+    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollableState = rememberScrollState()
@@ -47,7 +58,7 @@ fun NoteInfoField(
                     fontSize = 22.sp,
                 ),
 
-            )
+                )
             if (state.title.isEmpty()) {
                 Text(
                     text = "Название",
@@ -75,6 +86,16 @@ fun NoteInfoField(
                 fontSize = 17.sp,
                 color = Color.Gray
             )
+        }
+
+        BackHandler {
+            onEvent(
+                NoteInfoEvent.SaveNoteEvent(
+                    title = state.title,
+                    content = state.content
+                )
+            )
+            onNavigateBack()
         }
 
     }

@@ -11,4 +11,9 @@ sealed class NoteInfoEvent: Event {
     data class InputContentEvent(
         val content: String
     ): NoteInfoEvent()
+
+    data class SaveNoteEvent(
+        val title: String,
+        val content: String,
+    ): NoteInfoEvent()
 }

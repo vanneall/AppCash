@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -33,6 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.appcash.R
+import com.example.appcash.navigation.Destinations
+import com.example.appcash.navigation.Destinations.FOLDER_TO_NOTE_LINK_SCREEN
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.list.ItemListView
 import com.example.appcash.view.notes.TopBar
@@ -44,6 +47,7 @@ import com.example.appcash.view.notes.notes_folders.components.FolderListState
 fun FoldersListView(
     state: FolderListState,
     onEvent: (FolderListEvent) -> Unit,
+    navigateTo: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isDialogOpen = remember {
@@ -63,12 +67,12 @@ fun FoldersListView(
                 onClick = { isDialogOpen.value = true }
             )
         }
-        items(items = state.folders) { folder ->
+        itemsIndexed(items = state.folders) { index, folder ->
             ItemListView(
                 name = folder.name,
                 icon = painterResource(id = R.drawable.folder_icon),
                 backgroundIconColor = Color.Blue,
-                onClick = {}
+                onClick = { navigateTo("$FOLDER_TO_NOTE_LINK_SCREEN/${index + 1}") }
             )
         }
     }
