@@ -25,4 +25,8 @@ class NoteRepositoryImpl @Inject constructor(
     override fun updateNote(note: Note) {
         database.getNoteDao().updateNote(note = note)
     }
+
+    override fun getNotes(): Flow<List<Note>> {
+        return database.getNoteDao().getNotes()
+    }
 }

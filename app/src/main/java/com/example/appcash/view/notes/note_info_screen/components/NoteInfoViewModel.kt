@@ -5,9 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.appcash.data.entities.Note
 import com.example.appcash.domain.notes.implementations.GetNoteByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.UpsertNoteUseCaseImpl
+import com.example.appcash.utils.ArgsKeys
 import com.example.appcash.utils.StringExtensions.EMPTY_STRING
-import com.example.appcash.view.Event
-import com.example.appcash.view.EventHandler
+import com.example.appcash.utils.events.Event
+import com.example.appcash.utils.events.EventHandler
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
@@ -25,10 +26,10 @@ class NoteInfoViewModel @AssistedInject constructor(
     private val getNoteByIdUseCaseImpl: GetNoteByIdUseCaseImpl,
     private val upsertNoteUseCaseImpl: UpsertNoteUseCaseImpl,
     @Assisted
-    private val mode: NoteOpenOpenMode,
-    @Assisted("id")
+    private val mode: NoteOpenMode,
+    @Assisted(ArgsKeys.ID_KEY)
     private val id: Long,
-    @Assisted("folderId")
+    @Assisted(ArgsKeys.FOLDER_ID_KEY)
     private val folderId: Long,
 ) : ViewModel(), EventHandler {
 
@@ -70,7 +71,7 @@ class NoteInfoViewModel @AssistedInject constructor(
 
     private fun initializePrivateState(): Flow<Note> {
         return when(mode) {
-            NoteOpenOpenMode.CREATE -> {
+            NoteOpenMode.CREATE -> {
                 flowOf(
                     value = Note(
                         title = EMPTY_STRING,
@@ -78,7 +79,7 @@ class NoteInfoViewModel @AssistedInject constructor(
                     )
                 )
             }
-            NoteOpenOpenMode.EDIT -> {
+            NoteOpenMode.EDIT -> {
                 getNoteByIdUseCaseImpl.invoke(id = id)
                     .stateIn(
                         scope = viewModelScope,
@@ -99,7 +100,7 @@ class NoteInfoViewModel @AssistedInject constructor(
         if (handledTitle.isEmpty()) return
 
         when (mode) {
-            NoteOpenOpenMode.CREATE -> {
+            NoteOpenMode.CREATE -> {
                 upsertNoteUseCaseImpl.invoke(
                     note = Note(
                         title = handledTitle,
@@ -108,7 +109,7 @@ class NoteInfoViewModel @AssistedInject constructor(
                     folderId = folderId
                 )
             }
-            NoteOpenOpenMode.EDIT -> {
+            NoteOpenMode.EDIT -> {
                 _state.collect { state ->
                     upsertNoteUseCaseImpl.invoke(
                         Note(

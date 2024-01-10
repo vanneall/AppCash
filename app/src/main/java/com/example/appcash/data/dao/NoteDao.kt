@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import androidx.room.Upsert
 import com.example.appcash.data.entities.Note
 import com.example.appcash.data.entities.NoteToFolderLink
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +15,9 @@ interface NoteDao {
 
     @Query("SELECT * FROM note WHERE note.id = :id")
     fun getNoteById(id: Long): Flow<Note>
+
+    @Query("SELECT * FROM note")
+    fun getNotes(): Flow<List<Note>>
 
     @Update
     fun updateNote(note: Note)

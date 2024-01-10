@@ -1,4 +1,4 @@
-package com.example.appcash.view.notes.notes_folders
+package com.example.appcash.view.notes.notes_folders_screen.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,25 +29,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.appcash.R
-import com.example.appcash.navigation.Destinations
 import com.example.appcash.navigation.Destinations.FOLDER_TO_NOTE_LINK_SCREEN
+import com.example.appcash.utils.StringExtensions
+import com.example.appcash.utils.events.Event
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.list.ItemListView
+import com.example.appcash.view.general.other.SearchTextField
 import com.example.appcash.view.notes.TopBar
-import com.example.appcash.view.notes.notes_folders.components.FolderListEvent
-import com.example.appcash.view.notes.notes_folders.components.FolderListState
+import com.example.appcash.view.notes.notes_folders_screen.components.FolderListEvent
+import com.example.appcash.view.notes.notes_folders_screen.components.FolderListState
+import com.example.appcash.view.notes.notes_folders_screen.components.FolderOpenMode
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FoldersListView(
+fun FoldersList(
     state: FolderListState,
-    onEvent: (FolderListEvent) -> Unit,
+    onEvent: (Event) -> Unit,
     navigateTo: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val isDialogOpen = remember {
         mutableStateOf(false)
@@ -59,6 +60,8 @@ fun FoldersListView(
     ) {
         stickyHeader { TopBar() }
         item { Header(name = stringResource(id = R.string.my_folders)) }
+        item { SearchTextField(onEvent) }
+        item { Spacer(modifier = Modifier.padding(bottom = 10.dp)) }
         item {
             ItemListView(
                 name = stringResource(id = R.string.new_folder),
@@ -67,15 +70,24 @@ fun FoldersListView(
                 onClick = { isDialogOpen.value = true }
             )
         }
-        itemsIndexed(items = state.folders) { index, folder ->
+        item {
+            ItemListView(
+                name = stringResource(id = R.string.all_notes),
+                icon = painterResource(id = R.drawable.kid_star),
+                backgroundIconColor = Color(0xFFE9AD14),
+                onClick = { navigateTo("$FOLDER_TO_NOTE_LINK_SCREEN/${FolderOpenMode.ALL.name}/${0}") }
+            )
+        }
+        items(items = state.folders) { folder ->
             ItemListView(
                 name = folder.name,
                 icon = painterResource(id = R.drawable.folder_icon),
                 backgroundIconColor = Color.Blue,
-                onClick = { navigateTo("$FOLDER_TO_NOTE_LINK_SCREEN/${index + 1}") }
+                onClick = { navigateTo("$FOLDER_TO_NOTE_LINK_SCREEN/${FolderOpenMode.SELECTED.name}/${folder.id}") }
             )
         }
     }
+
     if (isDialogOpen.value) {
         CreateFolderDialogView(
             onCreateEvent = onEvent,
@@ -88,9 +100,9 @@ fun FoldersListView(
 @Composable
 private fun CreateFolderDialogView(
     onCreateEvent: (FolderListEvent) -> Unit,
-    isDialogOpenedMutableState: MutableState<Boolean>
+    isDialogOpenedMutableState: MutableState<Boolean>,
 ) {
-    val name = remember { mutableStateOf("") }
+    val name = remember { mutableStateOf(StringExtensions.EMPTY_STRING) }
     Dialog(onDismissRequest = { isDialogOpenedMutableState.value = false }) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -126,7 +138,7 @@ private fun CreateFolderDialogView(
 private fun CreateCancelButtonsRowView(
     onEvent: (FolderListEvent) -> Unit,
     isDialogOpenedMutableState: MutableState<Boolean>,
-    name: String
+    name: String,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -149,10 +161,4 @@ private fun CreateCancelButtonsRowView(
             Text(text = stringResource(id = R.string.create))
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PreviewFoldersListView() {
-    //FoldersList()
 }

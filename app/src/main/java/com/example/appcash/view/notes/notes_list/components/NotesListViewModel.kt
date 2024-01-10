@@ -2,31 +2,39 @@ package com.example.appcash.view.notes.notes_list.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.appcash.data.entities.Note
 import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
+import com.example.appcash.domain.notes.implementations.GetNotesByFolderIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNotesUseCaseImpl
-import com.example.appcash.view.Event
-import com.example.appcash.view.EventHandler
+import com.example.appcash.utils.ArgsKeys
+import com.example.appcash.utils.events.Event
+import com.example.appcash.utils.events.EventHandler
+import com.example.appcash.utils.events.SearchEvent
+import com.example.appcash.view.notes.notes_folders_screen.components.FolderOpenMode
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
 
 class NotesListViewModel @AssistedInject constructor(
-    getNotesUseCase: GetNotesUseCaseImpl,
-    getFolderNameByIdUseCase: GetFolderNameByIdUseCaseImpl,
-    @Assisted
-    private val folderId: Long
+    private val getNoteByFolderIdsUseCase: GetNotesByFolderIdUseCaseImpl,
+    private val getFolderNameByIdUseCase: GetFolderNameByIdUseCaseImpl,
+    private val getNotesUseCase: GetNotesUseCaseImpl,
+    @Assisted(ArgsKeys.OPEN_MODE_KEY)
+    private val mode: FolderOpenMode,
+    @Assisted(ArgsKeys.FOLDER_ID_KEY)
+    private val folderId: Long,
 ) : ViewModel(), EventHandler {
 
-    private val _notes = getNotesUseCase.invoke(id = folderId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    private val _notes = initializePrivateState()
 
-    private val _folderName = getFolderNameByIdUseCase.invoke(id = folderId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
+    private val _folderName = initializePrivateFolderName()
 
     private val _state = MutableStateFlow(NotesListState(folderId = folderId))
 
@@ -46,10 +54,34 @@ class NotesListViewModel @AssistedInject constructor(
 
     override fun handle(event: Event) {
         when (event) {
-            is NoteListEvent.SearchNoteEvent -> {
+            is SearchEvent -> {
                 _searchQuery.update { event.searchQuery }
             }
         }
+    }
+
+    private fun initializePrivateState(): Flow<List<Note>> {
+        return when (mode) {
+            FolderOpenMode.ALL -> {
+                getNotesUseCase.invoke()
+            }
+
+            FolderOpenMode.SELECTED -> {
+                getNoteByFolderIdsUseCase.invoke(id = folderId)
+            }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    }
+
+    private fun initializePrivateFolderName(): Flow<String> {
+        return when (mode) {
+            FolderOpenMode.ALL -> {
+                flowOf("Все заметки")
+            }
+
+            FolderOpenMode.SELECTED -> {
+                getFolderNameByIdUseCase.invoke(id = folderId)
+            }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
     }
 }
 

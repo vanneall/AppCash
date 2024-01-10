@@ -3,7 +3,7 @@ package com.example.appcash.view.notes.note_info_screen.components
 import com.example.appcash.utils.mode.OpenMode
 import com.example.appcash.utils.mode.OpenModeHandler
 
-enum class NoteOpenOpenMode: OpenMode {
+enum class NoteOpenMode: OpenMode {
     CREATE,
     EDIT;
 
@@ -11,7 +11,7 @@ enum class NoteOpenOpenMode: OpenMode {
 
         val DEFAULT_VALUE_STRING = CREATE.name
 
-        override fun handle(mode: String): NoteOpenOpenMode {
+        override fun handle(mode: String): NoteOpenMode {
             return when (mode) {
                 EDIT.name -> EDIT
                 else -> CREATE
