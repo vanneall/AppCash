@@ -38,7 +38,7 @@ import com.example.appcash.utils.events.Event
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.list.ItemListView
 import com.example.appcash.view.general.other.SearchTextField
-import com.example.appcash.view.notes.TopBar
+import com.example.appcash.view.general.other.TopBar
 import com.example.appcash.view.notes.notes_folders_screen.components.FolderListEvent
 import com.example.appcash.view.notes.notes_folders_screen.components.FolderListState
 import com.example.appcash.view.notes.notes_folders_screen.components.FolderOpenMode
@@ -60,7 +60,7 @@ fun FoldersList(
     ) {
         stickyHeader { TopBar() }
         item { Header(name = stringResource(id = R.string.my_folders)) }
-        item { SearchTextField(onEvent) }
+        item { SearchTextField(state.searchQuery, onEvent) }
         item { Spacer(modifier = Modifier.padding(bottom = 10.dp)) }
         item {
             ItemListView(

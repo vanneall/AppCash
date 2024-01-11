@@ -36,7 +36,7 @@ class NotesListViewModel @AssistedInject constructor(
 
     private val _folderName = initializePrivateFolderName()
 
-    private val _state = MutableStateFlow(NotesListState(folderId = folderId))
+    private val _state = MutableStateFlow(NotesListState(searchQuery = "", folderId = folderId))
 
     private val _searchQuery = MutableStateFlow("")
 
@@ -48,7 +48,8 @@ class NotesListViewModel @AssistedInject constructor(
     ) { state, folderName, notes, searchQuery ->
         state.copy(
             folderName = folderName,
-            notes = notes.filter { it.title.contains(searchQuery) }
+            notes = notes.filter { it.title.contains(searchQuery) },
+            searchQuery = searchQuery
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), NotesListState())
 

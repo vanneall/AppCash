@@ -34,7 +34,8 @@ class FoldersListViewModel @Inject constructor(
 
     val state = combine(_state, _searchQuery) { state, searchQuery ->
         FolderListState(
-            folders = state.folders.filter { it.name.contains(searchQuery) }
+            folders = state.folders.filter { it.name.contains(searchQuery) },
+            searchQuery = searchQuery
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), FolderListState())
 

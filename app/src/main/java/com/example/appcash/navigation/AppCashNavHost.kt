@@ -22,7 +22,7 @@ import com.example.appcash.view.notes.note_info_screen.screen.NoteInfoScreen
 import com.example.appcash.view.notes.notes_folders_screen.components.FolderOpenMode
 import com.example.appcash.view.notes.notes_folders_screen.components.FoldersListViewModel
 import com.example.appcash.view.notes.notes_folders_screen.screen.NotesFoldersScreen
-import com.example.appcash.view.notes.notes_list.NotesListScreen
+import com.example.appcash.view.notes.notes_list.screen.NotesListScreen
 import com.example.appcash.view.notes.notes_list.components.NoteListViewModelFactoryProvider
 import dagger.hilt.android.EntryPointAccessors
 

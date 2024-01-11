@@ -1,4 +1,4 @@
-package com.example.appcash.view.notes
+package com.example.appcash.view.general.other
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth

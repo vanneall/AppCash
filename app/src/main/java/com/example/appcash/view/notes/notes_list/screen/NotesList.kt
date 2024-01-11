@@ -1,4 +1,4 @@
-package com.example.appcash.view.notes.notes_list
+package com.example.appcash.view.notes.notes_list.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -28,7 +28,7 @@ import com.example.appcash.navigation.Destinations.NOTE_INFO_SCREEN
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.other.SearchTextField
-import com.example.appcash.view.notes.TopBar
+import com.example.appcash.view.general.other.TopBar
 import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode
 import com.example.appcash.view.notes.notes_list.components.NotesListState
 
@@ -47,7 +47,7 @@ fun NotesList(
         ) {
             stickyHeader { TopBar() }
             item { Header(state.folderName) }
-            item { SearchTextField(onEvent) }
+            item { SearchTextField(state.searchQuery, onEvent) }
             item { Spacer(modifier = Modifier.padding(bottom = 10.dp)) }
             itemsIndexed(state.notes) { index, item ->
                 ListItem(

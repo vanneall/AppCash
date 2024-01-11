@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.utils.events.Event
-import com.example.appcash.view.notes.TopBar
+import com.example.appcash.view.general.other.TopBar
 import com.example.appcash.view.notes.note_info_screen.components.NoteInfoEvent
 import com.example.appcash.view.notes.note_info_screen.components.NoteInfoState
 

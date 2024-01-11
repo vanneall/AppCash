@@ -15,7 +15,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,20 +28,18 @@ import com.example.appcash.utils.events.SearchEvent
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTextField(
+    searchQuery: String,
     onEvent: (Event) -> Unit,
 ) {
-    val searchQuery = remember { mutableStateOf(StringExtensions.EMPTY_STRING) }
-
     val isDeleteIconEnabled = remember {
-        derivedStateOf { searchQuery.value.isNotEmpty() }
+        derivedStateOf { searchQuery.isNotEmpty() }
     }
     OutlinedTextField(
-        value = searchQuery.value,
+        value = searchQuery,
         onValueChange = { newValue ->
-            searchQuery.value = newValue
             onEvent(
                 SearchEvent(
-                    searchQuery = searchQuery.value
+                    searchQuery = newValue
                 )
             )
         },
@@ -60,10 +57,9 @@ fun SearchTextField(
                 imageVector = Icons.Default.Close,
                 contentDescription = null,
                 modifier = Modifier.clickable {
-                    searchQuery.value = StringExtensions.EMPTY_STRING
                     onEvent(
                         SearchEvent(
-                            searchQuery = searchQuery.value
+                            searchQuery = StringExtensions.EMPTY_STRING
                         )
                     )
                 }
@@ -73,7 +69,7 @@ fun SearchTextField(
         keyboardActions = KeyboardActions(onSearch = {
             onEvent(
                 SearchEvent(
-                    searchQuery = searchQuery.value
+                    searchQuery = searchQuery
                 )
             )
         }),
