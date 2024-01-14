@@ -16,5 +16,11 @@
     <string name="title">Название</string>
     <string name="content">Текст</string>
 
+    <!-- TasksScreen -->
+    <string name="my_tasks_folder">Мои списки</string>
+    <string name="new_tasks">Добавить список</string>
+    <string name="planned">Запланировано</string>
+    <string name="completed">Выполнено</string>
+
 
 </resources>

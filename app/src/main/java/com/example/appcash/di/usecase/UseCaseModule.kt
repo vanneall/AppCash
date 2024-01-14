@@ -1,8 +1,9 @@
-package com.example.appcash.di.notes
+package com.example.appcash.di.usecase
 
 import com.example.appcash.data.repository_interfaces.FoldersRepository
 import com.example.appcash.data.repository_interfaces.NoteRepository
 import com.example.appcash.data.repository_interfaces.NoteToFolderLinkRepository
+import com.example.appcash.data.repository_interfaces.TasksRepository
 import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetFolderUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNoteByIdUseCaseImpl
@@ -17,6 +18,10 @@ import com.example.appcash.domain.notes.interfaces.GetNotesByFolderIdUseCase
 import com.example.appcash.domain.notes.interfaces.GetNotesUseCase
 import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
 import com.example.appcash.domain.notes.interfaces.UpsertNoteUseCase
+import com.example.appcash.domain.tasks.implementations.GetCompletedCountUseCaseImpl
+import com.example.appcash.domain.tasks.implementations.GetPlannedCountUseCaseImpl
+import com.example.appcash.domain.tasks.interfaces.GetCompletedCountUseCase
+import com.example.appcash.domain.tasks.interfaces.GetPlannedCountUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -66,5 +71,17 @@ class UseCaseModule {
     @ViewModelScoped
     fun provideGetNotesUseCase(repository: NoteRepository): GetNotesUseCase {
         return GetNotesUseCaseImpl(repository = repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetCompletedCountUseCase(repository: TasksRepository): GetCompletedCountUseCase {
+        return GetCompletedCountUseCaseImpl(tasksRepository = repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetPlannedCountUseCase(repository: TasksRepository): GetPlannedCountUseCase {
+        return GetPlannedCountUseCaseImpl(tasksRepository = repository)
     }
 }

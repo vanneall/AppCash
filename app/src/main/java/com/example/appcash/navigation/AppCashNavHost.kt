@@ -10,6 +10,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.appcash.navigation.Destinations.ALL_TASKS_SCREEN
 import com.example.appcash.navigation.Destinations.FOLDERS_SCREEN
 import com.example.appcash.navigation.Destinations.FOLDER_TO_NOTE_LINK_SCREEN
 import com.example.appcash.navigation.Destinations.NOTE_INFO_SCREEN
@@ -24,6 +25,8 @@ import com.example.appcash.view.notes.notes_folders_screen.components.FoldersLis
 import com.example.appcash.view.notes.notes_folders_screen.screen.NotesFoldersScreen
 import com.example.appcash.view.notes.notes_list.screen.NotesListScreen
 import com.example.appcash.view.notes.notes_list.components.NoteListViewModelFactoryProvider
+import com.example.appcash.view.tasks.all_tasks.components.AllTasksFoldersViewModel
+import com.example.appcash.view.tasks.all_tasks.screen.AllTasksScreen
 import dagger.hilt.android.EntryPointAccessors
 
 
@@ -31,7 +34,7 @@ import dagger.hilt.android.EntryPointAccessors
 fun AppCashNavHost(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = FOLDERS_SCREEN
+        startDestination = ALL_TASKS_SCREEN
     ) {
         composable(route = FOLDERS_SCREEN) {
             val foldersListViewModel: FoldersListViewModel = hiltViewModel()
@@ -106,6 +109,14 @@ fun AppCashNavHost(navController: NavHostController) {
             NoteInfoScreen(
                 viewModel = viewModel,
                 navigateBack = navController::popBackStack
+            )
+        }
+
+        composable(route = ALL_TASKS_SCREEN) {
+            val foldersListViewModel: AllTasksFoldersViewModel = hiltViewModel()
+            AllTasksScreen(
+                viewModel = foldersListViewModel,
+                navigateTo = {}
             )
         }
     }

@@ -16,4 +16,12 @@ data class Folder(
 
     @ColumnInfo(name = "color")
     val color: Int,
+
+    @ColumnInfo(name = "type")
+    val type: FolderType
 )
+
+enum class FolderType {
+    TASKS,
+    NOTES
+}
