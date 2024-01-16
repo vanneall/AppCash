@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetPlannedCountUseCaseImpl @Inject constructor(
-    private val tasksRepository: TasksRepository
+    private val repository: TasksRepository
 ): GetPlannedCountUseCase {
     override fun invoke(): Flow<Int> {
-        return tasksRepository.getPlannedCount()
+        return repository.getPlannedCount()
     }
 }

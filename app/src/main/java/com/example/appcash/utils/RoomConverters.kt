@@ -2,6 +2,7 @@ package com.example.appcash.utils
 
 import androidx.room.TypeConverter
 import com.example.appcash.data.entities.FolderType
+import com.example.appcash.data.entities.SubTask
 
 class RoomConverters {
     @TypeConverter

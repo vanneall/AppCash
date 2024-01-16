@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetCompletedCountUseCaseImpl @Inject constructor(
-    private val tasksRepository: TasksRepository
+    private val repository: TasksRepository
 ) :GetCompletedCountUseCase{
     override fun invoke(): Flow<Int> {
-        return tasksRepository.getCompletedCount()
+        return repository.getCompletedCount()
     }
 }

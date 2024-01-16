@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.appcash.navigation.AppCashNavHost
+import com.example.appcash.view.tasks.task.screen.TaskListScreen
 import com.example.appcash.view.ui.theme.AppCashTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,12 +21,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             AppCashTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    AppCashNavHost(navController)
-                }
+                TaskListScreen()
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colorScheme.background
+//                ) {
+//                    AppCashNavHost(navController)
+//                }
             }
         }
     }

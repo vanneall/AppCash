@@ -70,7 +70,7 @@ fun CreateFolderDialogView(
 
 
 @Composable
-fun CreateCancelButtonsRowView(
+private fun CreateCancelButtonsRowView(
     onEvent: (FolderListEvent) -> Unit,
     isDialogOpenedMutableState: MutableState<Boolean>,
     name: String,

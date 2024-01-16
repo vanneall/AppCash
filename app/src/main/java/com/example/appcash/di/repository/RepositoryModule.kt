@@ -4,10 +4,12 @@ import com.example.appcash.data.databases.FoldersDatabase
 import com.example.appcash.data.repository_implementations.FoldersRepositoryImpl
 import com.example.appcash.data.repository_implementations.NoteRepositoryImpl
 import com.example.appcash.data.repository_implementations.NoteToFolderLinkRepositoryImpl
+import com.example.appcash.data.repository_implementations.TaskToFolderRepositoryImpl
 import com.example.appcash.data.repository_implementations.TasksRepositoryImpl
 import com.example.appcash.data.repository_interfaces.FoldersRepository
 import com.example.appcash.data.repository_interfaces.NoteRepository
 import com.example.appcash.data.repository_interfaces.NoteToFolderLinkRepository
+import com.example.appcash.data.repository_interfaces.TaskToFolderRepository
 import com.example.appcash.data.repository_interfaces.TasksRepository
 import dagger.Module
 import dagger.Provides
@@ -40,5 +42,11 @@ class RepositoryModule {
     @Singleton
     fun provideTasksRepository(database: FoldersDatabase): TasksRepository {
         return TasksRepositoryImpl(database = database)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTaskToFolderRepository(database: FoldersDatabase): TaskToFolderRepository {
+        return TaskToFolderRepositoryImpl(database = database)
     }
 }
