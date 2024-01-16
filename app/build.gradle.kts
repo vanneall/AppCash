@@ -57,6 +57,10 @@ android {
 
 dependencies {
 
+    //BottomNavBar
+    implementation("androidx.compose.material:material:1.5.4")
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+
     //Navigation
     val nav_version = "2.7.6"
     implementation("androidx.navigation:navigation-compose:$nav_version")

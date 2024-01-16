@@ -8,4 +8,6 @@ object Destinations {
     const val NOTE_INFO_SCREEN = "NOTE_INFO_SCREEN"
 
     const val ALL_TASKS_SCREEN = "ALL_TASKS"
+
+    const val TASKS_SCREEN = "TASKS"
 }

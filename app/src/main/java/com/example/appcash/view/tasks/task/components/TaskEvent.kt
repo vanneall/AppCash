@@ -1,6 +1,5 @@
 package com.example.appcash.view.tasks.task.components
 
-import com.example.appcash.data.entities.MainTask
 import com.example.appcash.data.entities.Task
 import com.example.appcash.utils.events.Event
 

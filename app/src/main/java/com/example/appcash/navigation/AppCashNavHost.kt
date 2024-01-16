@@ -14,6 +14,7 @@ import com.example.appcash.navigation.Destinations.ALL_TASKS_SCREEN
 import com.example.appcash.navigation.Destinations.FOLDERS_SCREEN
 import com.example.appcash.navigation.Destinations.FOLDER_TO_NOTE_LINK_SCREEN
 import com.example.appcash.navigation.Destinations.NOTE_INFO_SCREEN
+import com.example.appcash.navigation.Destinations.TASKS_SCREEN
 import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
 import com.example.appcash.utils.ArgsKeys.ID_KEY
 import com.example.appcash.utils.ArgsKeys.OPEN_MODE_KEY
@@ -27,6 +28,8 @@ import com.example.appcash.view.notes.notes_list.screen.NotesListScreen
 import com.example.appcash.view.notes.notes_list.components.NoteListViewModelFactoryProvider
 import com.example.appcash.view.tasks.all_tasks.components.AllTasksFoldersViewModel
 import com.example.appcash.view.tasks.all_tasks.screen.AllTasksScreen
+import com.example.appcash.view.tasks.task.components.TasksViewModelFactoryProvider
+import com.example.appcash.view.tasks.task.screen.TaskListScreen
 import dagger.hilt.android.EntryPointAccessors
 
 
@@ -34,7 +37,7 @@ import dagger.hilt.android.EntryPointAccessors
 fun AppCashNavHost(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = ALL_TASKS_SCREEN
+        startDestination = ALL_TASKS_SCREEN,
     ) {
         composable(route = FOLDERS_SCREEN) {
             val foldersListViewModel: FoldersListViewModel = hiltViewModel()
@@ -116,7 +119,36 @@ fun AppCashNavHost(navController: NavHostController) {
             val foldersListViewModel: AllTasksFoldersViewModel = hiltViewModel()
             AllTasksScreen(
                 viewModel = foldersListViewModel,
-                navigateTo = {}
+                navigateTo = navController::navigate
+            )
+        }
+
+        composable(
+            route = "$TASKS_SCREEN/{$OPEN_MODE_KEY}/{$FOLDER_ID_KEY}",
+            arguments = listOf(
+                navArgument(name = OPEN_MODE_KEY) {
+                    type = NavType.StringType
+                },
+                navArgument(name = FOLDER_ID_KEY) {
+                    type = NavType.LongType
+                }
+            )
+        ) { backStackEntry ->
+            val factory = EntryPointAccessors.fromActivity(
+                LocalContext.current as Activity,
+                TasksViewModelFactoryProvider::class.java
+            ).provideTasksViewModelFactory()
+
+            val modeString = backStackEntry.arguments?.getString(OPEN_MODE_KEY)
+                ?: FolderOpenMode.Definition.DEFAULT_VALUE_STRING
+
+            val modeEnum = FolderOpenMode.Definition.handle(mode = modeString)
+
+            val viewModel = viewModel {
+                factory.create(modeEnum, backStackEntry.arguments?.getLong(FOLDER_ID_KEY) ?: 0)
+            }
+            TaskListScreen(
+                viewModel = viewModel,
             )
         }
     }

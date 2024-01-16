@@ -17,15 +17,7 @@ import com.example.appcash.view.tasks.task.components.TasksViewModelFactoryProvi
 import dagger.hilt.android.EntryPointAccessors
 
 @Composable
-fun TaskListScreen() {
-
-    val factory = EntryPointAccessors.fromActivity(
-        LocalContext.current as Activity,
-        TasksViewModelFactoryProvider::class.java
-    ).provideTasksViewModelFactory()
-
-    val viewModel = viewModel { factory.create(FolderOpenMode.ALL, 0) }
-
+fun TaskListScreen(viewModel: TasksViewModel) {
     TaskList(
         state = viewModel.state.collectAsState().value,
         onEvent = viewModel::handle,

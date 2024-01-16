@@ -27,7 +27,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
@@ -46,6 +45,7 @@ import com.example.appcash.view.tasks.all_tasks.components.AllTasksState
 @Composable
 fun AllTasks(
     state: AllTasksState,
+    navigate: (String) -> Unit,
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -63,11 +63,11 @@ fun AllTasks(
                 plannedTitle = stringResource(id = R.string.planned),
                 plannedIcon = painterResource(id = R.drawable.planned_task_icon),
                 plannedIconBgColor = Color.Red,
-                plannedCount = state.plannedTasks.toString(),
-                completedTitle = stringResource(id = R.string.planned),
+                plannedCount = state.plannedTasks.toString().takeIf { it != "0" } ?: "",
+                completedTitle = stringResource(id = R.string.completed),
                 completedIcon = painterResource(id = R.drawable.confirm_icon),
                 completedIconBgColor = Color.Green,
-                completedCount = state.plannedTasks.toString(),
+                completedCount = state.completeTasks.toString().takeIf { it != "0" } ?: "",
             )
         }
         item { Header(name = stringResource(id = R.string.my_tasks_folder)) }
@@ -81,12 +81,20 @@ fun AllTasks(
                 onClick = { isDialogOpen.value = true }
             )
         }
+        item {
+            ItemListView(
+                name = "Все задачи",
+                icon = painterResource(id = R.drawable.kid_star),
+                backgroundIconColor = Color(0xFFE9AD14),
+                onClick = { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.ALL.name}/${0}") }
+            )
+        }
         items(state.folders) { folder ->
             ItemListView(
                 name = folder.name,
                 icon = painterResource(id = R.drawable.tasks_folder_icon),
                 backgroundIconColor = Color.Blue,
-                onClick = { }
+                onClick = { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.SELECTED.name}/${folder.id}") }
             )
         }
     }
