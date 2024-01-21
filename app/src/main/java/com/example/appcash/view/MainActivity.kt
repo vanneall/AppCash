@@ -32,6 +32,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.appcash.R
 import com.example.appcash.navigation.AppCashNavHost
 import com.example.appcash.navigation.Destinations
+import com.example.appcash.view.finance.screen.Finance
+import com.example.appcash.view.finance.screen.FinanceScreen
 import com.example.appcash.view.tasks.task.screen.TaskListScreen
 import com.example.appcash.view.ui.theme.AppCashTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,33 +51,34 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Scaffold(
-                        modifier = Modifier.fillMaxSize(),
-                        bottomBar = {
-                            AppCashBottomNavigation(
-                                navController = navController,
-                                screens = listOf(
-                                    Screen(
-                                        "Заметки",
-                                        Destinations.FOLDERS_SCREEN,
-                                        icon = painterResource(id = R.drawable.notes_icon)
-                                    ),
-                                    Screen(
-                                        "Задачник",
-                                        Destinations.ALL_TASKS_SCREEN,
-                                        icon = painterResource(id = R.drawable.some_icon)
-                                    ),
-                                    Screen(
-                                        "Календарь",
-                                        Destinations.CALENDAR_SCREEN,
-                                        icon = painterResource(id = R.drawable.kid_star)
-                                    )
-                                )
-                            )
-                        }
-                    ) { it
-                        AppCashNavHost(navController)
-                    }
+                    FinanceScreen()
+//                    Scaffold(
+//                        modifier = Modifier.fillMaxSize(),
+//                        bottomBar = {
+//                            AppCashBottomNavigation(
+//                                navController = navController,
+//                                screens = listOf(
+//                                    Screen(
+//                                        "Заметки",
+//                                        Destinations.FOLDERS_SCREEN,
+//                                        icon = painterResource(id = R.drawable.notes_icon)
+//                                    ),
+//                                    Screen(
+//                                        "Задачник",
+//                                        Destinations.ALL_TASKS_SCREEN,
+//                                        icon = painterResource(id = R.drawable.some_icon)
+//                                    ),
+//                                    Screen(
+//                                        "Календарь",
+//                                        Destinations.CALENDAR_SCREEN,
+//                                        icon = painterResource(id = R.drawable.kid_star)
+//                                    )
+//                                )
+//                            )
+//                        }
+//                    ) { it
+//                        AppCashNavHost(navController)
+//                    }
                 }
             }
         }

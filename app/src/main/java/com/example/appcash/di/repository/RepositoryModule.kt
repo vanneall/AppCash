@@ -1,11 +1,13 @@
 package com.example.appcash.di.repository
 
 import com.example.appcash.data.databases.FoldersDatabase
+import com.example.appcash.data.repository_implementations.FinancialTransactionsRepositoryImpl
 import com.example.appcash.data.repository_implementations.FoldersRepositoryImpl
 import com.example.appcash.data.repository_implementations.NoteRepositoryImpl
 import com.example.appcash.data.repository_implementations.NoteToFolderLinkRepositoryImpl
 import com.example.appcash.data.repository_implementations.TaskToFolderRepositoryImpl
 import com.example.appcash.data.repository_implementations.TasksRepositoryImpl
+import com.example.appcash.data.repository_interfaces.FinancialTransactionsRepository
 import com.example.appcash.data.repository_interfaces.FoldersRepository
 import com.example.appcash.data.repository_interfaces.NoteRepository
 import com.example.appcash.data.repository_interfaces.NoteToFolderLinkRepository
@@ -48,5 +50,11 @@ class RepositoryModule {
     @Singleton
     fun provideTaskToFolderRepository(database: FoldersDatabase): TaskToFolderRepository {
         return TaskToFolderRepositoryImpl(database = database)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFinancialTransactionsRepository(database: FoldersDatabase): FinancialTransactionsRepository {
+        return FinancialTransactionsRepositoryImpl(database = database)
     }
 }

@@ -57,6 +57,9 @@ android {
 
 dependencies {
 
+    //Chart
+    implementation("co.yml:ycharts:2.1.0")
+
     //Calendar
     implementation ("com.kizitonwose.calendar:compose:2.4.1")
 

@@ -1,10 +1,15 @@
 package com.example.appcash.di.usecase
 
+import com.example.appcash.data.repository_interfaces.FinancialTransactionsRepository
 import com.example.appcash.data.repository_interfaces.FoldersRepository
 import com.example.appcash.data.repository_interfaces.NoteRepository
 import com.example.appcash.data.repository_interfaces.NoteToFolderLinkRepository
 import com.example.appcash.data.repository_interfaces.TaskToFolderRepository
 import com.example.appcash.data.repository_interfaces.TasksRepository
+import com.example.appcash.domain.financial_transactions.implementations.GetTransactionsByFolderUseCaseImpl
+import com.example.appcash.domain.financial_transactions.implementations.GetTransactionsByYearMonthUseCaseImpl
+import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByFolderUseCase
+import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByYearMonthUseCase
 import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetFolderUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNoteByIdUseCaseImpl
@@ -125,12 +130,24 @@ class UseCaseModule {
     @Provides
     @ViewModelScoped
     fun provideInsertSubTaskUseCase(repository: TasksRepository): InsertSubTaskUseCase {
-        return  InsertSubTaskUseCaseImpl(repository = repository)
+        return InsertSubTaskUseCaseImpl(repository = repository)
     }
 
     @Provides
     @ViewModelScoped
     fun provideInsertTaskToFolderLinkUseCase(repository: TaskToFolderRepository): InsertTaskToFolderLinkUseCase {
-        return  InsertTaskToFolderLinkUseCaseImpl(repository = repository)
+        return InsertTaskToFolderLinkUseCaseImpl(repository = repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetTransactionsByYearMonthUseCase(repository: FinancialTransactionsRepository): GetTransactionsByYearMonthUseCase {
+        return GetTransactionsByYearMonthUseCaseImpl(repository = repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetTransactionsByFolderUseCase(repository: FinancialTransactionsRepository): GetTransactionsByFolderUseCase {
+        return GetTransactionsByFolderUseCaseImpl(repository = repository)
     }
 }

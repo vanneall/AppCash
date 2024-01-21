@@ -23,5 +23,6 @@ data class Folder(
 
 enum class FolderType {
     TASKS,
-    NOTES
+    NOTES,
+    FINANCIAL
 }
