@@ -10,4 +10,6 @@ object Destinations {
     const val ALL_TASKS_SCREEN = "ALL_TASKS"
 
     const val TASKS_SCREEN = "TASKS"
+
+    const val CALENDAR_SCREEN = "CALENDAR"
 }

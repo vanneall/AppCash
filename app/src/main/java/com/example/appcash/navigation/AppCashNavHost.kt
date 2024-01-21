@@ -18,6 +18,7 @@ import com.example.appcash.navigation.Destinations.TASKS_SCREEN
 import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
 import com.example.appcash.utils.ArgsKeys.ID_KEY
 import com.example.appcash.utils.ArgsKeys.OPEN_MODE_KEY
+import com.example.appcash.view.calendar.AppCacheCalendar
 import com.example.appcash.view.notes.note_info_screen.components.NoteInfoViewModelFactoryProvider
 import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode
 import com.example.appcash.view.notes.note_info_screen.screen.NoteInfoScreen
@@ -150,6 +151,12 @@ fun AppCashNavHost(navController: NavHostController) {
             TaskListScreen(
                 viewModel = viewModel,
             )
+        }
+
+        composable(
+            route = Destinations.CALENDAR_SCREEN
+        ) {
+            AppCacheCalendar()
         }
     }
 }

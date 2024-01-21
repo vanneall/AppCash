@@ -57,6 +57,9 @@ android {
 
 dependencies {
 
+    //Calendar
+    implementation ("com.kizitonwose.calendar:compose:2.4.1")
+
     //BottomNavBar
     implementation("androidx.compose.material:material:1.5.4")
     implementation("androidx.work:work-runtime-ktx:2.9.0")
