@@ -1,10 +1,13 @@
 package com.example.appcash.data.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.MapColumn
 import androidx.room.Query
+import androidx.room.Transaction
 import com.example.appcash.data.entities.FinancialTransaction
 import com.example.appcash.data.entities.Folder
+import com.example.appcash.data.entities.TransactionToFolder
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -33,4 +36,17 @@ interface FinancialTransactionDao {
     fun getTransactionByFolders(monthId: String):
             Flow<Map<Folder, @MapColumn(columnName = "sum") Int>>
 
+
+    @Insert
+    fun insertTransaction(finance: FinancialTransaction): Long
+
+    @Transaction
+    fun insertTransactionWithFolder(
+        value: FinancialTransaction,
+        id: Long,
+        onInsertTransactionToFolder: (TransactionToFolder) -> Unit
+    ) {
+        val index = insertTransaction(value)
+        onInsertTransactionToFolder(TransactionToFolder(folderId = id, transactionId = index))
+    }
 }

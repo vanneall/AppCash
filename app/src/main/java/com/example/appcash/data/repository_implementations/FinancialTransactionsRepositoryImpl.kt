@@ -18,4 +18,12 @@ class FinancialTransactionsRepositoryImpl @Inject constructor(
     override fun getTransactionByFolders(id: String): Flow<Map<Folder, Int>> {
         return database.getFinancialTransactionDao().getTransactionByFolders(id)
     }
+
+    override fun insertTransaction(value: FinancialTransaction, id: Long) {
+        database.getFinancialTransactionDao().insertTransactionWithFolder(
+            value,
+            id,
+            database.getTransactionToFolderDao()::insert
+        )
+    }
 }

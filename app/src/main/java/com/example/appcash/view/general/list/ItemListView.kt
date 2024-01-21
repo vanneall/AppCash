@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 fun ItemListView(
     name: String,
     icon: Painter,
+    iconColor: Color = Color.White,
     backgroundIconColor: Color,
     onClick: () -> Unit
 ) {
@@ -33,7 +34,7 @@ fun ItemListView(
     ) {
         RoundedIconView(
             icon = icon,
-            tint = Color.White,
+            tint = iconColor,
             backGroundColor = backgroundIconColor
         )
         Text(

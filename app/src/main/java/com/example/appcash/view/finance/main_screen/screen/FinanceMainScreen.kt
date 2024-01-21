@@ -1,4 +1,4 @@
-package com.example.appcash.view.finance.screen
+package com.example.appcash.view.finance.main_screen.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -46,8 +46,8 @@ import com.example.appcash.data.entities.Folder
 import com.example.appcash.data.vo.FinanceCategoryVO
 import com.example.appcash.navigation.Destinations
 import com.example.appcash.utils.events.Event
-import com.example.appcash.view.finance.components.FinanceEvent
-import com.example.appcash.view.finance.components.FinanceState
+import com.example.appcash.view.finance.main_screen.components.FinanceEvent
+import com.example.appcash.view.finance.main_screen.components.FinanceState
 import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode
 import java.time.format.TextStyle
 import java.util.Locale

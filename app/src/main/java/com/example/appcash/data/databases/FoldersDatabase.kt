@@ -11,6 +11,7 @@ import com.example.appcash.data.dao.NoteToFolderLinkDao
 import com.example.appcash.data.dao.SubTaskToMainTaskDao
 import com.example.appcash.data.dao.TaskToFolderDao
 import com.example.appcash.data.dao.TasksDao
+import com.example.appcash.data.dao.TransactionToFolderDao
 import com.example.appcash.data.entities.FinancialTransaction
 import com.example.appcash.data.entities.MainTask
 import com.example.appcash.data.entities.Note
@@ -50,5 +51,7 @@ abstract class FoldersDatabase : RoomDatabase() {
     abstract fun getTaskToFolderDao(): TaskToFolderDao
 
     abstract fun getFinancialTransactionDao(): FinancialTransactionDao
+
+    abstract fun getTransactionToFolderDao(): TransactionToFolderDao
 
 }

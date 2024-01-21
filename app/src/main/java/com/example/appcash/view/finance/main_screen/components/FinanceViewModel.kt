@@ -1,4 +1,4 @@
-package com.example.appcash.view.finance.components
+package com.example.appcash.view.finance.main_screen.components
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel

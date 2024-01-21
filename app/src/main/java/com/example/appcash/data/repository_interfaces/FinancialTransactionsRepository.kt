@@ -10,4 +10,6 @@ interface FinancialTransactionsRepository {
 
     fun getTransactionByFolders(id: String): Flow<Map<Folder, Int>>
 
+    fun insertTransaction(value: FinancialTransaction, id: Long)
+
 }
