@@ -9,7 +9,7 @@ enum class NoteOpenMode: OpenMode {
 
     object Definition: OpenModeHandler {
 
-        val DEFAULT_VALUE_STRING = CREATE.name
+        override val DEFAULT_VALUE_STRING = CREATE.name
 
         override fun handle(mode: String): NoteOpenMode {
             return when (mode) {

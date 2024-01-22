@@ -94,7 +94,7 @@ fun AllTasks(
                 name = folder.name,
                 icon = painterResource(id = R.drawable.tasks_folder_icon),
                 backgroundIconColor = Color.Blue,
-                onClick = { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.SELECTED.name}/${folder.id}") }
+                onClick = { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.DEFINED.name}/${folder.id}") }
             )
         }
     }

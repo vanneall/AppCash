@@ -15,7 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.appcash.R
-import com.example.appcash.navigation.Destinations.FOLDER_TO_NOTE_LINK_SCREEN
+import com.example.appcash.navigation.Destinations.NOTES_LIST_SCREEN
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.general.list.CreateFolderDialogView
 import com.example.appcash.view.general.list.Header
@@ -57,7 +57,7 @@ fun FoldersList(
                 name = stringResource(id = R.string.all_notes),
                 icon = painterResource(id = R.drawable.kid_star),
                 backgroundIconColor = Color(0xFFE9AD14),
-                onClick = { navigateTo("$FOLDER_TO_NOTE_LINK_SCREEN/${FolderOpenMode.ALL.name}/${0}") }
+                onClick = { navigateTo("$NOTES_LIST_SCREEN/${FolderOpenMode.ALL.name}/${0}") }
             )
         }
         items(items = state.folders) { folder ->
@@ -65,7 +65,7 @@ fun FoldersList(
                 name = folder.name,
                 icon = painterResource(id = R.drawable.folder_icon),
                 backgroundIconColor = Color.Blue,
-                onClick = { navigateTo("$FOLDER_TO_NOTE_LINK_SCREEN/${FolderOpenMode.SELECTED.name}/${folder.id}") }
+                onClick = { navigateTo("$NOTES_LIST_SCREEN/${FolderOpenMode.DEFINED.name}/${folder.id}") }
             )
         }
     }

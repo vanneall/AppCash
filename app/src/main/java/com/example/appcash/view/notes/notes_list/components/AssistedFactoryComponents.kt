@@ -11,7 +11,7 @@ import dagger.hilt.android.components.ActivityComponent
 @AssistedFactory
 interface MyFactory {
     fun create(
-        @Assisted(ArgsKeys.OPEN_MODE_KEY) mode: FolderOpenMode,
+        @Assisted(ArgsKeys.OPEN_MODE_KEY) openMode: FolderOpenMode,
         @Assisted(ArgsKeys.FOLDER_ID_KEY) folderId: Long
     ): NotesListViewModel
 }

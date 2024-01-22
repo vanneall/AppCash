@@ -2,9 +2,11 @@ package com.example.appcash.utils
 
 object ArgsKeys {
 
-    const val ID_KEY = "id"
+    const val ID_KEY = "ID_KEY"
 
-    const val OPEN_MODE_KEY = "openMode"
+    const val OPEN_MODE_KEY = "OPEN_MODE_KEY"
 
-    const val FOLDER_ID_KEY = "folderId"
+    const val FOLDER_ID_KEY = "FOLDER_ID_KEY"
+
+    const val ERROR_MESSAGE_KEY = "ERROR_MESSAGE_KEY"
 }

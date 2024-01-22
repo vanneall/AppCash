@@ -67,7 +67,7 @@ class NotesListViewModel @AssistedInject constructor(
                 getNotesUseCase.invoke()
             }
 
-            FolderOpenMode.SELECTED -> {
+            FolderOpenMode.DEFINED -> {
                 getNoteByFolderIdsUseCase.invoke(id = folderId)
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
@@ -79,7 +79,7 @@ class NotesListViewModel @AssistedInject constructor(
                 flowOf("Все заметки")
             }
 
-            FolderOpenMode.SELECTED -> {
+            FolderOpenMode.DEFINED -> {
                 getFolderNameByIdUseCase.invoke(id = folderId)
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")

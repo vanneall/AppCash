@@ -5,15 +5,15 @@ import com.example.appcash.utils.mode.OpenModeHandler
 
 enum class FolderOpenMode: OpenMode {
     ALL,
-    SELECTED;
+    DEFINED;
 
     object Definition: OpenModeHandler {
 
-        val DEFAULT_VALUE_STRING = ALL.name
+        override val DEFAULT_VALUE_STRING = ALL.name
 
         override fun handle(mode: String): FolderOpenMode {
             return when (mode) {
-                SELECTED.name -> SELECTED
+                DEFINED.name -> DEFINED
                 else -> ALL
             }
         }

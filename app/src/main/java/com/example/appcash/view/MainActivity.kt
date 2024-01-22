@@ -3,7 +3,6 @@ package com.example.appcash.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,8 +29,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.appcash.R
 import com.example.appcash.navigation.AppCashNavHost
 import com.example.appcash.navigation.Destinations
-import com.example.appcash.view.finance.add_folder.screen.AddFolderScreen
-import com.example.appcash.view.finance.main_screen.screen.FinanceScreen
 import com.example.appcash.view.ui.theme.AppCashTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -56,22 +53,22 @@ class MainActivity : ComponentActivity() {
                                 screens = listOf(
                                     Screen(
                                         "Заметки",
-                                        Destinations.FOLDERS_SCREEN,
+                                        Destinations.MAIN_NOTES_FOLDER_SCREEN,
                                         icon = painterResource(id = R.drawable.notes_icon)
                                     ),
                                     Screen(
                                         "Задачник",
-                                        Destinations.ALL_TASKS_SCREEN,
+                                        Destinations.MAIN_TASKS_FOLDER_SCREEN,
                                         icon = painterResource(id = R.drawable.some_icon)
                                     ),
                                     Screen(
                                         "Календарь",
-                                        Destinations.CALENDAR_SCREEN,
+                                        Destinations.MAIN_CALENDAR_SCREEN,
                                         icon = painterResource(id = R.drawable.kid_star)
                                     ),
                                     Screen(
                                         "Финансы",
-                                        Destinations.FINANCE_CHART_SCREEN,
+                                        Destinations.MAIN_FINANCE_SCREEN,
                                         icon = painterResource(id = R.drawable.chart_icon)
                                     )
                                 )

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcash.data.entities.MainTask
 import com.example.appcash.data.entities.SubTask
-import com.example.appcash.data.entities.TaskToFolderLink
 import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.GetMapTasksByFolderIdUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.GetMapTasksUseCaseImpl
@@ -93,7 +92,7 @@ class TasksViewModel @AssistedInject constructor(
                 getMapTasksUseCase.invoke()
             }
 
-            FolderOpenMode.SELECTED -> {
+            FolderOpenMode.DEFINED -> {
                 getMapTasksByFolderIdUseCase.invoke(id = id)
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyMap())
@@ -105,7 +104,7 @@ class TasksViewModel @AssistedInject constructor(
                 flowOf("Все задачи")
             }
 
-            FolderOpenMode.SELECTED -> {
+            FolderOpenMode.DEFINED -> {
                 getFolderNameByIdUseCase.invoke(id = id)
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")

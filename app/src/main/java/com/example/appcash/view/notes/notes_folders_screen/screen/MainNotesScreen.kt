@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.dp
 import com.example.appcash.view.notes.notes_folders_screen.components.FoldersListViewModel
 
 @Composable
-fun NotesFoldersScreen(
+fun MainNotesScreen(
     viewModel: FoldersListViewModel,
     navigateTo: (String) -> Unit
 ) {

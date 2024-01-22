@@ -10,8 +10,8 @@ import dagger.hilt.android.components.ActivityComponent
 @AssistedFactory
 interface NoteInfoViewModelFactory {
     fun create(
-        @Assisted mode: NoteOpenMode,
-        @Assisted(ArgsKeys.ID_KEY) id: Long,
+        @Assisted openMode: NoteOpenMode,
+        @Assisted(ArgsKeys.ID_KEY) noteId: Long,
         @Assisted(ArgsKeys.FOLDER_ID_KEY) folderId: Long
     ): NoteInfoViewModel
 }

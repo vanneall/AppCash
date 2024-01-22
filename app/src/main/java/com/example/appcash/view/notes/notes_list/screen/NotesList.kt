@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.appcash.navigation.Destinations.NOTE_INFO_SCREEN
+import com.example.appcash.navigation.Destinations.NOTE_SCREEN
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.other.SearchTextField
@@ -40,7 +41,9 @@ fun NotesList(
     navigateTo: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(15.dp),
             modifier = modifier
@@ -55,7 +58,7 @@ fun NotesList(
                     content = item.content,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { navigateTo("$NOTE_INFO_SCREEN/${NoteOpenMode.EDIT.name}/${item.id}/${state.folderId}") }
+                        .clickable { navigateTo("$NOTE_SCREEN/${NoteOpenMode.EDIT.name}/${item.id}/${state.folderId}") }
                 )
                 if (index < state.notes.size - 1)
                     Divider(
@@ -66,7 +69,7 @@ fun NotesList(
             }
         }
         FloatingActionButton(
-            onClick = { navigateTo("$NOTE_INFO_SCREEN/${NoteOpenMode.CREATE.name}/${-1}/${state.folderId}") },
+            onClick = { navigateTo("$NOTE_SCREEN/${NoteOpenMode.CREATE.name}/${-1}/${state.folderId}") },
             shape = CircleShape,
             modifier = Modifier
                 .align(Alignment.BottomEnd)

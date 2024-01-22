@@ -45,15 +45,12 @@ import co.yml.charts.ui.piechart.charts.DonutPieChart
 import co.yml.charts.ui.piechart.models.PieChartConfig
 import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.appcash.data.entities.FinancialTransaction
-import com.example.appcash.data.entities.Folder
 import com.example.appcash.data.vo.FinanceCategoryVO
 import com.example.appcash.data.vo.IconFolderVO
-import com.example.appcash.navigation.Destinations
-import com.example.appcash.navigation.Destinations.FINANCE_ADD_SCREEN
+import com.example.appcash.navigation.Destinations.FINANCE_ACCOUNTING_SCREEN
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.finance.main_screen.components.FinanceEvent
 import com.example.appcash.view.finance.main_screen.components.FinanceState
-import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -118,7 +115,7 @@ fun Finance(
             }
         }
         FloatingActionButton(
-            onClick = { navigateTo(FINANCE_ADD_SCREEN) },
+            onClick = { navigateTo(FINANCE_ACCOUNTING_SCREEN) },
             shape = CircleShape,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
