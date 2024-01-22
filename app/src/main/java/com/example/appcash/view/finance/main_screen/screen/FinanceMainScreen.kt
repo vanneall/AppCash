@@ -34,7 +34,10 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import co.yml.charts.common.model.PlotType
@@ -44,6 +47,7 @@ import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.appcash.data.entities.FinancialTransaction
 import com.example.appcash.data.entities.Folder
 import com.example.appcash.data.vo.FinanceCategoryVO
+import com.example.appcash.data.vo.IconFolderVO
 import com.example.appcash.navigation.Destinations
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.finance.main_screen.components.FinanceEvent
@@ -112,7 +116,7 @@ fun Finance(
             }
         }
         FloatingActionButton(
-            onClick = {  },
+            onClick = { },
             shape = CircleShape,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -135,22 +139,34 @@ fun Finance(
 
 @Composable
 fun TransactionRow(
-    vo: Pair<FinancialTransaction, Folder>,
+    vo: Pair<FinancialTransaction, IconFolderVO>,
     modifier: Modifier = Modifier
 ) {
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
     ) {
+        Icon(
+            painter = painterResource(
+                id = LocalContext.current.resources.getIdentifier(
+                    vo.second.iconId,
+                    "drawable",
+                    LocalContext.current.packageName
+                ),
+            ),
+            contentDescription = null
+        )
         Text(
-            text = vo.second.name,
+            text = vo.second.folder.name,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium
         )
         Text(
             fontSize = 16.sp,
             text = vo.first.price.toString(),
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.End,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

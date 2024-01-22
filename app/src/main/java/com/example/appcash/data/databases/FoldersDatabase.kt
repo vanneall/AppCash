@@ -13,6 +13,7 @@ import com.example.appcash.data.dao.TaskToFolderDao
 import com.example.appcash.data.dao.TasksDao
 import com.example.appcash.data.dao.TransactionToFolderDao
 import com.example.appcash.data.entities.FinancialTransaction
+import com.example.appcash.data.entities.FolderToIcon
 import com.example.appcash.data.entities.MainTask
 import com.example.appcash.data.entities.Note
 import com.example.appcash.data.entities.NoteToFolderLink
@@ -33,7 +34,8 @@ import com.example.appcash.utils.RoomConverters
         SubTaskToMainTaskLink::class,
         TaskToFolderLink::class,
         FinancialTransaction::class,
-        TransactionToFolder::class
+        TransactionToFolder::class,
+        FolderToIcon::class
     ]
 )
 @TypeConverters(RoomConverters::class)

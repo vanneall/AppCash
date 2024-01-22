@@ -21,4 +21,8 @@ class FoldersRepositoryImpl @Inject constructor(
     override fun getFolderNameById(id: Long): Flow<String> {
         return database.getFoldersDao().getFolderNameById(id = id)
     }
+
+    override fun insertFolderWithIcon(folder: Folder, iconId: String) {
+        database.getFoldersDao().insertFolderWithIcon(folder, iconId)
+    }
 }

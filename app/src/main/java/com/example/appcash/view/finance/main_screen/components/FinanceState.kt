@@ -5,6 +5,7 @@ import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.appcash.data.entities.FinancialTransaction
 import com.example.appcash.data.entities.Folder
 import com.example.appcash.data.vo.FinanceCategoryVO
+import com.example.appcash.data.vo.IconFolderVO
 import java.time.YearMonth
 
 data class FinanceState(
@@ -17,5 +18,5 @@ data class FinanceState(
             color = Color.Transparent
         )
     ),
-    val transactionsByYearMonth: Map<FinancialTransaction, Folder> = emptyMap()
+    val transactionsByYearMonth: Map<FinancialTransaction, IconFolderVO> = emptyMap()
 )

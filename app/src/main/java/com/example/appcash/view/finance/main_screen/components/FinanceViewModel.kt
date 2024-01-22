@@ -7,6 +7,7 @@ import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.appcash.data.entities.FinancialTransaction
 import com.example.appcash.data.entities.Folder
 import com.example.appcash.data.vo.FinanceCategoryVO
+import com.example.appcash.data.vo.IconFolderVO
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByFolderUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByYearMonthUseCase
 import com.example.appcash.utils.events.Event
@@ -30,7 +31,7 @@ class FinanceViewModel @Inject constructor(
 
     private val _month = MutableStateFlow<YearMonth>(YearMonth.now())
 
-    private val _transactions = MutableStateFlow<Map<FinancialTransaction, Folder>>(emptyMap())
+    private val _transactions = MutableStateFlow<Map<FinancialTransaction, IconFolderVO>>(emptyMap())
 
     private val _categories = MutableStateFlow<Map<FinanceCategoryVO, Int>>(emptyMap())
 

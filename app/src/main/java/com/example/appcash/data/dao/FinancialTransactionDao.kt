@@ -8,19 +8,22 @@ import androidx.room.Transaction
 import com.example.appcash.data.entities.FinancialTransaction
 import com.example.appcash.data.entities.Folder
 import com.example.appcash.data.entities.TransactionToFolder
+import com.example.appcash.data.vo.IconFolderVO
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FinancialTransactionDao {
 
     @Query(
-        "SELECT ft.id, ft.price, ft.date, f.id, f.name, f.color, f.type " +
+        "SELECT ft.id, ft.price, ft.date, f.id, f.name, f.color, f.type,  fi.iconId " +
                 "FROM financialtransaction ft " +
                 "JOIN transactiontofolder tf ON tf.transactionId = ft.id " +
                 "JOIN folder f ON f.id = tf.folderId " +
+                "JOIN foldertoicon fi " +
+                "ON fi.folderId = f.id " +
                 "WHERE ft.date = :monthId "
     )
-    fun getTransactionByMonthId(monthId: String): Flow<Map<FinancialTransaction, Folder>>
+    fun getTransactionByMonthId(monthId: String): Flow<Map<FinancialTransaction, IconFolderVO>>
 
 
     @Query(

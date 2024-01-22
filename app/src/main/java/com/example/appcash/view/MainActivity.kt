@@ -12,18 +12,24 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.appcash.view.finance.add_screen.screen.AddFinanceScreen
+import com.example.appcash.R
+import com.example.appcash.navigation.AppCashNavHost
+import com.example.appcash.navigation.Destinations
+import com.example.appcash.view.finance.add_folder.screen.AddFolderScreen
+import com.example.appcash.view.finance.main_screen.screen.FinanceScreen
 import com.example.appcash.view.ui.theme.AppCashTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AddFinanceScreen()
+                    FinanceScreen()
 //                    Scaffold(
 //                        modifier = Modifier.fillMaxSize(),
 //                        bottomBar = {

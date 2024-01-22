@@ -9,9 +9,11 @@ import com.example.appcash.data.repository_interfaces.TasksRepository
 import com.example.appcash.domain.financial_transactions.implementations.GetTransactionsByFolderUseCaseImpl
 import com.example.appcash.domain.financial_transactions.implementations.GetTransactionsByYearMonthUseCaseImpl
 import com.example.appcash.domain.financial_transactions.implementations.InsertFinanceUseCaseImpl
+import com.example.appcash.domain.financial_transactions.implementations.InsertFolderWithIconUseCaseImpl
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByFolderUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByYearMonthUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.InsertFinanceUseCase
+import com.example.appcash.domain.financial_transactions.interfaces.InsertFolderWithIconUseCase
 import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetFolderUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNoteByIdUseCaseImpl
@@ -157,5 +159,11 @@ class UseCaseModule {
     @ViewModelScoped
     fun provideInsertFinanceUseCase(repository: FinancialTransactionsRepository): InsertFinanceUseCase {
         return InsertFinanceUseCaseImpl(repository = repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideInsertFolderWithIconUseCase(repository: FoldersRepository): InsertFolderWithIconUseCase {
+        return InsertFolderWithIconUseCaseImpl(repository = repository)
     }
 }

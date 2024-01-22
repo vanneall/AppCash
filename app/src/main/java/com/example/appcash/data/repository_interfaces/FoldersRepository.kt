@@ -11,4 +11,6 @@ interface FoldersRepository {
     fun insertFolder(folder: Folder)
 
     fun getFolderNameById(id: Long): Flow<String>
+
+    fun insertFolderWithIcon(folder: Folder, iconId: String)
 }
