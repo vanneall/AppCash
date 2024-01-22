@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.appcash.navigation.Destinations.ALL_TASKS_SCREEN
+import com.example.appcash.navigation.Destinations.FINANCE_ADD_SCREEN
 import com.example.appcash.navigation.Destinations.FOLDERS_SCREEN
 import com.example.appcash.navigation.Destinations.FOLDER_TO_NOTE_LINK_SCREEN
 import com.example.appcash.navigation.Destinations.NOTE_INFO_SCREEN
@@ -19,6 +20,12 @@ import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
 import com.example.appcash.utils.ArgsKeys.ID_KEY
 import com.example.appcash.utils.ArgsKeys.OPEN_MODE_KEY
 import com.example.appcash.view.calendar.AppCacheCalendar
+import com.example.appcash.view.finance.add_folder.components.AddFolderViewModel
+import com.example.appcash.view.finance.add_folder.screen.AddFolderScreen
+import com.example.appcash.view.finance.add_screen.components.AddFinanceViewModel
+import com.example.appcash.view.finance.add_screen.screen.AddFinanceScreen
+import com.example.appcash.view.finance.main_screen.components.FinanceViewModel
+import com.example.appcash.view.finance.main_screen.screen.FinanceScreen
 import com.example.appcash.view.notes.note_info_screen.components.NoteInfoViewModelFactoryProvider
 import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode
 import com.example.appcash.view.notes.note_info_screen.screen.NoteInfoScreen
@@ -41,9 +48,9 @@ fun AppCashNavHost(navController: NavHostController) {
         startDestination = ALL_TASKS_SCREEN,
     ) {
         composable(route = FOLDERS_SCREEN) {
-            val foldersListViewModel: FoldersListViewModel = hiltViewModel()
+            val viewModel: FoldersListViewModel = hiltViewModel()
             NotesFoldersScreen(
-                viewModel = foldersListViewModel,
+                viewModel = viewModel,
                 navigateTo = navController::navigate
             )
         }
@@ -117,9 +124,9 @@ fun AppCashNavHost(navController: NavHostController) {
         }
 
         composable(route = ALL_TASKS_SCREEN) {
-            val foldersListViewModel: AllTasksFoldersViewModel = hiltViewModel()
+            val viewModel: AllTasksFoldersViewModel = hiltViewModel()
             AllTasksScreen(
-                viewModel = foldersListViewModel,
+                viewModel = viewModel,
                 navigateTo = navController::navigate
             )
         }
@@ -157,6 +164,33 @@ fun AppCashNavHost(navController: NavHostController) {
             route = Destinations.CALENDAR_SCREEN
         ) {
             AppCacheCalendar()
+        }
+
+        composable(
+            route = Destinations.FINANCE_CHART_SCREEN
+        ) {
+            val viewModel: FinanceViewModel = hiltViewModel()
+            FinanceScreen(
+                vm = viewModel,
+                navigateTo = navController::navigate
+            )
+        }
+
+        composable(
+            route = Destinations.FINANCE_ADD_SCREEN
+        ) {
+            val viewModel: AddFinanceViewModel = hiltViewModel()
+            AddFinanceScreen(
+                viewModel,
+                navigateTo = navController::navigate
+            )
+        }
+
+        composable(
+            route = Destinations.FINANCE_ADD_FOLDER_SCREEN
+        ) {
+            val viewModel: AddFolderViewModel = hiltViewModel()
+            AddFolderScreen(viewModel)
         }
     }
 }

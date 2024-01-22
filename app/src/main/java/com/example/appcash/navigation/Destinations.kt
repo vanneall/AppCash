@@ -12,4 +12,10 @@ object Destinations {
     const val TASKS_SCREEN = "TASKS"
 
     const val CALENDAR_SCREEN = "CALENDAR"
+
+    const val FINANCE_CHART_SCREEN = "FINANCE_CHART_SCREEN"
+
+    const val FINANCE_ADD_FOLDER_SCREEN = "FINANCE_ADD_FOLDER_SCREEN"
+
+    const val FINANCE_ADD_SCREEN = "FINANCE_ADD_SCREEN"
 }

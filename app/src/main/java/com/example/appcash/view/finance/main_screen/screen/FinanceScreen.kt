@@ -6,9 +6,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.appcash.view.finance.main_screen.components.FinanceViewModel
 
 @Composable
-fun FinanceScreen(vm: FinanceViewModel = viewModel()) {
+fun FinanceScreen(
+    vm: FinanceViewModel,
+    navigateTo: (String) -> Unit
+) {
     Finance(
         vm.state.collectAsState().value,
-        vm::handle
+        vm::handle,
+        navigateTo
     )
 }

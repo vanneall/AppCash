@@ -6,7 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.appcash.view.finance.add_folder.components.AddFolderViewModel
 
 @Composable
-fun AddFolderScreen(vm: AddFolderViewModel = viewModel()){
+fun AddFolderScreen(vm: AddFolderViewModel){
     AddFolder(
         vm.state.collectAsState().value,
         vm::handle

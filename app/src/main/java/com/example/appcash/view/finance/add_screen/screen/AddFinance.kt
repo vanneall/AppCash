@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.appcash.R
+import com.example.appcash.navigation.Destinations.FINANCE_ADD_FOLDER_SCREEN
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.finance.add_screen.components.AddFinanceEvent
 import com.example.appcash.view.finance.add_screen.components.AddFinanceState
@@ -42,6 +43,7 @@ import kotlinx.coroutines.launch
 fun AddFinance(
     state: AddFinanceState,
     onEvent: (Event) -> Unit,
+    navigateTo: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val tabData = listOf(
@@ -90,7 +92,7 @@ fun AddFinance(
                         icon = painterResource(id = R.drawable.add_task_icon),
                         backgroundIconColor = Color.Transparent,
                         iconColor = Color.Black,
-                        onClick = {}
+                        onClick = { navigateTo(FINANCE_ADD_FOLDER_SCREEN) }
                     )
                 }
                 items(items = state.folders) {
@@ -100,7 +102,12 @@ fun AddFinance(
                         iconColor = Color.Black,
                         backgroundIconColor = Color.Transparent,
                         onClick = {
-                            onEvent(AddFinanceEvent.CreateTransactionEvent(it.id, pagerState.currentPage == 0))
+                            onEvent(
+                                AddFinanceEvent.CreateTransactionEvent(
+                                    it.id,
+                                    pagerState.currentPage == 0
+                                )
+                            )
                         }
                     )
                 }

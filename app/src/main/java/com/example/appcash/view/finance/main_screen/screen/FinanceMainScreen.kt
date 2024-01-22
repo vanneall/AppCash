@@ -49,6 +49,7 @@ import com.example.appcash.data.entities.Folder
 import com.example.appcash.data.vo.FinanceCategoryVO
 import com.example.appcash.data.vo.IconFolderVO
 import com.example.appcash.navigation.Destinations
+import com.example.appcash.navigation.Destinations.FINANCE_ADD_SCREEN
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.finance.main_screen.components.FinanceEvent
 import com.example.appcash.view.finance.main_screen.components.FinanceState
@@ -60,7 +61,8 @@ import java.util.Locale
 @Composable
 fun Finance(
     state: FinanceState,
-    onEvent: (Event) -> Unit
+    onEvent: (Event) -> Unit,
+    navigateTo: (String) -> Unit
 ) {
     val pagerState = rememberPagerState(
         pageCount = {
@@ -116,7 +118,7 @@ fun Finance(
             }
         }
         FloatingActionButton(
-            onClick = { },
+            onClick = { navigateTo(FINANCE_ADD_SCREEN) },
             shape = CircleShape,
             modifier = Modifier
                 .align(Alignment.BottomEnd)

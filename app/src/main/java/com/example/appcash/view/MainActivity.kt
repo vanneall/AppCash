@@ -3,6 +3,7 @@ package com.example.appcash.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
@@ -46,34 +48,38 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    FinanceScreen()
-//                    Scaffold(
-//                        modifier = Modifier.fillMaxSize(),
-//                        bottomBar = {
-//                            AppCashBottomNavigation(
-//                                navController = navController,
-//                                screens = listOf(
-//                                    Screen(
-//                                        "Заметки",
-//                                        Destinations.FOLDERS_SCREEN,
-//                                        icon = painterResource(id = R.drawable.notes_icon)
-//                                    ),
-//                                    Screen(
-//                                        "Задачник",
-//                                        Destinations.ALL_TASKS_SCREEN,
-//                                        icon = painterResource(id = R.drawable.some_icon)
-//                                    ),
-//                                    Screen(
-//                                        "Календарь",
-//                                        Destinations.CALENDAR_SCREEN,
-//                                        icon = painterResource(id = R.drawable.kid_star)
-//                                    )
-//                                )
-//                            )
-//                        }
-//                    ) { it
-//                        AppCashNavHost(navController)
-//                    }
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        bottomBar = {
+                            AppCashBottomNavigation(
+                                navController = navController,
+                                screens = listOf(
+                                    Screen(
+                                        "Заметки",
+                                        Destinations.FOLDERS_SCREEN,
+                                        icon = painterResource(id = R.drawable.notes_icon)
+                                    ),
+                                    Screen(
+                                        "Задачник",
+                                        Destinations.ALL_TASKS_SCREEN,
+                                        icon = painterResource(id = R.drawable.some_icon)
+                                    ),
+                                    Screen(
+                                        "Календарь",
+                                        Destinations.CALENDAR_SCREEN,
+                                        icon = painterResource(id = R.drawable.kid_star)
+                                    ),
+                                    Screen(
+                                        "Финансы",
+                                        Destinations.FINANCE_CHART_SCREEN,
+                                        icon = painterResource(id = R.drawable.chart_icon)
+                                    )
+                                )
+                            )
+                        }
+                    ) { it
+                        AppCashNavHost(navController)
+                    }
                 }
             }
         }
@@ -86,7 +92,8 @@ fun AppCashBottomNavigation(
     screens: List<Screen>
 ){
     BottomNavigation(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        backgroundColor = Color.White
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
@@ -105,7 +112,7 @@ fun AppCashBottomNavigation(
                 icon = { ScreenIcon(
                     screen.name,
                     screen.icon
-                ) },
+                ) }
             )
         }
     }
