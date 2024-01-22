@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName")
+
 package com.example.appcash.navigation.screens
 
 import androidx.navigation.NavGraphBuilder
@@ -23,7 +25,7 @@ fun ErrorScreenNavigation(
                 type = NavType.StringType
             }
         )
-    ) {backStackEntry ->
+    ) { backStackEntry ->
         val message = backStackEntry.arguments?.getString(ERROR_MESSAGE_KEY) ?: ""
         ErrorScreen(message = message)
     }

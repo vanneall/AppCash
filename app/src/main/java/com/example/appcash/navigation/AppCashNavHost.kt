@@ -68,8 +68,8 @@ fun AppCashNavHost(navHostController: NavHostController) {
         )
 
         ErrorScreenNavigation(
-            this,
-            navHostController
+            navGraphBuilder = this,
+            navHostController = navHostController
         )
     }
 }
