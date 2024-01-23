@@ -12,8 +12,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.appcash.navigation.Destinations
-import com.example.appcash.navigation.exceptions.MismatchIdException
-import com.example.appcash.navigation.exceptions.MismatchOpenModeException
 import com.example.appcash.utils.ArgsKeys
 import com.example.appcash.view.notes.note_info_screen.components.NoteInfoViewModelFactoryProvider
 import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode

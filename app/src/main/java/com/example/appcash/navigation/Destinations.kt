@@ -1,5 +1,7 @@
 package com.example.appcash.navigation
 
+import com.example.appcash.R
+
 object Destinations {
     const val MAIN_NOTES_FOLDER_SCREEN = "MAIN_NOTES_FOLDER_SCREEN"
 
@@ -21,3 +23,32 @@ object Destinations {
 
     const val ERROR_SCREEN = "ERROR_SCREEN"
 }
+
+val screenBottomItems = listOf(
+    Screen(
+        "Заметки",
+        Destinations.MAIN_NOTES_FOLDER_SCREEN,
+        iconId = R.drawable.notes_icon
+    ),
+    Screen(
+        "Задачник",
+        Destinations.MAIN_TASKS_FOLDER_SCREEN,
+        iconId = R.drawable.some_icon
+    ),
+    Screen(
+        "Календарь",
+        Destinations.MAIN_CALENDAR_SCREEN,
+        iconId = R.drawable.kid_star
+    ),
+    Screen(
+        "Финансы",
+        Destinations.MAIN_FINANCE_SCREEN,
+        iconId = R.drawable.chart_icon
+    )
+)
+
+data class Screen(
+    val name: String,
+    val route: String,
+    val iconId: Int
+)
