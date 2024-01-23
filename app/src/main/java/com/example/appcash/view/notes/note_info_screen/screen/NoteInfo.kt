@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.utils.events.Event
-import com.example.appcash.view.general.other.TopBar
 import com.example.appcash.view.notes.note_info_screen.components.NoteInfoEvent
 import com.example.appcash.view.notes.note_info_screen.components.NoteInfoState
 
@@ -36,7 +35,6 @@ fun NoteInfo(
             .fillMaxWidth()
             .verticalScroll(scrollableState),
     ) {
-        TopBar()
         Spacer(modifier = Modifier.height(27.dp))
         TitleTextField(state = state, onEvent = onEvent)
         Spacer(modifier = Modifier.height(20.dp))

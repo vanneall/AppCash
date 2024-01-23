@@ -1,10 +1,11 @@
 package com.example.appcash.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.example.appcash.navigation.Destinations.MAIN_TASKS_FOLDER_SCREEN
-import com.example.appcash.navigation.exceptions.MismatchOpenModeException
 import com.example.appcash.navigation.screens.CreatingFinanceFolderScreenNavigation
 import com.example.appcash.navigation.screens.ErrorScreenNavigation
 import com.example.appcash.navigation.screens.FinanceAccountingScreenNavigation
@@ -15,56 +16,70 @@ import com.example.appcash.navigation.screens.MainTasksScreenNavigation
 import com.example.appcash.navigation.screens.NoteScreenNavigation
 import com.example.appcash.navigation.screens.NotesListScreenNavigation
 import com.example.appcash.navigation.screens.TasksScreenNavigation
-import com.example.appcash.utils.ArgsKeys
+import com.example.appcash.view.TopAppBarState
 
 
 @Composable
-fun AppCashNavHost(navHostController: NavHostController) {
+fun AppCashNavHost(
+    navHostController: NavHostController,
+    topAppBarState: MutableState<TopAppBarState>,
+    modifier: Modifier = Modifier
+) {
     NavHost(
         navController = navHostController,
         startDestination = MAIN_TASKS_FOLDER_SCREEN,
+        modifier = modifier
     ) {
         MainNotesScreenNavigation(
             navGraphBuilder = this,
-            navHostController = navHostController
+            navHostController = navHostController,
+            topAppBarState = topAppBarState
         )
         NotesListScreenNavigation(
             navGraphBuilder = this,
-            navHostController = navHostController
+            navHostController = navHostController,
+            topAppBarState = topAppBarState
         )
         NoteScreenNavigation(
             navGraphBuilder = this,
-            navHostController = navHostController
+            navHostController = navHostController,
+            topAppBarState = topAppBarState
         )
 
 
         MainTasksScreenNavigation(
             navGraphBuilder = this,
-            navHostController = navHostController
+            navHostController = navHostController,
+            topAppBarState = topAppBarState
         )
         TasksScreenNavigation(
             navGraphBuilder = this,
-            navHostController = navHostController
+            navHostController = navHostController,
+            topAppBarState = topAppBarState
         )
 
 
         MainCalendarScreenNavigation(
             navGraphBuilder = this,
-            navHostController = navHostController
+            navHostController = navHostController,
+            topAppBarState = topAppBarState
         )
 
 
         MainFinanceScreenNavigation(
             navGraphBuilder = this,
-            navHostController = navHostController
+            navHostController = navHostController,
+            topAppBarState = topAppBarState
         )
         FinanceAccountingScreenNavigation(
             navGraphBuilder = this,
-            navHostController = navHostController
+            navHostController = navHostController,
+            topAppBarState = topAppBarState
         )
         CreatingFinanceFolderScreenNavigation(
             navGraphBuilder = this,
-            navHostController = navHostController
+            navHostController = navHostController,
+            topAppBarState = topAppBarState
         )
 
         ErrorScreenNavigation(

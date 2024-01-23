@@ -21,11 +21,9 @@ import com.example.appcash.view.general.list.CreateFolderDialogView
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.list.ItemListView
 import com.example.appcash.view.general.other.SearchTextField
-import com.example.appcash.view.general.other.TopBar
 import com.example.appcash.view.notes.notes_folders_screen.components.FolderListState
 import com.example.appcash.view.notes.notes_folders_screen.components.FolderOpenMode
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FoldersList(
     state: FolderListState,
@@ -40,7 +38,6 @@ fun FoldersList(
         verticalArrangement = Arrangement.spacedBy(15.dp),
         modifier = modifier
     ) {
-        stickyHeader { TopBar() }
         item { Header(name = stringResource(id = R.string.my_folders)) }
         item { SearchTextField(state.searchQuery, onEvent) }
         item { Spacer(modifier = Modifier.padding(bottom = 10.dp)) }

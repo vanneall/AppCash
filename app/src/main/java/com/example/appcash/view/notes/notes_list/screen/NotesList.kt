@@ -1,6 +1,5 @@
 package com.example.appcash.view.notes.notes_list.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,11 +28,9 @@ import com.example.appcash.navigation.Destinations.NOTE_SCREEN
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.other.SearchTextField
-import com.example.appcash.view.general.other.TopBar
 import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode
 import com.example.appcash.view.notes.notes_list.components.NotesListState
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NotesList(
     state: NotesListState,
@@ -48,7 +45,6 @@ fun NotesList(
             verticalArrangement = Arrangement.spacedBy(15.dp),
             modifier = modifier
         ) {
-            stickyHeader { TopBar() }
             item { Header(state.folderName) }
             item { SearchTextField(state.searchQuery, onEvent) }
             item { Spacer(modifier = Modifier.padding(bottom = 10.dp)) }

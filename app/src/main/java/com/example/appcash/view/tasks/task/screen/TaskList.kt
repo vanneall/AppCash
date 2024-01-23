@@ -34,11 +34,9 @@ import com.example.appcash.data.entities.Task
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.other.SearchTextField
-import com.example.appcash.view.general.other.TopBar
 import com.example.appcash.view.tasks.task.components.TaskEvent
 import com.example.appcash.view.tasks.task.components.TasksState
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskList(
     state: TasksState,
@@ -50,7 +48,6 @@ fun TaskList(
         contentPadding = PaddingValues(bottom = 50.dp),
         modifier = modifier
     ) {
-        stickyHeader { TopBar() }
         item { Header(state.folderName) }
         item { SearchTextField(state.querySearch, onEvent) }
         itemsIndexed(state.values.toList()) { index, item ->
@@ -179,8 +176,6 @@ fun AddTaskRow(
         )
     }
 }
-
-
 
 
 //@Preview(showBackground = true)

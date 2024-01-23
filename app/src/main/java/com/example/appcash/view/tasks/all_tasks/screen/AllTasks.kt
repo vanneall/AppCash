@@ -37,11 +37,9 @@ import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.list.ItemListView
 import com.example.appcash.view.general.list.RoundedIconView
 import com.example.appcash.view.general.other.SearchTextField
-import com.example.appcash.view.general.other.TopBar
 import com.example.appcash.view.notes.notes_folders_screen.components.FolderOpenMode
 import com.example.appcash.view.tasks.all_tasks.components.AllTasksState
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AllTasks(
     state: AllTasksState,
@@ -57,7 +55,6 @@ fun AllTasks(
         contentPadding = PaddingValues(bottom = 50.dp),
         modifier = modifier
     ) {
-        stickyHeader { TopBar() }
         item {
             TasksCounterRow(
                 plannedTitle = stringResource(id = R.string.planned),

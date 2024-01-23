@@ -3,6 +3,7 @@
 package com.example.appcash.navigation.screens
 
 import android.app.Activity
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -13,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.appcash.navigation.Destinations
 import com.example.appcash.utils.ArgsKeys
+import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.notes.note_info_screen.components.NoteInfoViewModelFactoryProvider
 import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode
 import com.example.appcash.view.notes.note_info_screen.screen.NoteInfoScreen
@@ -25,7 +27,8 @@ import dagger.hilt.android.EntryPointAccessors
 
 fun MainNotesScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    topAppBarState: MutableState<TopAppBarState>
 ) {
     navGraphBuilder.composable(
         route = Destinations.MAIN_NOTES_FOLDER_SCREEN
@@ -33,14 +36,16 @@ fun MainNotesScreenNavigation(
         val viewModel: FoldersListViewModel = hiltViewModel()
         MainNotesScreen(
             viewModel = viewModel,
-            navigateTo = navHostController::navigate
+            navigateTo = navHostController::navigate,
+            topAppBarState = topAppBarState
         )
     }
 }
 
 fun NotesListScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    topAppBarState: MutableState<TopAppBarState>
 ) {
     navGraphBuilder.composable(
         route = "${Destinations.NOTES_LIST_SCREEN}/{${ArgsKeys.OPEN_MODE_KEY}}/{${ArgsKeys.ID_KEY}}",
@@ -76,15 +81,17 @@ fun NotesListScreenNavigation(
 
         NotesListScreen(
             viewModel = viewModel,
+            navigateTo = navHostController::navigate,
             navigateBack = navHostController::popBackStack,
-            navigateTo = navHostController::navigate
+            topAppBarState = topAppBarState
         )
     }
 }
 
 fun NoteScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    topAppBarState: MutableState<TopAppBarState>
 ) {
     navGraphBuilder.composable(
         route = "${Destinations.NOTE_SCREEN}/{${ArgsKeys.OPEN_MODE_KEY}}/{${ArgsKeys.ID_KEY}}/{${ArgsKeys.FOLDER_ID_KEY}}",
@@ -121,7 +128,8 @@ fun NoteScreenNavigation(
 
         NoteInfoScreen(
             viewModel = viewModel,
-            navigateBack = navHostController::popBackStack
+            navigateBack = navHostController::popBackStack,
+            topAppBarState = topAppBarState
         )
     }
 }
