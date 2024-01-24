@@ -15,14 +15,14 @@ import com.example.appcash.domain.financial_transactions.interfaces.GetTransacti
 import com.example.appcash.domain.financial_transactions.interfaces.InsertFinanceUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.InsertFolderWithIconUseCase
 import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
-import com.example.appcash.domain.notes.implementations.GetFolderUseCaseImpl
+import com.example.appcash.domain.notes.implementations.GetFolderByTypeUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNoteByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNotesByFolderIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNotesUseCaseImpl
 import com.example.appcash.domain.notes.implementations.InsertFolderUseCaseImpl
 import com.example.appcash.domain.notes.implementations.UpsertNoteUseCaseImpl
 import com.example.appcash.domain.notes.interfaces.GetFolderNameByIdUseCase
-import com.example.appcash.domain.notes.interfaces.GetFoldersUseCase
+import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
 import com.example.appcash.domain.notes.interfaces.GetNoteByIdUseCase
 import com.example.appcash.domain.notes.interfaces.GetNotesByFolderIdUseCase
 import com.example.appcash.domain.notes.interfaces.GetNotesUseCase
@@ -55,8 +55,8 @@ import dagger.hilt.android.scopes.ViewModelScoped
 class UseCaseModule {
     @Provides
     @ViewModelScoped
-    fun provideGetFoldersUseCase(repository: FoldersRepository): GetFoldersUseCase {
-        return GetFolderUseCaseImpl(repository = repository)
+    fun provideGetFoldersUseCase(repository: FoldersRepository): GetFoldersByTypeUseCase {
+        return GetFolderByTypeUseCaseImpl(repository = repository)
     }
 
     @Provides

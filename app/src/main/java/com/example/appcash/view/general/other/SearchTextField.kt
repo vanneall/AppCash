@@ -39,7 +39,7 @@ fun SearchTextField(
         onValueChange = { newValue ->
             onEvent(
                 SearchEvent(
-                    searchQuery = newValue
+                    query = newValue
                 )
             )
         },
@@ -59,7 +59,7 @@ fun SearchTextField(
                 modifier = Modifier.clickable {
                     onEvent(
                         SearchEvent(
-                            searchQuery = StringExtensions.EMPTY_STRING
+                            query = StringExtensions.EMPTY_STRING
                         )
                     )
                 }
@@ -69,7 +69,7 @@ fun SearchTextField(
         keyboardActions = KeyboardActions(onSearch = {
             onEvent(
                 SearchEvent(
-                    searchQuery = searchQuery
+                    query = searchQuery
                 )
             )
         }),

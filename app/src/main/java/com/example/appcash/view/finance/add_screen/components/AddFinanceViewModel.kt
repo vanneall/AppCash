@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.appcash.data.entities.FinancialTransaction
 import com.example.appcash.data.entities.FolderType
 import com.example.appcash.domain.financial_transactions.interfaces.InsertFinanceUseCase
-import com.example.appcash.domain.notes.interfaces.GetFoldersUseCase
+import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.utils.events.SearchEvent
@@ -23,11 +23,11 @@ import kotlin.math.abs
 
 @HiltViewModel
 class AddFinanceViewModel @Inject constructor(
-    getFoldersUseCase: GetFoldersUseCase,
+    getFoldersByTypeUseCase: GetFoldersByTypeUseCase,
     private val insertFinanceUseCase: InsertFinanceUseCase
 ) : ViewModel(), EventHandler {
 
-    private val _list = getFoldersUseCase.invoke(FolderType.FINANCIAL)
+    private val _list = getFoldersByTypeUseCase.invoke(FolderType.FINANCIAL, {})
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val _searchQuery = MutableStateFlow("")
@@ -45,7 +45,7 @@ class AddFinanceViewModel @Inject constructor(
     override fun handle(event: Event) {
         when (event) {
             is SearchEvent -> {
-                _searchQuery.update { event.searchQuery }
+                _searchQuery.update { event.query }
             }
 
             is AddFinanceEvent.InputPriceEvent -> {

@@ -1,6 +1,5 @@
 package com.example.appcash.view.notes.notes_folders_screen.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -21,12 +20,12 @@ import com.example.appcash.view.general.list.CreateFolderDialogView
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.list.ItemListView
 import com.example.appcash.view.general.other.SearchTextField
-import com.example.appcash.view.notes.notes_folders_screen.components.FolderListState
 import com.example.appcash.view.notes.notes_folders_screen.components.FolderOpenMode
+import com.example.appcash.view.notes.notes_folders_screen.components.MainNotesState
 
 @Composable
-fun FoldersList(
-    state: FolderListState,
+fun MainNotes(
+    state: MainNotesState,
     onEvent: (Event) -> Unit,
     navigateTo: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -38,9 +37,25 @@ fun FoldersList(
         verticalArrangement = Arrangement.spacedBy(15.dp),
         modifier = modifier
     ) {
-        item { Header(name = stringResource(id = R.string.my_folders)) }
-        item { SearchTextField(state.searchQuery, onEvent) }
-        item { Spacer(modifier = Modifier.padding(bottom = 10.dp)) }
+        item {
+            Header(
+                name = stringResource(id = R.string.my_folders)
+            )
+        }
+
+        item {
+            SearchTextField(
+                searchQuery = state.query,
+                onEvent = onEvent
+            )
+        }
+
+        item {
+            Spacer(
+                modifier = Modifier.padding(bottom = 10.dp)
+            )
+        }
+
         item {
             ItemListView(
                 name = stringResource(id = R.string.new_folder),
@@ -49,6 +64,7 @@ fun FoldersList(
                 onClick = { isDialogOpen.value = true }
             )
         }
+
         item {
             ItemListView(
                 name = stringResource(id = R.string.all_notes),
@@ -57,7 +73,10 @@ fun FoldersList(
                 onClick = { navigateTo("$NOTES_LIST_SCREEN/${FolderOpenMode.ALL.name}/${0}") }
             )
         }
-        items(items = state.folders) { folder ->
+
+        items(
+            items = state.list
+        ) { folder ->
             ItemListView(
                 name = folder.name,
                 icon = painterResource(id = R.drawable.folder_icon),

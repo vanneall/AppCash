@@ -76,7 +76,7 @@ class TasksViewModel @AssistedInject constructor(
                 }
             }
             is SearchEvent -> {
-                _searchQuery.update { event.searchQuery }
+                _searchQuery.update { event.query }
             }
             is TaskEvent.UpdateCheckBoxEvent -> {
                 viewModelScope.launch(Dispatchers.IO) {
@@ -95,6 +95,7 @@ class TasksViewModel @AssistedInject constructor(
             FolderOpenMode.DEFINED -> {
                 getMapTasksByFolderIdUseCase.invoke(id = id)
             }
+            else -> flowOf()
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyMap())
     }
 
@@ -107,6 +108,7 @@ class TasksViewModel @AssistedInject constructor(
             FolderOpenMode.DEFINED -> {
                 getFolderNameByIdUseCase.invoke(id = id)
             }
+            else -> flowOf()
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
     }
 }

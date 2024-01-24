@@ -19,7 +19,7 @@ import com.example.appcash.view.notes.note_info_screen.components.NoteInfoViewMo
 import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode
 import com.example.appcash.view.notes.note_info_screen.screen.NoteInfoScreen
 import com.example.appcash.view.notes.notes_folders_screen.components.FolderOpenMode
-import com.example.appcash.view.notes.notes_folders_screen.components.FoldersListViewModel
+import com.example.appcash.view.notes.notes_folders_screen.components.MainNotesViewModel
 import com.example.appcash.view.notes.notes_folders_screen.screen.MainNotesScreen
 import com.example.appcash.view.notes.notes_list.components.NoteListViewModelFactoryProvider
 import com.example.appcash.view.notes.notes_list.screen.NotesListScreen
@@ -33,7 +33,7 @@ fun MainNotesScreenNavigation(
     navGraphBuilder.composable(
         route = Destinations.MAIN_NOTES_FOLDER_SCREEN
     ) {
-        val viewModel: FoldersListViewModel = hiltViewModel()
+        val viewModel: MainNotesViewModel = hiltViewModel()
         MainNotesScreen(
             viewModel = viewModel,
             navigateTo = navHostController::navigate,
@@ -66,7 +66,7 @@ fun NotesListScreenNavigation(
         ).provideNoteListViewModelFactory()
 
         val openModeString = backStackEntry.arguments?.getString(ArgsKeys.OPEN_MODE_KEY)
-            ?: FolderOpenMode.Definition.DEFAULT_VALUE_STRING
+            ?: FolderOpenMode.Definition.ERROR_VALUE_STRING
 
         val openModeEnum = FolderOpenMode.Definition.handle(mode = openModeString)
         val folderId = backStackEntry.arguments?.getLong(ArgsKeys.ID_KEY)
@@ -114,7 +114,7 @@ fun NoteScreenNavigation(
         ).provideNoteInfoViewModelFactory()
 
         val openModeString = backStackEntry.arguments?.getString(ArgsKeys.OPEN_MODE_KEY)
-            ?: NoteOpenMode.Definition.DEFAULT_VALUE_STRING
+            ?: NoteOpenMode.Definition.ERROR_VALUE_STRING
 
         val openModeEnum = NoteOpenMode.Definition.handle(mode = openModeString)
 

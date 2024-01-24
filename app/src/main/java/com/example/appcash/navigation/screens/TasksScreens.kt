@@ -62,7 +62,7 @@ fun TasksScreenNavigation(
         ).provideTasksViewModelFactory()
 
         val openModeString = backStackEntry.arguments?.getString(ArgsKeys.OPEN_MODE_KEY)
-            ?: FolderOpenMode.Definition.DEFAULT_VALUE_STRING
+            ?: FolderOpenMode.Definition.ERROR_VALUE_STRING
 
         val openModeEnum = FolderOpenMode.Definition.handle(mode = openModeString)
 

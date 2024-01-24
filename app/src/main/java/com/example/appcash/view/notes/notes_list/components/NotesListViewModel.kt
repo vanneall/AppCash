@@ -56,7 +56,7 @@ class NotesListViewModel @AssistedInject constructor(
     override fun handle(event: Event) {
         when (event) {
             is SearchEvent -> {
-                _searchQuery.update { event.searchQuery }
+                _searchQuery.update { event.query }
             }
         }
     }
@@ -70,6 +70,7 @@ class NotesListViewModel @AssistedInject constructor(
             FolderOpenMode.DEFINED -> {
                 getNoteByFolderIdsUseCase.invoke(id = folderId)
             }
+            else -> flowOf()
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
@@ -82,6 +83,7 @@ class NotesListViewModel @AssistedInject constructor(
             FolderOpenMode.DEFINED -> {
                 getFolderNameByIdUseCase.invoke(id = folderId)
             }
+            else -> flowOf()
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
     }
 }

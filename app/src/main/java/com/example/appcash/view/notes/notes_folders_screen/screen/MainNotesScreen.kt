@@ -7,23 +7,29 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.appcash.view.TopAppBarState
-import com.example.appcash.view.notes.notes_folders_screen.components.FoldersListViewModel
+import com.example.appcash.view.general.ErrorScreen
+import com.example.appcash.view.notes.notes_folders_screen.components.MainNotesViewModel
 
 @Composable
 fun MainNotesScreen(
-    viewModel: FoldersListViewModel,
+    viewModel: MainNotesViewModel,
     navigateTo: (String) -> Unit,
     topAppBarState: MutableState<TopAppBarState>
 ) {
-
     topAppBarState.value = TopAppBarState(
         title = "Папки с заметками"
     )
 
-    FoldersList(
-        state = viewModel.state.collectAsState().value,
-        onEvent = viewModel::handle,
-        navigateTo = navigateTo,
-        modifier = Modifier.padding(horizontal = 20.dp)
-    )
+    when (val message = viewModel.state.collectAsState().value.error) {
+        null -> MainNotes(
+            state = viewModel.state.collectAsState().value,
+            onEvent = viewModel::handle,
+            navigateTo = navigateTo,
+            modifier = Modifier.padding(horizontal = 20.dp)
+        )
+
+        else -> ErrorScreen(
+            message = message
+        )
+    }
 }

@@ -1,7 +1,11 @@
 package com.example.appcash.utils.events
 
-interface Event
+interface Event {
+    data class ErrorEvent(
+        val message: String
+    ): Event
+}
 
 data class SearchEvent(
-    val searchQuery: String
+    val query: String
 ): Event

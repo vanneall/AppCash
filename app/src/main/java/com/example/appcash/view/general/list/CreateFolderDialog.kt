@@ -29,12 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.appcash.R
 import com.example.appcash.utils.StringExtensions
-import com.example.appcash.view.notes.notes_folders_screen.components.FolderListEvent
+import com.example.appcash.view.notes.notes_folders_screen.components.MainNotesEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateFolderDialogView(
-    onCreateEvent: (FolderListEvent) -> Unit,
+    onCreateEvent: (MainNotesEvent) -> Unit,
     isDialogOpenedMutableState: MutableState<Boolean>,
 ) {
     val name = remember { mutableStateOf(StringExtensions.EMPTY_STRING) }
@@ -71,7 +71,7 @@ fun CreateFolderDialogView(
 
 @Composable
 private fun CreateCancelButtonsRowView(
-    onEvent: (FolderListEvent) -> Unit,
+    onEvent: (MainNotesEvent) -> Unit,
     isDialogOpenedMutableState: MutableState<Boolean>,
     name: String,
 ) {
@@ -87,7 +87,7 @@ private fun CreateCancelButtonsRowView(
         Button(
             onClick = {
                 onEvent(
-                    FolderListEvent.CreateFolderEvent(
+                    MainNotesEvent.InsertFolderEvent(
                         name = name
                     )
                 )

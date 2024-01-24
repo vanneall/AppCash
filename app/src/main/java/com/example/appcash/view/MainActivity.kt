@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.example.appcash.navigation.AppCashBottomNavigation
@@ -84,7 +85,8 @@ private fun AppCashTopAppBar(
             Text(
                 text = state.title,
                 color = Color.Black,
-                fontSize = 22.sp
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold
             )
         },
         navigationIcon = state.navigationIcon ?: {},

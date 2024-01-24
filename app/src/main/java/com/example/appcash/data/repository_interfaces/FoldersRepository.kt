@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface FoldersRepository {
-    fun getFolders(type: FolderType): Flow<List<Folder>>
+    fun getFoldersByType(type: FolderType): Flow<List<Folder>>
 
     fun insertFolder(folder: Folder)
 

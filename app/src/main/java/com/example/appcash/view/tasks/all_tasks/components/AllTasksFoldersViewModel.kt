@@ -2,9 +2,8 @@ package com.example.appcash.view.tasks.all_tasks.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appcash.data.entities.Folder
 import com.example.appcash.data.entities.FolderType
-import com.example.appcash.domain.notes.interfaces.GetFoldersUseCase
+import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
 import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
 import com.example.appcash.domain.tasks.implementations.GetPlannedCountUseCaseImpl
 import com.example.appcash.domain.tasks.interfaces.GetCompletedCountUseCase
@@ -12,8 +11,7 @@ import com.example.appcash.utils.StringExtensions
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.utils.events.SearchEvent
-import com.example.appcash.view.notes.notes_folders_screen.components.FolderListEvent
-import com.example.appcash.view.notes.notes_folders_screen.components.FolderListState
+import com.example.appcash.view.notes.notes_folders_screen.components.MainNotesEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,14 +25,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AllTasksFoldersViewModel @Inject constructor(
-    getFoldersUseCase: GetFoldersUseCase,
+    getFoldersByTypeUseCase: GetFoldersByTypeUseCase,
     getPlannedCountUseCaseImpl: GetPlannedCountUseCaseImpl,
     getCompletedCountUseCase: GetCompletedCountUseCase,
     private val insertFolderUseCase: InsertFolderUseCase,
 ) : ViewModel(), EventHandler {
     private val _searchQuery = MutableStateFlow(StringExtensions.EMPTY_STRING)
 
-    private val _state = getFoldersUseCase.invoke(type = FolderType.TASKS).map { list ->
+    private val _state = getFoldersByTypeUseCase.invoke(type = FolderType.TASKS, {}).map { list ->
         AllTasksState(folders = list)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), AllTasksState())
 
@@ -60,30 +58,27 @@ class AllTasksFoldersViewModel @Inject constructor(
 
     override fun handle(event: Event) {
         when (event) {
-            is FolderListEvent.CreateFolderEvent -> {
-                viewModelScope.launch(context = Dispatchers.IO) {
-                    insertFolder(name = event.name)
-                }
+            is MainNotesEvent.InsertFolderEvent -> {
+                insertFolder(
+                    name = event.name
+                )
             }
 
             is SearchEvent -> {
-                _searchQuery.update { event.searchQuery }
+                _searchQuery.update { event.query }
             }
         }
     }
 
 
     private fun insertFolder(name: String) {
-        val handledName = name.trim()
-
-        if (handledName.isEmpty()) return
-
-        insertFolderUseCase.invoke(
-            Folder(
-                name = handledName,
+        viewModelScope.launch(context = Dispatchers.IO) {
+            insertFolderUseCase.invoke(
+                name = name,
                 color = 1, //TODO Добавить цвет папкам
-                type = FolderType.TASKS
+                type = FolderType.TASKS,
+                {}
             )
-        )
+        }
     }
 }

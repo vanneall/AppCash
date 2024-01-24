@@ -2,9 +2,9 @@ package com.example.appcash.view.notes.notes_folders_screen.components
 
 import com.example.appcash.utils.events.Event
 
-sealed class FolderListEvent : Event {
-    data class CreateFolderEvent(
+sealed class MainNotesEvent : Event {
+    data class InsertFolderEvent(
         val name: String
-    ) : FolderListEvent()
+    ) : MainNotesEvent()
 }
 
