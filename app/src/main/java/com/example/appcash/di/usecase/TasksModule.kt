@@ -1,6 +1,5 @@
 package com.example.appcash.di.usecase
 
-import com.example.appcash.data.repository_interfaces.TaskToFolderRepository
 import com.example.appcash.data.repository_interfaces.TasksRepository
 import com.example.appcash.domain.tasks.implementations.GetCompletedCountUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.GetMapTasksByFolderIdUseCaseImpl
@@ -65,11 +64,5 @@ class TasksModule {
     @ViewModelScoped
     fun provideInsertSubTaskUseCase(repository: TasksRepository): InsertSubtaskUseCase {
         return InsertSubtaskUseCaseImpl(repository = repository)
-    }
-
-    @Provides
-    @ViewModelScoped
-    fun provideInsertTaskToFolderLinkUseCase(repository: TaskToFolderRepository): InsertTaskToFolderLinkUseCase {
-        return InsertTaskToFolderLinkUseCaseImpl(repository = repository)
     }
 }
