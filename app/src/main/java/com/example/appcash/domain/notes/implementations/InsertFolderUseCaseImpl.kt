@@ -25,9 +25,7 @@ class InsertFolderUseCaseImpl @Inject constructor(
                 )
             )
         } catch (ex: Exception) {
-            onError(
-                ErrorEvent(message = "Insert exception")
-            )
+            onError(ErrorEvent)
 
             Log.e("Insert exception", ex.stackTrace.contentToString())
         }

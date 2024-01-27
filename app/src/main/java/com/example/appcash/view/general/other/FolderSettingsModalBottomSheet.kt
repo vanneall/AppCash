@@ -31,7 +31,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,21 +43,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.utils.ParamsStore.colorsList
 import com.example.appcash.utils.events.Event
-import com.example.appcash.view.notes.notes_folder.components.MainNotesEvent.InsertFolderEvent
+import com.example.appcash.view.notes.notes_folder.components.MainNotesEvent.UpsertFolderEvent
 
 @Composable
 fun FolderSettingsModalBottomSheet(
     sheetState: SheetState,
-    isOpenState: MutableState<Boolean>,
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    //TODO переписать хранение состояния в state
     val name = remember { mutableStateOf("") }
     val selectedColorIndex = remember { mutableIntStateOf(0) }
 
     ModalBottomSheet(
         sheetState = sheetState,
-        onDismissRequest = { isOpenState.value = false },
+        onDismissRequest = { onEvent(BottomSheetEvent.HideEvent) },
         modifier = modifier,
     ) {
         OutlinedTextField(
@@ -97,7 +96,7 @@ fun FolderSettingsModalBottomSheet(
                 .padding(start = 20.dp, end = 20.dp, bottom = 40.dp)
         ) {
             Button(
-                onClick = { isOpenState.value = false },
+                onClick = { onEvent(BottomSheetEvent.HideEvent) },
                 modifier = Modifier.weight(0.5f)
             ) {
                 Text(
@@ -109,12 +108,12 @@ fun FolderSettingsModalBottomSheet(
             Button(
                 onClick = {
                     onEvent(
-                        InsertFolderEvent(
+                        UpsertFolderEvent(
                             name = name.value,
                             colorIndex = selectedColorIndex.intValue
                         )
                     )
-                    isOpenState.value = false
+                    onEvent(BottomSheetEvent.HideEvent)
                 },
                 modifier = Modifier.weight(0.5f)
             ) {
@@ -126,6 +125,11 @@ fun FolderSettingsModalBottomSheet(
             }
         }
     }
+}
+
+sealed class BottomSheetEvent : Event {
+    object ShowEvent : Event
+    object HideEvent : Event
 }
 
 @Composable

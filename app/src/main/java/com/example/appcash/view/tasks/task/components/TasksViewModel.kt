@@ -106,7 +106,7 @@ class TasksViewModel @AssistedInject constructor(
             }
 
             FolderOpenMode.DEFINED -> {
-                getFolderNameByIdUseCase.invoke(id = id)
+                getFolderNameByIdUseCase.invoke(id = id, onError = {})
             }
             else -> flowOf()
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")

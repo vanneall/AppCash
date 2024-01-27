@@ -8,6 +8,8 @@ import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.utils.events.SearchEvent
+import com.example.appcash.view.general.other.BottomSheetEvent
+import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,12 +23,14 @@ import javax.inject.Inject
 @HiltViewModel
 class MainNotesViewModel @Inject constructor(
     getFoldersByTypeUseCase: GetFoldersByTypeUseCase,
-    private val insertFolderUseCase: InsertFolderUseCase,
+    private val insertFolderUseCase: Lazy<InsertFolderUseCase>,
 ) : ViewModel(), EventHandler {
 
     private val _searchQuery = MutableStateFlow("")
 
-    private val _error = MutableStateFlow<String?>(null)
+    private val _error = MutableStateFlow(false)
+
+    private val _isShowed = MutableStateFlow(false)
 
     private val _foldersDtoList = getFoldersByTypeUseCase
         .invoke(
@@ -37,18 +41,20 @@ class MainNotesViewModel @Inject constructor(
     val state = combine(
         _foldersDtoList,
         _searchQuery,
-        _error
-    ) { list, searchQuery, isError ->
+        _error,
+        _isShowed
+    ) { list, searchQuery, isError, isShowed ->
         MainNotesState(
-            list = list.filter { it.name.contains(searchQuery) },
+            foldersList = list.filter { it.name.contains(searchQuery) },
             query = searchQuery,
-            error = isError
+            error = isError,
+            isShow = isShowed
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), MainNotesState())
 
     override fun handle(event: Event) {
         when (event) {
-            is MainNotesEvent.InsertFolderEvent -> {
+            is MainNotesEvent.UpsertFolderEvent -> {
                 insertFolder(
                     name = event.name,
                     colorIndex = event.colorIndex
@@ -60,14 +66,22 @@ class MainNotesViewModel @Inject constructor(
             }
 
             is Event.ErrorEvent -> {
-                updateIsError(message = event.message)
+                updateIsError()
+            }
+
+            is BottomSheetEvent.ShowEvent -> {
+                showBottomSheet()
+            }
+
+            is BottomSheetEvent.HideEvent -> {
+                hideBottomSheet()
             }
         }
     }
 
     private fun insertFolder(name: String, colorIndex: Int) {
         viewModelScope.launch(context = Dispatchers.IO) {
-            insertFolderUseCase.invoke(
+            insertFolderUseCase.get().invoke(
                 name = name,
                 colorIndex = colorIndex,
                 type = FolderType.NOTES,
@@ -80,7 +94,15 @@ class MainNotesViewModel @Inject constructor(
         _searchQuery.update { query }
     }
 
-    private fun updateIsError(message: String) {
-        _error.update { message }
+    private fun updateIsError() {
+        _error.update { true }
+    }
+
+    private fun showBottomSheet() {
+        _isShowed.update { true }
+    }
+
+    private fun hideBottomSheet() {
+        _isShowed.update { false }
     }
 }

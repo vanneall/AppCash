@@ -14,19 +14,23 @@ import com.example.appcash.domain.financial_transactions.interfaces.GetTransacti
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByYearMonthUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.InsertFinanceUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.InsertFolderWithIconUseCase
-import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
+import com.example.appcash.domain.notes.implementations.DeleteFolderByIdImpl
 import com.example.appcash.domain.notes.implementations.GetFolderByTypeUseCaseImpl
+import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNoteByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNotesByFolderIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNotesUseCaseImpl
 import com.example.appcash.domain.notes.implementations.InsertFolderUseCaseImpl
+import com.example.appcash.domain.notes.implementations.UpdateFolderUseCaseImpl
 import com.example.appcash.domain.notes.implementations.UpsertNoteUseCaseImpl
+import com.example.appcash.domain.notes.interfaces.DeleteByIdFolderUseCase
 import com.example.appcash.domain.notes.interfaces.GetFolderNameByIdUseCase
 import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
 import com.example.appcash.domain.notes.interfaces.GetNoteByIdUseCase
 import com.example.appcash.domain.notes.interfaces.GetNotesByFolderIdUseCase
 import com.example.appcash.domain.notes.interfaces.GetNotesUseCase
 import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
+import com.example.appcash.domain.notes.interfaces.UpdateFolderUseCase
 import com.example.appcash.domain.notes.interfaces.UpsertNoteUseCase
 import com.example.appcash.domain.tasks.implementations.GetCompletedCountUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.GetMapTasksByFolderIdUseCaseImpl
@@ -165,5 +169,17 @@ class UseCaseModule {
     @ViewModelScoped
     fun provideInsertFolderWithIconUseCase(repository: FoldersRepository): InsertFolderWithIconUseCase {
         return InsertFolderWithIconUseCaseImpl(repository = repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideDeleteFolderByIdUseCase(repository: FoldersRepository): DeleteByIdFolderUseCase{
+        return DeleteFolderByIdImpl(repository = repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideUpdateFolderUseCase(repository: FoldersRepository): UpdateFolderUseCase{
+        return UpdateFolderUseCaseImpl(repository = repository)
     }
 }

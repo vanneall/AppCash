@@ -11,13 +11,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ErrorScreen(message: String) {
+fun ErrorScreen() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "ERROR: $message",
+            text = "ERROR",
             color = Color.Red,
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold

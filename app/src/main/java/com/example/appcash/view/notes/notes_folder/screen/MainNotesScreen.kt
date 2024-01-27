@@ -20,16 +20,14 @@ fun MainNotesScreen(
         title = "Папки с заметками"
     )
 
-    when (val message = viewModel.state.collectAsState().value.error) {
-        null -> MainNotes(
+    when (viewModel.state.collectAsState().value.error) {
+        false -> MainNotes(
             state = viewModel.state.collectAsState().value,
             onEvent = viewModel::handle,
             navigateTo = navigateTo,
             modifier = Modifier.padding(horizontal = 20.dp)
         )
 
-        else -> ErrorScreen(
-            message = message
-        )
+        true -> ErrorScreen()
     }
 }

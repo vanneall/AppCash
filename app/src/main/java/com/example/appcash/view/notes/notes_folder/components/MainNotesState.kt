@@ -4,6 +4,7 @@ import com.example.appcash.data.dto.FolderDto
 
 data class MainNotesState (
     val query: String = "",
-    val list: List<FolderDto> = emptyList(),
-    val error: String? = null
+    val foldersList: List<FolderDto> = emptyList(),
+    val error: Boolean = true,
+    val isShow: Boolean = false
 )

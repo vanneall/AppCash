@@ -13,7 +13,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.appcash.navigation.Destinations
-import com.example.appcash.utils.ArgsKeys
+import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
+import com.example.appcash.utils.ArgsKeys.ID_KEY
+import com.example.appcash.utils.ArgsKeys.OPEN_MODE_KEY
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.notes.note_info_screen.components.NoteInfoViewModelFactoryProvider
 import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode
@@ -48,13 +50,13 @@ fun NotesListScreenNavigation(
     topAppBarState: MutableState<TopAppBarState>
 ) {
     navGraphBuilder.composable(
-        route = "${Destinations.NOTES_LIST_SCREEN}/{${ArgsKeys.OPEN_MODE_KEY}}/{${ArgsKeys.ID_KEY}}",
+        route = "${Destinations.NOTES_LIST_SCREEN}/{$ID_KEY}/{$OPEN_MODE_KEY}",
 
         arguments = listOf(
-            navArgument(name = ArgsKeys.OPEN_MODE_KEY) {
+            navArgument(name = OPEN_MODE_KEY) {
                 type = NavType.StringType
             },
-            navArgument(name = ArgsKeys.ID_KEY) {
+            navArgument(name = ID_KEY) {
                 type = NavType.LongType
             }
         )
@@ -65,11 +67,11 @@ fun NotesListScreenNavigation(
             entryPoint = NoteListViewModelFactoryProvider::class.java
         ).provideNoteListViewModelFactory()
 
-        val openModeString = backStackEntry.arguments?.getString(ArgsKeys.OPEN_MODE_KEY)
+        val openModeString = backStackEntry.arguments?.getString(OPEN_MODE_KEY)
             ?: FolderOpenMode.Definition.ERROR_VALUE_STRING
 
         val openModeEnum = FolderOpenMode.Definition.handle(mode = openModeString)
-        val folderId = backStackEntry.arguments?.getLong(ArgsKeys.ID_KEY)
+        val folderId = backStackEntry.arguments?.getLong(ID_KEY)
             ?: 0
 
         val viewModel = viewModel {
@@ -94,16 +96,16 @@ fun NoteScreenNavigation(
     topAppBarState: MutableState<TopAppBarState>
 ) {
     navGraphBuilder.composable(
-        route = "${Destinations.NOTE_SCREEN}/{${ArgsKeys.OPEN_MODE_KEY}}/{${ArgsKeys.ID_KEY}}/{${ArgsKeys.FOLDER_ID_KEY}}",
+        route = "${Destinations.NOTE_SCREEN}/{$FOLDER_ID_KEY}/{$ID_KEY}/{$OPEN_MODE_KEY}",
 
         arguments = listOf(
-            navArgument(name = ArgsKeys.OPEN_MODE_KEY) {
+            navArgument(name = OPEN_MODE_KEY) {
                 type = NavType.StringType
             },
-            navArgument(name = ArgsKeys.ID_KEY) {
+            navArgument(name = ID_KEY) {
                 type = NavType.LongType
             },
-            navArgument(name = ArgsKeys.FOLDER_ID_KEY) {
+            navArgument(name = FOLDER_ID_KEY) {
                 type = NavType.LongType
             }
         )
@@ -113,7 +115,7 @@ fun NoteScreenNavigation(
             entryPoint = NoteInfoViewModelFactoryProvider::class.java
         ).provideNoteInfoViewModelFactory()
 
-        val openModeString = backStackEntry.arguments?.getString(ArgsKeys.OPEN_MODE_KEY)
+        val openModeString = backStackEntry.arguments?.getString(OPEN_MODE_KEY)
             ?: NoteOpenMode.Definition.ERROR_VALUE_STRING
 
         val openModeEnum = NoteOpenMode.Definition.handle(mode = openModeString)
@@ -121,8 +123,8 @@ fun NoteScreenNavigation(
         val viewModel = viewModel {
             factory.create(
                 openMode = openModeEnum,
-                noteId = backStackEntry.arguments?.getLong(ArgsKeys.ID_KEY) ?: 0,
-                folderId = backStackEntry.arguments?.getLong(ArgsKeys.FOLDER_ID_KEY) ?: 0
+                noteId = backStackEntry.arguments?.getLong(ID_KEY) ?: 0,
+                folderId = backStackEntry.arguments?.getLong(FOLDER_ID_KEY) ?: 0
             )
         }
 

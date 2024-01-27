@@ -25,4 +25,16 @@ class FoldersRepositoryImpl @Inject constructor(
     override fun insertFolderWithIcon(folder: Folder, iconId: String) {
         database.getFoldersDao().insertFolderWithIcon(folder, iconId)
     }
+
+    override fun deleteFolderById(id: Long) {
+        database.getFoldersDao().deleteFolderById(id = id)
+    }
+
+    override fun updateFolder(id: Long, name: String, colorIndex: Int) {
+        database.getFoldersDao().updateFolder(
+            id = id,
+            name = name,
+            colorIndex = colorIndex
+        )
+    }
 }

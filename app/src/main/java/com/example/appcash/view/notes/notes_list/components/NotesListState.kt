@@ -4,7 +4,9 @@ import com.example.appcash.data.entities.Note
 
 data class NotesListState(
     val folderId: Long = 0,
-    val searchQuery: String = "",
     val folderName: String = "",
-    val notes: List<Note> = emptyList()
+    val searchQuery: String = "",
+    val notesList: List<Note> = emptyList(),
+    val error: Boolean = false,
+    val showEdit: Boolean = false
 )

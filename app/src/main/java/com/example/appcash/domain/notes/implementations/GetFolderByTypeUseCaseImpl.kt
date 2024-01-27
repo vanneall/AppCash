@@ -21,9 +21,7 @@ class GetFolderByTypeUseCaseImpl @Inject constructor(
         return try {
             repository.getFoldersByType(type = type).map { list -> list.toFolderDtoList()}
         } catch (ex: Exception) {
-            onError(
-                ErrorEvent(message = "Selection exception")
-            )
+            onError(ErrorEvent)
 
             Log.e("Selection exception", ex.stackTrace.contentDeepToString())
             flowOf()

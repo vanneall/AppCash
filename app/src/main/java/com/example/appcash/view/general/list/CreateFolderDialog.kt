@@ -84,7 +84,7 @@ private fun CreateCancelButtonsRowView(
         Button(
             onClick = {
                 onEvent(
-                    MainNotesEvent.InsertFolderEvent(
+                    MainNotesEvent.UpsertFolderEvent(
                         name = name,
                         colorIndex = 0
                     )

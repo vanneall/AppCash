@@ -57,7 +57,7 @@ class AllTasksFoldersViewModel @Inject constructor(
 
     override fun handle(event: Event) {
         when (event) {
-            is MainNotesEvent.InsertFolderEvent -> {
+            is MainNotesEvent.UpsertFolderEvent -> {
                 insertFolder(
                     name = event.name
                 )

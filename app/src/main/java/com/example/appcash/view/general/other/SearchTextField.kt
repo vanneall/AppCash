@@ -1,7 +1,6 @@
 package com.example.appcash.view.general.other
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -29,6 +28,7 @@ import com.example.appcash.utils.events.SearchEvent
 fun SearchTextField(
     searchQuery: String,
     onEvent: (Event) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val isDeleteIconEnabled = remember {
         derivedStateOf { searchQuery.isNotEmpty() }
@@ -72,6 +72,6 @@ fun SearchTextField(
                 )
             )
         }),
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
     )
 }

@@ -35,4 +35,11 @@ interface FoldersDao {
         )
     }
 
+    @Query("DELETE FROM folder WHERE id = :id")
+    fun deleteFolderById(id: Long)
+
+    @Query("UPDATE folder " +
+            "SET name = :name, color = :colorIndex " +
+            "WHERE id = :id")
+    fun updateFolder(id: Long, name: String, colorIndex: Int)
 }
