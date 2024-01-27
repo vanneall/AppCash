@@ -81,7 +81,8 @@ fun MainNotes(
         }
 
         items(
-            items = state.foldersList
+            items = state.foldersList,
+            key = { dto -> dto.id }
         ) { folderDto ->
             ItemListView(
                 name = folderDto.name,

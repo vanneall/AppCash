@@ -71,7 +71,8 @@ fun NotesList(
             }
 
             itemsIndexed(
-                items = state.notesList
+                items = state.notesList,
+                key = { _, note -> note.id }
             ) { index, note ->
                 ListItem(
                     title = note.title,
