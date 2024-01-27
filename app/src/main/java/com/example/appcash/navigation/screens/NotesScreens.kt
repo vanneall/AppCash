@@ -17,9 +17,9 @@ import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
 import com.example.appcash.utils.ArgsKeys.ID_KEY
 import com.example.appcash.utils.ArgsKeys.OPEN_MODE_KEY
 import com.example.appcash.view.TopAppBarState
-import com.example.appcash.view.notes.note_info_screen.components.NoteInfoViewModelFactoryProvider
-import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode
-import com.example.appcash.view.notes.note_info_screen.screen.NoteInfoScreen
+import com.example.appcash.view.notes.note_info.components.NoteInfoViewModelFactoryProvider
+import com.example.appcash.view.notes.note_info.components.NoteOpenMode
+import com.example.appcash.view.notes.note_info.screen.NoteInfoScreen
 import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
 import com.example.appcash.view.notes.notes_folder.components.MainNotesViewModel
 import com.example.appcash.view.notes.notes_folder.screen.MainNotesScreen

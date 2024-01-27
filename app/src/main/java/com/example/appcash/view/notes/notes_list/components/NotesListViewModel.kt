@@ -62,6 +62,7 @@ class NotesListViewModel @AssistedInject constructor(
         _showEdit
     ) { folderName, notes, searchQuery, error, showEdit ->
         NotesListState(
+            folderId = folderId,
             folderName = folderName,
             notesList = notes.filter { it.title.contains(searchQuery) },
             searchQuery = searchQuery,

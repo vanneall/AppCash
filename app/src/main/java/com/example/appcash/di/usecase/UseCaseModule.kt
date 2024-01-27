@@ -15,6 +15,7 @@ import com.example.appcash.domain.financial_transactions.interfaces.GetTransacti
 import com.example.appcash.domain.financial_transactions.interfaces.InsertFinanceUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.InsertFolderWithIconUseCase
 import com.example.appcash.domain.notes.implementations.DeleteFolderByIdImpl
+import com.example.appcash.domain.notes.implementations.DeleteNoteByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetFolderByTypeUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNoteByIdUseCaseImpl
@@ -24,6 +25,7 @@ import com.example.appcash.domain.notes.implementations.InsertFolderUseCaseImpl
 import com.example.appcash.domain.notes.implementations.UpdateFolderUseCaseImpl
 import com.example.appcash.domain.notes.implementations.UpsertNoteUseCaseImpl
 import com.example.appcash.domain.notes.interfaces.DeleteByIdFolderUseCase
+import com.example.appcash.domain.notes.interfaces.DeleteNoteByIdUseCase
 import com.example.appcash.domain.notes.interfaces.GetFolderNameByIdUseCase
 import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
 import com.example.appcash.domain.notes.interfaces.GetNoteByIdUseCase
@@ -181,5 +183,11 @@ class UseCaseModule {
     @ViewModelScoped
     fun provideUpdateFolderUseCase(repository: FoldersRepository): UpdateFolderUseCase{
         return UpdateFolderUseCaseImpl(repository = repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideDeleteNoteUseCase(repository: NoteRepository): DeleteNoteByIdUseCase{
+        return DeleteNoteByIdUseCaseImpl(repository = repository)
     }
 }

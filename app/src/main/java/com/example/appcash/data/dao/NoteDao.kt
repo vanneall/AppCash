@@ -14,16 +14,16 @@ import kotlinx.coroutines.flow.Flow
 interface NoteDao {
 
     @Query("SELECT * FROM note WHERE note.id = :id")
-    fun getNoteById(id: Long): Flow<Note>
+    fun getById(id: Long): Flow<Note>
 
     @Query("SELECT * FROM note")
-    fun getNotes(): Flow<List<Note>>
+    fun get(): Flow<List<Note>>
 
     @Update
-    fun updateNote(note: Note)
+    fun update(note: Note)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNote(note: Note): Long
+    fun insert(note: Note): Long
 
     @Transaction
     fun insertTransaction(
@@ -31,7 +31,7 @@ interface NoteDao {
         folderId: Long,
         insertNoteToFolderLink: (NoteToFolderLink) -> Unit
     ) {
-        val noteId = insertNote(note = note)
+        val noteId = insert(note = note)
         insertNoteToFolderLink(
             NoteToFolderLink(
                 folderId = folderId,
@@ -39,4 +39,7 @@ interface NoteDao {
             )
         )
     }
+
+    @Query("DELETE FROM note WHERE id = :id")
+    fun delete(id: Long)
 }

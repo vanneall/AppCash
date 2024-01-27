@@ -33,8 +33,8 @@ import com.example.appcash.utils.events.Event
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.other.FolderSettingsModalBottomSheet
 import com.example.appcash.view.general.other.SearchTextField
-import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode.CREATE
-import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode.EDIT
+import com.example.appcash.view.notes.note_info.components.NoteOpenMode.CREATE
+import com.example.appcash.view.notes.note_info.components.NoteOpenMode.EDIT
 import com.example.appcash.view.notes.notes_list.components.NotesListState
 
 @Composable
@@ -90,7 +90,7 @@ fun NotesList(
         }
 
         FloatingActionButton(
-            onClick = { navigateTo("$NOTE_SCREEN/${state.folderId}/$OPEN_FOR_CREATE}/${CREATE.name}") },
+            onClick = { navigateTo("$NOTE_SCREEN/${state.folderId}/$OPEN_FOR_CREATE/${CREATE.name}") },
             shape = CircleShape,
             modifier = Modifier
                 .align(Alignment.BottomEnd)

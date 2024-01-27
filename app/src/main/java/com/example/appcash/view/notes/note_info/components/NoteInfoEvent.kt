@@ -1,4 +1,4 @@
-package com.example.appcash.view.notes.note_info_screen.components
+package com.example.appcash.view.notes.note_info.components
 
 import com.example.appcash.utils.events.Event
 
@@ -12,8 +12,7 @@ sealed class NoteInfoEvent: Event {
         val content: String
     ): NoteInfoEvent()
 
-    data class SaveNoteEvent(
-        val title: String,
-        val content: String,
-    ): NoteInfoEvent()
+    object SaveNoteEvent: NoteInfoEvent()
+
+    object DeleteNoteEvent: NoteInfoEvent()
 }

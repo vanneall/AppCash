@@ -1,4 +1,4 @@
-package com.example.appcash.view.notes.note_info_screen.components
+package com.example.appcash.view.notes.note_info.components
 
 import com.example.appcash.utils.ArgsKeys
 import dagger.assisted.Assisted
@@ -10,7 +10,7 @@ import dagger.hilt.android.components.ActivityComponent
 @AssistedFactory
 interface NoteInfoViewModelFactory {
     fun create(
-        @Assisted openMode: NoteOpenMode,
+        @Assisted(ArgsKeys.OPEN_MODE_KEY) openMode: NoteOpenMode,
         @Assisted(ArgsKeys.ID_KEY) noteId: Long,
         @Assisted(ArgsKeys.FOLDER_ID_KEY) folderId: Long
     ): NoteInfoViewModel

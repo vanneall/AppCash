@@ -1,7 +1,6 @@
 package com.example.appcash.data.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Upsert
 import com.example.appcash.data.entities.Note
@@ -15,5 +14,4 @@ interface NoteToFolderLinkDao {
 
     @Upsert
     fun insertNotesToFolderLink(noteToFolderLink: NoteToFolderLink)
-
 }

@@ -10,10 +10,10 @@ class NoteRepositoryImpl @Inject constructor(
     private val database: FoldersDatabase
 ) : NoteRepository {
     override fun getNoteById(id: Long): Flow<Note> {
-        return database.getNoteDao().getNoteById(id = id)
+        return database.getNoteDao().getById(id = id)
     }
 
-    override fun insertNote(note: Note, folderId: Long) {
+    override fun insertLinkedNote(note: Note, folderId: Long) {
         database.getNoteDao()
             .insertTransaction(
                 note = note,
@@ -23,10 +23,18 @@ class NoteRepositoryImpl @Inject constructor(
     }
 
     override fun updateNote(note: Note) {
-        database.getNoteDao().updateNote(note = note)
+        database.getNoteDao().update(note = note)
     }
 
     override fun getNotes(): Flow<List<Note>> {
-        return database.getNoteDao().getNotes()
+        return database.getNoteDao().get()
+    }
+
+    override fun insertNote(note: Note) {
+        database.getNoteDao().insert(note = note)
+    }
+
+    override fun deleteNote(id: Long) {
+        database.getNoteDao().delete(id = id)
     }
 }

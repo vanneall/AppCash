@@ -9,8 +9,12 @@ interface NoteRepository {
 
     fun getNotes(): Flow<List<Note>>
 
-    fun insertNote(note: Note, folderId: Long)
+    fun insertLinkedNote(note: Note, folderId: Long)
 
     fun updateNote(note: Note)
+
+    fun insertNote(note: Note)
+
+    fun deleteNote(id: Long)
 
 }
