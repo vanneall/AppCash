@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.appcash.view.tasks.all_tasks.screen
 
 import androidx.compose.foundation.BorderStroke
@@ -15,10 +17,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,10 +33,11 @@ import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.navigation.Destinations
 import com.example.appcash.utils.events.Event
-import com.example.appcash.view.general.list.CreateFolderDialogView
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.list.ItemListView
 import com.example.appcash.view.general.list.RoundedIconView
+import com.example.appcash.view.general.other.BottomSheetEvent
+import com.example.appcash.view.general.other.FolderSettingsModalBottomSheet
 import com.example.appcash.view.general.other.SearchTextField
 import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
 import com.example.appcash.view.tasks.all_tasks.components.AllTasksState
@@ -46,37 +49,56 @@ fun AllTasks(
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isDialogOpen = remember {
-        mutableStateOf(false)
-    }
+    val modalBottomSheetState = rememberModalBottomSheetState()
+
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(15.dp),
         contentPadding = PaddingValues(bottom = 50.dp),
         modifier = modifier
     ) {
         item {
-            TasksCounterRow(
-                plannedTitle = stringResource(id = R.string.planned),
-                plannedIcon = painterResource(id = R.drawable.planned_task_icon),
-                plannedIconBgColor = Color.Red,
-                plannedCount = state.plannedTasks.toString().takeIf { it != "0" } ?: "",
-                completedTitle = stringResource(id = R.string.completed),
-                completedIcon = painterResource(id = R.drawable.confirm_icon),
-                completedIconBgColor = Color.Green,
-                completedCount = state.completeTasks.toString().takeIf { it != "0" } ?: "",
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                TaskCheeps(
+                    title = stringResource(id = R.string.planned),
+                    icon = painterResource(id = R.drawable.planned_task_icon),
+                    iconBgColor = Color.Red,
+                    count = state.plannedTasks.toString().takeIf { it != "0" } ?: "",
+                    modifier = Modifier.weight(0.5f)
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                TaskCheeps(
+                    title = stringResource(id = R.string.completed),
+                    icon = painterResource(id = R.drawable.confirm_icon),
+                    iconBgColor = Color.Green,
+                    count = state.completeTasks.toString().takeIf { it != "0" } ?: "",
+                    modifier = Modifier.weight(0.5f)
+                )
+            }
+        }
+
+        item { Header(name = stringResource(id = R.string.my_tasks_folder)) }
+
+        item {
+            SearchTextField(
+                state.searchQuery,
+                onEvent,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp)
             )
         }
-        item { Header(name = stringResource(id = R.string.my_tasks_folder)) }
-        item { SearchTextField(state.searchQuery, onEvent) }
-        item { Spacer(modifier = Modifier.padding(bottom = 10.dp)) }
+
         item {
             ItemListView(
                 name = stringResource(id = R.string.new_tasks),
                 icon = painterResource(id = R.drawable.new_tasks_folder_icon),
                 backgroundIconColor = Color.Gray,
-                onClick = { isDialogOpen.value = true }
+                onClick = { onEvent(BottomSheetEvent.ShowEvent) }
             )
         }
+
         item {
             ItemListView(
                 name = "Все задачи",
@@ -85,59 +107,31 @@ fun AllTasks(
                 onClick = { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.ALL.name}/${0}") }
             )
         }
-        items(state.folders) { folder ->
+
+        items(
+            items = state.folders,
+            key = { dto -> dto.id }
+        ) { folderDto ->
             ItemListView(
-                name = folder.name,
+                name = folderDto.name,
                 icon = painterResource(id = R.drawable.tasks_folder_icon),
-                backgroundIconColor = Color.Blue,
-                onClick = { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.DEFINED.name}/${folder.id}") }
+                backgroundIconColor = folderDto.color,
+                onClick = { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.DEFINED.name}/${folderDto.id}") }
             )
         }
     }
 
-    if (isDialogOpen.value) {
-        CreateFolderDialogView(
-            onCreateEvent = onEvent,
-            isDialogOpenedMutableState = isDialogOpen
+    if (state.isShowed) {
+        FolderSettingsModalBottomSheet(
+            sheetState = modalBottomSheetState,
+            onEvent = onEvent,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
 
 @Composable
-private fun TasksCounterRow(
-    plannedTitle: String,
-    plannedIcon: Painter,
-    plannedIconBgColor: Color,
-    plannedCount: String,
-    completedTitle: String,
-    completedIcon: Painter,
-    completedIconBgColor: Color,
-    completedCount: String,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-    ) {
-        TasksCounterBlock(
-            title = plannedTitle,
-            icon = plannedIcon,
-            iconBgColor = plannedIconBgColor,
-            count = plannedCount,
-            modifier = Modifier.weight(0.5f)
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        TasksCounterBlock(
-            title = completedTitle,
-            icon = completedIcon,
-            iconBgColor = completedIconBgColor,
-            count = completedCount,
-            modifier = Modifier.weight(0.5f)
-        )
-    }
-}
-
-@Composable
-private fun TasksCounterBlock(
+private fun TaskCheeps(
     title: String,
     icon: Painter,
     iconBgColor: Color,
@@ -189,13 +183,3 @@ private fun TaskCounterBlockInfo(
         )
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun TasksCounterBlockPreview() {
-//    AllTasks(
-//        modifier = Modifier.padding(horizontal = 20.dp)
-//    )
-//
-//}
-

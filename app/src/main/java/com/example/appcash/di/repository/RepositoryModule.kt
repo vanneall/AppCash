@@ -16,44 +16,44 @@ import com.example.appcash.data.repository_interfaces.TasksRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 class RepositoryModule {
     @Provides
-    @ViewModelScoped
+    @Singleton
     fun provideFoldersRepository(database: FoldersDatabase): FoldersRepository {
         return FoldersRepositoryImpl(database = database)
     }
 
     @Provides
-    @ViewModelScoped
+    @Singleton
     fun provideNoteToFolderLinkRepository(database: FoldersDatabase): NoteToFolderLinkRepository {
         return NoteToFolderLinkRepositoryImpl(database = database)
     }
 
     @Provides
-    @ViewModelScoped
+    @Singleton
     fun provideNoteRepository(database: FoldersDatabase): NoteRepository {
         return NoteRepositoryImpl(database = database)
     }
 
     @Provides
-    @ViewModelScoped
+    @Singleton
     fun provideTasksRepository(database: FoldersDatabase): TasksRepository {
         return TasksRepositoryImpl(database = database)
     }
 
     @Provides
-    @ViewModelScoped
+    @Singleton
     fun provideTaskToFolderRepository(database: FoldersDatabase): TaskToFolderRepository {
         return TaskToFolderRepositoryImpl(database = database)
     }
 
     @Provides
-    @ViewModelScoped
+    @Singleton
     fun provideFinancialTransactionsRepository(database: FoldersDatabase): FinancialTransactionsRepository {
         return FinancialTransactionsRepositoryImpl(database = database)
     }
