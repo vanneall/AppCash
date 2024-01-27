@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class SubTask(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("id")
-    val id: Int = 0,
+    val id: Long = 0,
 
     @ColumnInfo("text")
     override val text: String,

@@ -3,8 +3,6 @@ package com.example.appcash.data.repository_implementations
 import com.example.appcash.data.databases.FoldersDatabase
 import com.example.appcash.data.entities.MainTask
 import com.example.appcash.data.entities.SubTask
-import com.example.appcash.data.entities.Task
-import com.example.appcash.data.entities.TaskToFolderLink
 import com.example.appcash.data.repository_interfaces.TasksRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -41,31 +39,30 @@ class TasksRepositoryImpl @Inject constructor(
     }
 
     override fun insertMainTransaction(
-        mainId: Long,
-        mainTask: MainTask,
+        folderId: Long,
+        task: MainTask,
     ) {
         database.getTasksDao().insertMainTransaction(
-            mainTask,
-            mainId,
+            task,
+            folderId,
             database.getTaskToFolderDao()::insertTaskToFolderLink
         )
     }
 
-    override fun insertMainTask(mainTask: MainTask) {
-        database.getTasksDao().insertMainTask(mainTask = mainTask)
+    override fun insertMainTask(task: MainTask) {
+        database.getTasksDao().insertMainTask(mainTask = task)
     }
 
-    override fun updateTask(task: Task) {
-        when (task) {
-            is MainTask -> database.getTasksDao()
-                .updateMainTask(task.copy(isCompleted = !task.isCompleted))
-
-            is SubTask -> database.getTasksDao()
-                .updateSubTask(task.copy(isCompleted = !task.isCompleted))
-        }
-    }
 
     override fun getAllTasksById(id: Long): Flow<Map<MainTask, List<SubTask>?>> {
         return database.getTasksDao().getAllTasksByFolderId(id = id)
+    }
+
+    override fun updateMaintask(id: Long, isChecked: Boolean) {
+        database.getTasksDao().updateMainTask(id = id, isChecked = isChecked)
+    }
+
+    override fun updateSubtask(id: Long, isChecked: Boolean) {
+        database.getTasksDao().updateSubTask(id = id, isChecked = isChecked)
     }
 }

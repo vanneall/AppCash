@@ -7,14 +7,14 @@ import com.example.appcash.data.entities.SubTask
 import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.GetMapTasksByFolderIdUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.GetMapTasksUseCaseImpl
-import com.example.appcash.domain.tasks.implementations.InsertMainTaskUseCaseImpl
-import com.example.appcash.domain.tasks.implementations.InsertSubTaskUseCaseImpl
-import com.example.appcash.domain.tasks.implementations.InsertTaskToFolderLinkUseCaseImpl
+import com.example.appcash.domain.tasks.implementations.InsertMaintaskUseCaseImpl
+import com.example.appcash.domain.tasks.implementations.InsertSubtaskUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.UpdateTaskUseCaseImpl
 import com.example.appcash.utils.ArgsKeys
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.utils.events.SearchEvent
+import com.example.appcash.view.general.other.BottomSheetEvent
 import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -30,60 +30,143 @@ import kotlinx.coroutines.launch
 
 class TasksViewModel @AssistedInject constructor(
     @Assisted(ArgsKeys.FOLDER_ID_KEY)
-    private val id: Long,
+    private val folderId: Long,
     @Assisted(ArgsKeys.OPEN_MODE_KEY)
     private val mode: FolderOpenMode,
     private val insertTaskToFolderLinkUseCaseImpl: InsertTaskToFolderLinkUseCaseImpl,
     private val getFolderNameByIdUseCase: GetFolderNameByIdUseCaseImpl,
     private val getMapTasksUseCase: GetMapTasksUseCaseImpl,
     private val getMapTasksByFolderIdUseCase: GetMapTasksByFolderIdUseCaseImpl,
-    private val insertSubTaskUseCase: InsertSubTaskUseCaseImpl,
-    private val insertMainTaskUseCase: InsertMainTaskUseCaseImpl,
+    private val insertMainTaskUseCase: InsertMaintaskUseCaseImpl,
+    private val insertSubTaskUseCase: InsertSubtaskUseCaseImpl,
     private val updateTaskUseCase: UpdateTaskUseCaseImpl
 ) : ViewModel(), EventHandler {
 
-    private val _state = initializePrivateState()
+    private val _tasksMap = initializePrivateState()
 
     private val _searchQuery = MutableStateFlow("")
 
     private val _folderName = initializePrivateFolderName()
 
-    val state = combine(_state, _searchQuery, _folderName) { state, query, name ->
+    private val _isError = MutableStateFlow(false)
+
+    private val _isShowed = MutableStateFlow(Pair(false, false))
+
+    val state = combine(
+        _tasksMap,
+        _searchQuery,
+        _folderName,
+        _isError,
+        _isShowed
+    ) { tasksMap, query, name, isError, isShowed ->
         TasksState(
             folderName = name,
-            values = state.filterKeys { it.text.contains(query) },
-            querySearch = query
+            values = tasksMap.filterKeys { it.text.contains(query) },
+            querySearch = query,
+            isError = isError,
+            isShowed = isShowed
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TasksState())
 
     override fun handle(event: Event) {
         when (event) {
-            is TaskEvent.CreateTaskEvent -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    when {
-                        event.mainTaskId != null -> {
-                            insertSubTaskUseCase(
-                                mainId = event.mainTaskId, subTask = SubTask(text = event.title)
-                            )
-                        }
-                        else -> {
-                            insertMainTaskUseCase(
-                                folderId = id,
-                                mainTask = MainTask(text = event.title)
-                            )
-                        }
-                    }
-                }
+            is TaskEvent.CreateMaintaskEvent -> {
+                insertMaintask(text = event.text)
             }
-            is SearchEvent -> {
-                _searchQuery.update { event.query }
+
+            is TaskEvent.CreateSubtaskEvent -> {
+                insertSubtask(
+                    mainTaskId = event.mainTaskId,
+                    text = event.text
+                )
             }
+
             is TaskEvent.UpdateCheckBoxEvent -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    updateTaskUseCase.invoke(event.task)
-                }
+                updateTaskChecked(
+                    id = event.id,
+                    isChecked = event.isChecked,
+                    type = event.type
+                )
+            }
+
+            is TaskEvent.ShowMaintaskBottomSheetEvent -> {
+                showMaintaskBottomSheet()
+            }
+
+            is TaskEvent.ShowSubtaskBottomSheetEvent -> {
+                showSubtaskBottomSheet()
+            }
+
+            is SearchEvent -> {
+                updateQuery(query = event.query)
+            }
+
+            is BottomSheetEvent.HideEvent -> {
+                updateHide()
+            }
+
+            is Event.ErrorEvent -> {
+                updateIsError()
             }
         }
+    }
+
+    private fun insertMaintask(text: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            insertMainTaskUseCase(
+                folderId = folderId,
+                text = text,
+                onError = ::handle
+            )
+        }
+    }
+
+    private fun insertSubtask(
+        mainTaskId: Long,
+        text: String
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            insertSubTaskUseCase(
+                mainTaskId = mainTaskId,
+                text = text,
+                onError = ::handle
+            )
+        }
+    }
+
+    private fun showMaintaskBottomSheet() {
+        _isShowed.update { it.copy(first = true) }
+    }
+
+    private fun showSubtaskBottomSheet() {
+        _isShowed.update { it.copy(second = true) }
+    }
+
+    private fun updateTaskChecked(
+        id: Long,
+        isChecked: Boolean,
+        type: TaskType
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateTaskUseCase.invoke(
+                id = id,
+                isChecked = isChecked,
+                type = type,
+                onError = ::handle
+            )
+        }
+    }
+
+    private fun updateQuery(query: String) {
+        _searchQuery.update { query }
+    }
+
+    private fun updateHide() {
+        _isShowed.update { Pair(false, false) }
+    }
+
+    private fun updateIsError() {
+        _isError.update { true }
     }
 
     private fun initializePrivateState(): Flow<Map<MainTask, List<SubTask>?>> {
@@ -93,8 +176,9 @@ class TasksViewModel @AssistedInject constructor(
             }
 
             FolderOpenMode.DEFINED -> {
-                getMapTasksByFolderIdUseCase.invoke(id = id)
+                getMapTasksByFolderIdUseCase.invoke(id = folderId)
             }
+
             else -> flowOf()
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyMap())
     }
@@ -106,8 +190,9 @@ class TasksViewModel @AssistedInject constructor(
             }
 
             FolderOpenMode.DEFINED -> {
-                getFolderNameByIdUseCase.invoke(id = id, onError = {})
+                getFolderNameByIdUseCase.invoke(id = folderId, onError = {})
             }
+
             else -> flowOf()
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
     }

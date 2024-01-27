@@ -2,8 +2,6 @@ package com.example.appcash.data.repository_interfaces
 
 import com.example.appcash.data.entities.MainTask
 import com.example.appcash.data.entities.SubTask
-import com.example.appcash.data.entities.Task
-import com.example.appcash.data.entities.TaskToFolderLink
 import kotlinx.coroutines.flow.Flow
 
 interface TasksRepository {
@@ -22,10 +20,12 @@ interface TasksRepository {
 
     fun insertSubTask(mainId: Long, subTask: SubTask)
 
-    fun insertMainTask(mainTask: MainTask)
+    fun insertMainTask(task: MainTask)
 
-    fun insertMainTransaction(mainId: Long, mainTask: MainTask)
+    fun insertMainTransaction(folderId: Long, task: MainTask)
 
-    fun updateTask(task: Task)
+    fun updateMaintask(id: Long, isChecked: Boolean)
+
+    fun updateSubtask(id: Long, isChecked: Boolean)
 
 }

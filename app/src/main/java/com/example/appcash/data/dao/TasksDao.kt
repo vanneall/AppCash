@@ -5,10 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Update
 import com.example.appcash.data.entities.MainTask
-import com.example.appcash.data.entities.Note
-import com.example.appcash.data.entities.NoteToFolderLink
 import com.example.appcash.data.entities.SubTask
 import com.example.appcash.data.entities.SubTaskToMainTaskLink
 import com.example.appcash.data.entities.TaskToFolderLink
@@ -48,14 +45,14 @@ interface TasksDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMainTask(mainTask: MainTask): Long
 
-    @Update
-    fun updateMainTask(mainTask: MainTask)
+    @Query("UPDATE maintask SET isCompleted = :isChecked WHERE id = :id")
+    fun updateMainTask(id: Long, isChecked: Boolean)
+
+    @Query("UPDATE subtask SET isCompleted = :isChecked WHERE id = :id")
+    fun updateSubTask(id: Long, isChecked: Boolean)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertSubTask(subTask: SubTask): Long
-
-    @Update
-    fun updateSubTask(subTask: SubTask)
 
     @Transaction
     fun insertMainTransaction(

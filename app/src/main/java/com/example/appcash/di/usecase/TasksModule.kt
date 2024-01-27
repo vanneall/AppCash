@@ -6,17 +6,15 @@ import com.example.appcash.domain.tasks.implementations.GetCompletedCountUseCase
 import com.example.appcash.domain.tasks.implementations.GetMapTasksByFolderIdUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.GetMapTasksUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.GetPlannedCountUseCaseImpl
-import com.example.appcash.domain.tasks.implementations.InsertMainTaskUseCaseImpl
-import com.example.appcash.domain.tasks.implementations.InsertSubTaskUseCaseImpl
-import com.example.appcash.domain.tasks.implementations.InsertTaskToFolderLinkUseCaseImpl
+import com.example.appcash.domain.tasks.implementations.InsertMaintaskUseCaseImpl
+import com.example.appcash.domain.tasks.implementations.InsertSubtaskUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.UpdateTaskUseCaseImpl
 import com.example.appcash.domain.tasks.interfaces.GetCompletedCountUseCase
 import com.example.appcash.domain.tasks.interfaces.GetMapTasksByFolderIdUseCase
 import com.example.appcash.domain.tasks.interfaces.GetMapTasksUseCase
 import com.example.appcash.domain.tasks.interfaces.GetPlannedCountUseCase
-import com.example.appcash.domain.tasks.interfaces.InsertMainTaskUseCase
-import com.example.appcash.domain.tasks.interfaces.InsertSubTaskUseCase
-import com.example.appcash.domain.tasks.interfaces.InsertTaskToFolderLinkUseCase
+import com.example.appcash.domain.tasks.interfaces.InsertMaintaskUseCase
+import com.example.appcash.domain.tasks.interfaces.InsertSubtaskUseCase
 import com.example.appcash.domain.tasks.interfaces.UpdateTaskUseCase
 import dagger.Module
 import dagger.Provides
@@ -47,8 +45,8 @@ class TasksModule {
 
     @Provides
     @ViewModelScoped
-    fun provideInsertMainTasksUseCase(repository: TasksRepository): InsertMainTaskUseCase {
-        return InsertMainTaskUseCaseImpl(repository = repository)
+    fun provideInsertMainTasksUseCase(repository: TasksRepository): InsertMaintaskUseCase {
+        return InsertMaintaskUseCaseImpl(repository = repository)
     }
 
     @Provides
@@ -65,8 +63,8 @@ class TasksModule {
 
     @Provides
     @ViewModelScoped
-    fun provideInsertSubTaskUseCase(repository: TasksRepository): InsertSubTaskUseCase {
-        return InsertSubTaskUseCaseImpl(repository = repository)
+    fun provideInsertSubTaskUseCase(repository: TasksRepository): InsertSubtaskUseCase {
+        return InsertSubtaskUseCaseImpl(repository = repository)
     }
 
     @Provides
