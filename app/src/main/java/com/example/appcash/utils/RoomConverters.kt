@@ -2,9 +2,6 @@ package com.example.appcash.utils
 
 import androidx.room.TypeConverter
 import com.example.appcash.data.entities.FolderType
-import com.example.appcash.data.entities.SubTask
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.YearMonth
 
 class RoomConverters {

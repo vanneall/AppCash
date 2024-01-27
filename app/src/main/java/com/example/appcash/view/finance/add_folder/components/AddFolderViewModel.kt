@@ -37,7 +37,7 @@ class AddFolderViewModel @Inject constructor(
                     insertFolderWithIconUseCase(
                         folder = Folder(
                             name = _state.value.name,
-                            color = 1,
+                            colorIndex = 1,
                             type = FolderType.FINANCIAL
                         ),
                         event.iconId

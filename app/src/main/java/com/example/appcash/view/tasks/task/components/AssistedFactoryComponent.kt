@@ -1,7 +1,7 @@
 package com.example.appcash.view.tasks.task.components
 
 import com.example.appcash.utils.ArgsKeys
-import com.example.appcash.view.notes.notes_folders_screen.components.FolderOpenMode
+import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.hilt.EntryPoint

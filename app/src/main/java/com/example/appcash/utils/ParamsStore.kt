@@ -1,11 +1,8 @@
 package com.example.appcash.utils
 
-import android.content.Context
-import androidx.compose.ui.res.painterResource
-import com.example.appcash.R
-import javax.inject.Inject
+import androidx.compose.ui.graphics.Color
 
-object FoldersIconStore {
+object ParamsStore {
     val icons
         get() = listOf(
             "alcohol_folder_icon",
@@ -26,4 +23,22 @@ object FoldersIconStore {
             "theater_folder_icon",
             "travel_folder_icon"
         )
+
+    val colorsList
+    get() = listOf(
+        Color(0xFF86986A),
+        Color(0xFF940B25),
+        Color(0xFFC65911),
+        Color(0xFF55828B),
+        Color(0xFFC88B18),
+        Color(0xFF9C1448),
+        Color(0xFFBE95C4),
+        Color(0xFFBC8A5F),
+        Color(0xFF9CAEA9)
+    )
+
+    fun List<Color>.getSafety(i: Int): Color {
+        if (i in indices) return this[i]
+        return Color.Black
+    }
 }

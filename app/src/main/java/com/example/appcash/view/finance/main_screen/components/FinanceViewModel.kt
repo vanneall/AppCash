@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.appcash.data.entities.FinancialTransaction
-import com.example.appcash.data.entities.Folder
 import com.example.appcash.data.vo.FinanceCategoryVO
 import com.example.appcash.data.vo.IconFolderVO
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByFolderUseCase

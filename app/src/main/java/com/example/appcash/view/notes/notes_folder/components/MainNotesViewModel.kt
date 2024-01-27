@@ -1,4 +1,4 @@
-package com.example.appcash.view.notes.notes_folders_screen.components
+package com.example.appcash.view.notes.notes_folder.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -29,21 +28,19 @@ class MainNotesViewModel @Inject constructor(
 
     private val _error = MutableStateFlow<String?>(null)
 
-    private val _mainNotesState = getFoldersByTypeUseCase
+    private val _foldersDtoList = getFoldersByTypeUseCase
         .invoke(
             type = FolderType.NOTES,
             onError = ::handle
-        ).map { list ->
-            MainNotesState(list = list)
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), MainNotesState())
+        ).stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     val state = combine(
-        _mainNotesState,
+        _foldersDtoList,
         _searchQuery,
         _error
-    ) { state, searchQuery, isError ->
+    ) { list, searchQuery, isError ->
         MainNotesState(
-            list = state.list.filter { it.name.contains(searchQuery) },
+            list = list.filter { it.name.contains(searchQuery) },
             query = searchQuery,
             error = isError
         )
@@ -52,7 +49,10 @@ class MainNotesViewModel @Inject constructor(
     override fun handle(event: Event) {
         when (event) {
             is MainNotesEvent.InsertFolderEvent -> {
-                insertFolder(name = event.name)
+                insertFolder(
+                    name = event.name,
+                    colorIndex = event.colorIndex
+                )
             }
 
             is SearchEvent -> {
@@ -65,11 +65,11 @@ class MainNotesViewModel @Inject constructor(
         }
     }
 
-    private fun insertFolder(name: String) {
+    private fun insertFolder(name: String, colorIndex: Int) {
         viewModelScope.launch(context = Dispatchers.IO) {
             insertFolderUseCase.invoke(
                 name = name,
-                color = 1, //TODO Добавить цвет папкам
+                colorIndex = colorIndex,
                 type = FolderType.NOTES,
                 onError = ::handle
             )

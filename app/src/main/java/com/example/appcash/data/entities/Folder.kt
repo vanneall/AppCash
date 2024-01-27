@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Folder(
-
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Long = 0,
@@ -15,12 +14,11 @@ data class Folder(
     val name: String,
 
     @ColumnInfo(name = "color")
-    val color: Int,
+    val colorIndex: Int,
 
     @ColumnInfo(name = "type")
     val type: FolderType
 )
-
 enum class FolderType {
     TASKS,
     NOTES,

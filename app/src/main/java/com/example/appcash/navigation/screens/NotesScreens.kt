@@ -18,9 +18,9 @@ import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.notes.note_info_screen.components.NoteInfoViewModelFactoryProvider
 import com.example.appcash.view.notes.note_info_screen.components.NoteOpenMode
 import com.example.appcash.view.notes.note_info_screen.screen.NoteInfoScreen
-import com.example.appcash.view.notes.notes_folders_screen.components.FolderOpenMode
-import com.example.appcash.view.notes.notes_folders_screen.components.MainNotesViewModel
-import com.example.appcash.view.notes.notes_folders_screen.screen.MainNotesScreen
+import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
+import com.example.appcash.view.notes.notes_folder.components.MainNotesViewModel
+import com.example.appcash.view.notes.notes_folder.screen.MainNotesScreen
 import com.example.appcash.view.notes.notes_list.components.NoteListViewModelFactoryProvider
 import com.example.appcash.view.notes.notes_list.screen.NotesListScreen
 import dagger.hilt.android.EntryPointAccessors

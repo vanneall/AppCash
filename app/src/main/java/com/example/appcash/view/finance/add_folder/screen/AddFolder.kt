@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -26,7 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.appcash.utils.FoldersIconStore
+import com.example.appcash.utils.ParamsStore
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.finance.add_folder.components.AddFolderEvent
 import com.example.appcash.view.finance.add_folder.components.AddFolderState
@@ -56,7 +55,7 @@ fun AddFolder(
             horizontalArrangement = Arrangement.spacedBy(15.dp),
             contentPadding = PaddingValues(vertical = 50.dp)
         ) {
-            items(items = FoldersIconStore.icons) { id ->
+            items(items = ParamsStore.icons) { id ->
                 Icon(
                     painter = painterResource(
                         id = LocalContext.current.resources.getIdentifier(

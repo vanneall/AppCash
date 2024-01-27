@@ -1,7 +1,6 @@
 package com.example.appcash.view.tasks.all_tasks.screen
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,7 +36,7 @@ import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.list.ItemListView
 import com.example.appcash.view.general.list.RoundedIconView
 import com.example.appcash.view.general.other.SearchTextField
-import com.example.appcash.view.notes.notes_folders_screen.components.FolderOpenMode
+import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
 import com.example.appcash.view.tasks.all_tasks.components.AllTasksState
 
 @Composable

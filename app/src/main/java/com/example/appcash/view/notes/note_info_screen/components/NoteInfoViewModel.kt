@@ -6,7 +6,6 @@ import com.example.appcash.data.entities.Note
 import com.example.appcash.domain.notes.implementations.GetNoteByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.UpsertNoteUseCaseImpl
 import com.example.appcash.utils.ArgsKeys
-import com.example.appcash.utils.StringExtensions.EMPTY_STRING
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import dagger.assisted.Assisted
@@ -74,8 +73,8 @@ class NoteInfoViewModel @AssistedInject constructor(
             NoteOpenMode.CREATE -> {
                 flowOf(
                     value = Note(
-                        title = EMPTY_STRING,
-                        content = EMPTY_STRING
+                        title = "",
+                        content = ""
                     )
                 )
             }
@@ -85,8 +84,8 @@ class NoteInfoViewModel @AssistedInject constructor(
                         scope = viewModelScope,
                         started = SharingStarted.WhileSubscribed(),
                         initialValue = Note(
-                            title = EMPTY_STRING,
-                            content = EMPTY_STRING
+                            title = "",
+                            content = ""
                         )
                     )
             }

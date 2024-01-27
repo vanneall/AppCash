@@ -1,7 +1,6 @@
 package com.example.appcash.domain.financial_transactions.implementations
 
 import com.example.appcash.data.entities.FinancialTransaction
-import com.example.appcash.data.entities.Folder
 import com.example.appcash.data.repository_interfaces.FinancialTransactionsRepository
 import com.example.appcash.data.vo.IconFolderVO
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByYearMonthUseCase

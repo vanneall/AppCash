@@ -15,7 +15,7 @@ import com.example.appcash.utils.ArgsKeys
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.utils.events.SearchEvent
-import com.example.appcash.view.notes.notes_folders_screen.components.FolderOpenMode
+import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers

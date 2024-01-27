@@ -7,11 +7,10 @@ import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
 import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
 import com.example.appcash.domain.tasks.implementations.GetPlannedCountUseCaseImpl
 import com.example.appcash.domain.tasks.interfaces.GetCompletedCountUseCase
-import com.example.appcash.utils.StringExtensions
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.utils.events.SearchEvent
-import com.example.appcash.view.notes.notes_folders_screen.components.MainNotesEvent
+import com.example.appcash.view.notes.notes_folder.components.MainNotesEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +29,7 @@ class AllTasksFoldersViewModel @Inject constructor(
     getCompletedCountUseCase: GetCompletedCountUseCase,
     private val insertFolderUseCase: InsertFolderUseCase,
 ) : ViewModel(), EventHandler {
-    private val _searchQuery = MutableStateFlow(StringExtensions.EMPTY_STRING)
+    private val _searchQuery = MutableStateFlow("")
 
     private val _state = getFoldersByTypeUseCase.invoke(type = FolderType.TASKS, {}).map { list ->
         AllTasksState(folders = list)
@@ -75,7 +74,7 @@ class AllTasksFoldersViewModel @Inject constructor(
         viewModelScope.launch(context = Dispatchers.IO) {
             insertFolderUseCase.invoke(
                 name = name,
-                color = 1, //TODO Добавить цвет папкам
+                colorIndex = 0, //TODO Добавить цвет папкам
                 type = FolderType.TASKS,
                 {}
             )

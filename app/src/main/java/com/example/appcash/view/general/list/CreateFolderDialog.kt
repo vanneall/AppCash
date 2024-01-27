@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,16 +27,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.appcash.R
-import com.example.appcash.utils.StringExtensions
-import com.example.appcash.view.notes.notes_folders_screen.components.MainNotesEvent
+import com.example.appcash.view.notes.notes_folder.components.MainNotesEvent
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateFolderDialogView(
     onCreateEvent: (MainNotesEvent) -> Unit,
     isDialogOpenedMutableState: MutableState<Boolean>,
 ) {
-    val name = remember { mutableStateOf(StringExtensions.EMPTY_STRING) }
+    val name = remember { mutableStateOf("") }
     Dialog(onDismissRequest = { isDialogOpenedMutableState.value = false }) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -88,7 +85,8 @@ private fun CreateCancelButtonsRowView(
             onClick = {
                 onEvent(
                     MainNotesEvent.InsertFolderEvent(
-                        name = name
+                        name = name,
+                        colorIndex = 0
                     )
                 )
                 isDialogOpenedMutableState.value = false

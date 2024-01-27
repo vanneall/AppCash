@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.appcash.R
-import com.example.appcash.utils.StringExtensions
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.SearchEvent
 
@@ -59,7 +58,7 @@ fun SearchTextField(
                 modifier = Modifier.clickable {
                     onEvent(
                         SearchEvent(
-                            query = StringExtensions.EMPTY_STRING
+                            query = ""
                         )
                     )
                 }

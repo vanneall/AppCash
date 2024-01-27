@@ -11,7 +11,7 @@ import javax.inject.Inject
 class InsertFolderUseCaseImpl @Inject constructor(
     private val repository: FoldersRepository
 ) : InsertFolderUseCase {
-    override fun invoke(name: String, color: Int, type: FolderType, onError: (ErrorEvent) -> Unit) {
+    override fun invoke(name: String, colorIndex: Int, type: FolderType, onError: (ErrorEvent) -> Unit) {
         val nameTrimmed = name.trim()
 
         if (nameTrimmed.isEmpty()) return
@@ -20,7 +20,7 @@ class InsertFolderUseCaseImpl @Inject constructor(
             repository.insertFolder(
                 folder = Folder(
                     name = nameTrimmed,
-                    color = color,
+                    colorIndex = colorIndex,
                     type = type
                 )
             )
