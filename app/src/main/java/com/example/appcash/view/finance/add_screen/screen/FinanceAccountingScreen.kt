@@ -9,6 +9,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.finance.add_screen.components.AddFinanceViewModel
+import com.example.appcash.view.general.ErrorScreen
 
 @Composable
 fun FinanceAccountingScreen(
@@ -32,9 +33,13 @@ fun FinanceAccountingScreen(
         }
     )
 
-    AddFinance(
-        state = viewModel.state.collectAsState().value,
-        onEvent = viewModel::handle,
-        navigateTo = navigateTo
-    )
+    when (viewModel.state.collectAsState().value.isError) {
+        false -> AddFinance(
+            state = viewModel.state.collectAsState().value,
+            onEvent = viewModel::handle,
+            navigateTo = navigateTo
+        )
+
+        true -> ErrorScreen()
+    }
 }

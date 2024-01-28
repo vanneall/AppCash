@@ -2,10 +2,12 @@ package com.example.appcash.di.usecase
 
 import com.example.appcash.data.repository_interfaces.FinancialTransactionsRepository
 import com.example.appcash.data.repository_interfaces.FoldersRepository
+import com.example.appcash.domain.financial_transactions.implementations.GetIconFoldersUseCaseImpl
 import com.example.appcash.domain.financial_transactions.implementations.GetTransactionsByFolderUseCaseImpl
 import com.example.appcash.domain.financial_transactions.implementations.GetTransactionsByYearMonthUseCaseImpl
 import com.example.appcash.domain.financial_transactions.implementations.InsertFinanceUseCaseImpl
 import com.example.appcash.domain.financial_transactions.implementations.InsertFolderWithIconUseCaseImpl
+import com.example.appcash.domain.financial_transactions.interfaces.GetIconFoldersUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByFolderUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByYearMonthUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.InsertFinanceUseCase
@@ -41,5 +43,11 @@ class FinanceModule {
     @ViewModelScoped
     fun provideInsertFolderWithIconUseCase(repository: FoldersRepository): InsertFolderWithIconUseCase {
         return InsertFolderWithIconUseCaseImpl(repository = repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetIconFoldersUseCase(repository: FinancialTransactionsRepository): GetIconFoldersUseCase {
+        return GetIconFoldersUseCaseImpl(repository = repository)
     }
 }

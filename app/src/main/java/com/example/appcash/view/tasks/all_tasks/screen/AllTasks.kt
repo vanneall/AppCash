@@ -174,7 +174,7 @@ private fun TaskCounterBlockInfo(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        RoundedIconView(icon = icon, tint = Color.White, backGroundColor = iconBgColor)
+        RoundedIconView(icon = icon, tint = Color.White, backGroundColor = iconBgColor, size = 28.dp)
         Text(
             text = count,
             fontSize = 22.sp,

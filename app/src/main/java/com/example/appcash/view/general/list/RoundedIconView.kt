@@ -10,13 +10,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun RoundedIconView(
     icon: Painter,
     tint: Color,
-    backGroundColor: Color
+    backGroundColor: Color,
+    size: Dp
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -28,7 +30,7 @@ fun RoundedIconView(
             painter = icon,
             contentDescription = null,
             tint = tint,
-            modifier = Modifier.size(28.dp)
+            modifier = Modifier.size(size)
         )
     }
 }

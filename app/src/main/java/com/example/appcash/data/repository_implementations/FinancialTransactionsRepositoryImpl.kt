@@ -26,4 +26,8 @@ class FinancialTransactionsRepositoryImpl @Inject constructor(
             database.getTransactionToFolderDao()::insert
         )
     }
+
+    override fun getIconFolders(): Flow<List<IconFolderVO>> {
+        return database.getFinancialTransactionDao().getIconFolder()
+    }
 }

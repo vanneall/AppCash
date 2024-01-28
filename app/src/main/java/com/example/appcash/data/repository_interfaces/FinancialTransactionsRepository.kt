@@ -13,4 +13,6 @@ interface FinancialTransactionsRepository {
 
     fun insertTransaction(value: FinancialTransaction, id: Long)
 
+    fun getIconFolders(): Flow<List<IconFolderVO>>
+
 }

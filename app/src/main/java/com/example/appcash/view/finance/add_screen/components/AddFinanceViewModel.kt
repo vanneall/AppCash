@@ -3,7 +3,7 @@ package com.example.appcash.view.finance.add_screen.components
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcash.data.entities.FinancialTransaction
-import com.example.appcash.data.entities.FolderType
+import com.example.appcash.domain.financial_transactions.interfaces.GetIconFoldersUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.InsertFinanceUseCase
 import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
 import com.example.appcash.utils.events.Event
@@ -24,46 +24,77 @@ import kotlin.math.abs
 @HiltViewModel
 class AddFinanceViewModel @Inject constructor(
     getFoldersByTypeUseCase: GetFoldersByTypeUseCase,
-    private val insertFinanceUseCase: InsertFinanceUseCase
+    private val insertFinanceUseCase: InsertFinanceUseCase,
+    private val getIconFoldersUseCase: GetIconFoldersUseCase,
 ) : ViewModel(), EventHandler {
 
-    private val _list = getFoldersByTypeUseCase.invoke(FolderType.FINANCIAL, {})
+    private val _list = getIconFoldersUseCase.invoke(onError = ::handle)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val _searchQuery = MutableStateFlow("")
 
     private val _price = MutableStateFlow("")
 
-    val state = combine(_list, _searchQuery, _price) { list, query, price ->
+    private val _error = MutableStateFlow(false)
+
+    val state = combine(
+        _list,
+        _searchQuery,
+        _price,
+        _error
+    ) { list, query, price, error ->
         AddFinanceState(
             price = price,
             query = query,
-            folders = list.filter { it.name.contains(query) }
+            folders = list.filter { it.folder.name.contains(query) },
+            isError = error
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), AddFinanceState())
 
     override fun handle(event: Event) {
         when (event) {
             is SearchEvent -> {
-                _searchQuery.update { event.query }
+                updateQuery(query = event.query)
             }
 
             is AddFinanceEvent.InputPriceEvent -> {
-                _price.update { event.price }
+                updatePrice(price = event.price)
             }
 
             is AddFinanceEvent.CreateTransactionEvent -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    insertFinanceUseCase(
-                        value = FinancialTransaction(
-                            price = if (event.isMinus) -1 * abs(_price.value.toInt()) else abs(_price.value.toInt()),
-                            date = YearMonth.now()
-                        ),
-                        id = event.id
-                    )
-                }
-
+                createFinance(isMinus = event.isMinus, id = event.id)
             }
+
+            is Event.ErrorEvent -> {
+                updateError()
+            }
+        }
+    }
+
+    private fun updateQuery(query: String) {
+        _searchQuery.update { query }
+    }
+
+    private fun updatePrice(price: String) {
+        _price.update { price }
+    }
+
+    private fun updateError() {
+        _error.update { true }
+    }
+
+    private fun createFinance(isMinus: Boolean, id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            insertFinanceUseCase(
+                value = FinancialTransaction(
+                    price = if (isMinus) -1 * abs(_price.value.toInt()) else abs(
+                        _price.value.toInt()
+                    ),
+                    date = YearMonth.now()
+                ),
+                id = id,
+                onError = ::handle
+            )
         }
     }
 }

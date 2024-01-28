@@ -25,6 +25,12 @@ interface FinancialTransactionDao {
     )
     fun getTransactionByMonthId(monthId: String): Flow<Map<FinancialTransaction, IconFolderVO>>
 
+    @Query("SELECT f.id, f.name, f.color, f.type,  fi.iconId " +
+            "FROM folder f " +
+            "JOIN foldertoicon fi " +
+            "ON fi.folderId = f.id " +
+            "WHERE f.type = \"FINANCIAL\" ")
+    fun getIconFolder(): Flow<List<IconFolderVO>>
 
     @Query(
         "SELECT f.id, f.name, f.color, f.type, SUM(ft.price) as sum " +
