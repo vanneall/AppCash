@@ -26,6 +26,11 @@ object Destinations {
 
 val screenBottomItems = listOf(
     Screen(
+        "Календарь",
+        Destinations.MAIN_CALENDAR_SCREEN,
+        iconId = R.drawable.kid_star
+    ),
+    Screen(
         "Заметки",
         Destinations.MAIN_NOTES_FOLDER_SCREEN,
         iconId = R.drawable.notes_icon
@@ -34,11 +39,6 @@ val screenBottomItems = listOf(
         "Задачник",
         Destinations.MAIN_TASKS_FOLDER_SCREEN,
         iconId = R.drawable.some_icon
-    ),
-    Screen(
-        "Календарь",
-        Destinations.MAIN_CALENDAR_SCREEN,
-        iconId = R.drawable.kid_star
     ),
     Screen(
         "Финансы",

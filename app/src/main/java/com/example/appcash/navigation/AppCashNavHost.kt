@@ -5,7 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.example.appcash.navigation.Destinations.MAIN_TASKS_FOLDER_SCREEN
+import com.example.appcash.navigation.Destinations.MAIN_CALENDAR_SCREEN
 import com.example.appcash.navigation.screens.CreatingFinanceFolderScreenNavigation
 import com.example.appcash.navigation.screens.ErrorScreenNavigation
 import com.example.appcash.navigation.screens.FinanceAccountingScreenNavigation
@@ -27,7 +27,7 @@ fun AppCashNavHost(
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = MAIN_TASKS_FOLDER_SCREEN,
+        startDestination = MAIN_CALENDAR_SCREEN,
         modifier = modifier
     ) {
         MainNotesScreenNavigation(
