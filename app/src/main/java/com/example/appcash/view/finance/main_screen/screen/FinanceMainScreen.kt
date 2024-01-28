@@ -47,6 +47,8 @@ import com.example.appcash.data.entities.FinancialTransaction
 import com.example.appcash.data.vo.FinanceCategoryVO
 import com.example.appcash.data.vo.IconFolderVO
 import com.example.appcash.navigation.Destinations.FINANCE_ACCOUNTING_SCREEN
+import com.example.appcash.utils.ParamsStore.colorsList
+import com.example.appcash.utils.ParamsStore.getSafety
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.finance.main_screen.components.FinanceEvent
 import com.example.appcash.view.finance.main_screen.components.FinanceState
@@ -193,7 +195,7 @@ private fun GridCell(
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
-            .background(color = Color.Blue, shape = RoundedCornerShape(10.dp))
+            .background(color = colorsList.getSafety(vo.color), shape = RoundedCornerShape(10.dp))
             .padding(horizontal = 5.dp, vertical = 5.dp)
     ) {
         Text(
@@ -225,7 +227,9 @@ private fun Chart(
         strokeWidth = 80f,
         activeSliceAlpha = .9f,
         backgroundColor = Color.Transparent,
-        isAnimationEnable = true
+        isAnimationEnable = true,
+        isClickOnSliceEnabled = false,
+
     )
     Box(
         modifier = Modifier.fillMaxWidth(),

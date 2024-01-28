@@ -9,6 +9,8 @@ import com.example.appcash.data.vo.FinanceCategoryVO
 import com.example.appcash.data.vo.IconFolderVO
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByFolderUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByYearMonthUseCase
+import com.example.appcash.utils.ParamsStore.colorsList
+import com.example.appcash.utils.ParamsStore.getSafety
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -77,7 +79,7 @@ class FinanceViewModel @Inject constructor(
         return PieChartData.Slice(
             label = vo.name,
             value = value.toFloat(),
-            color = Color.Blue
+            color = colorsList.getSafety(vo.color)
         )
     }
 

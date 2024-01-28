@@ -1,13 +1,12 @@
 package com.example.appcash.view
 
-import com.example.appcash.utils.ParamsStore
-import com.example.appcash.utils.ParamsStore.getSafety
+import com.example.appcash.utils.ParamsStore.colorsList
+import com.example.appcash.utils.ParamsStore.getRandomColorIndex
 
 fun main(){
-    println(ParamsStore.colorsList.size)
-    println(ParamsStore.colorsList.getSafety(-1))
-    println(ParamsStore.colorsList.getSafety(0))
-    println(ParamsStore.colorsList.getSafety(8))
-    println(ParamsStore.colorsList.getSafety(9))
-    println(ParamsStore.colorsList.getSafety(10))
+    var a = false
+    while (!a) {
+        a = 0 == colorsList.getRandomColorIndex()
+        println("нет")
+    }
 }
