@@ -14,8 +14,9 @@ data class FinanceState(
         PieChartData.Slice(
             label = "",
             value = 1f,
-            color = Color.Transparent
+            color = Color.Gray
         )
     ),
-    val transactionsByYearMonth: Map<FinancialTransaction, IconFolderVO> = emptyMap()
+    val transactionsByYearMonth: Map<FinancialTransaction, IconFolderVO> = emptyMap(),
+    val isError: Boolean = false
 )

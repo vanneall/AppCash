@@ -9,15 +9,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -36,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -51,8 +50,9 @@ import com.example.appcash.navigation.Destinations.FINANCE_ACCOUNTING_SCREEN
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.finance.main_screen.components.FinanceEvent
 import com.example.appcash.view.finance.main_screen.components.FinanceState
-import java.time.format.TextStyle
 import java.util.Locale
+
+const val CURRENT_MONTH_INDEX = 11
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -65,53 +65,66 @@ fun Finance(
         pageCount = {
             12
         },
-        initialPage = 6
+        initialPage = 11
     )
-    pagerState.initialPage
-    Box {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            item {
-                HorizontalPager(
-                    state = pagerState
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Chart(
-                            list = when {
-                                state.categoriesForChart.isEmpty() -> {
-                                    listOf(
-                                        PieChartData.Slice(
-                                            label = "",
-                                            value = 1f,
-                                            color = Color.Transparent
-                                        )
-                                    )
-                                }
+    val gridState = rememberLazyGridState()
 
-                                else -> state.categoriesForChart
-                            }
-                        )
-                        Text(
-                            text = state.yearMonth.month.getDisplayName(
-                                TextStyle.FULL,
-                                Locale.getDefault()
-                            )
-                        )
-                    }
+    Box {
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(100.dp),
+            state = gridState,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            item(span = { GridItemSpan(maxCurrentLineSpan) }) {
+                HorizontalPager(
+                    state = pagerState,
+                ) {
+                    Chart(
+                        text = state.yearMonth.month.getDisplayName(
+                            java.time.format.TextStyle.FULL_STANDALONE,
+                            Locale.getDefault()
+                        ).capitalize(),
+                        textStyle = TextStyle(
+                            fontSize = 16.sp
+                        ),
+                        list = state.categoriesForChart,
+                        modifier = Modifier
+                            .size(250.dp)
+                            .padding(20.dp),
+                    )
                 }
             }
-            item { CategoryGrid(state.categories.toList()) }
-            item { Spacer(modifier = Modifier.height(40.dp)) }
-            items(items = state.transactionsByYearMonth.toList()) {
-                TransactionRow(it, modifier = Modifier.fillMaxWidth())
-                Spacer(modifier = Modifier.height(20.dp))
+            items(
+                items = state.categories.toList(),
+            ) {
+                GridCell(
+                    it.first,
+                    it.second,
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .height(30.dp)
+                )
+            }
+
+            item(
+                span = { GridItemSpan(maxCurrentLineSpan) }
+            ) {
+                Spacer(modifier = Modifier.height(40.dp))
+            }
+
+            items(
+                span = { GridItemSpan(maxCurrentLineSpan) },
+                items = state.transactionsByYearMonth.toList()
+            ) {
+                TransactionRow(
+                    it,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .padding(bottom = 20.dp)
+                )
             }
         }
         FloatingActionButton(
@@ -126,10 +139,10 @@ fun Finance(
         }
     }
     LaunchedEffect(pagerState) {
-        snapshotFlow { pagerState.currentPage }.collect { page ->
+        snapshotFlow { pagerState.currentPage }.collect { monthIndex ->
             onEvent(
                 FinanceEvent.SwitchEvent(
-                    6 - page
+                    newMonthIndex = CURRENT_MONTH_INDEX - monthIndex
                 )
             )
         }
@@ -162,35 +175,17 @@ fun TransactionRow(
         )
         Text(
             fontSize = 16.sp,
-            text = vo.first.price.toString(),
+            text = if (vo.first.price < 0) "${vo.first.price}" else "+${vo.first.price}",
             fontWeight = FontWeight.Medium,
             textAlign = TextAlign.End,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            color = if (vo.first.price < 0) Color.Red else Color.Green
         )
     }
 }
 
 @Composable
-fun CategoryGrid(
-    list: List<Pair<FinanceCategoryVO, Int>>,
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(100.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = Modifier.height(100.dp)
-    ) {
-        items(
-            items = list,
-        ) {
-            GridCell(it.first, it.second, modifier = Modifier.width(100.dp))
-        }
-
-    }
-}
-
-@Composable
-fun GridCell(
+private fun GridCell(
     vo: FinanceCategoryVO,
     price: Int,
     modifier: Modifier = Modifier
@@ -215,8 +210,11 @@ fun GridCell(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Chart(
-    list: List<PieChartData.Slice>
+private fun Chart(
+    text: String,
+    textStyle: TextStyle,
+    list: List<PieChartData.Slice>,
+    modifier: Modifier = Modifier
 ) {
     val donutChartData = PieChartData(
         slices = list,
@@ -225,14 +223,22 @@ fun Chart(
 
     val donutChartConfig = PieChartConfig(
         strokeWidth = 80f,
-        activeSliceAlpha = .9f
+        activeSliceAlpha = .9f,
+        backgroundColor = Color.Transparent,
+        isAnimationEnable = true
     )
-    DonutPieChart(
-        modifier = Modifier
-            .width(250.dp)
-            .height(250.dp)
-            .padding(20.dp),
-        donutChartData,
-        donutChartConfig
-    )
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        DonutPieChart(
+            modifier = modifier,
+            donutChartData,
+            donutChartConfig
+        )
+        Text(
+            text = text,
+            style = textStyle
+        )
+    }
 }

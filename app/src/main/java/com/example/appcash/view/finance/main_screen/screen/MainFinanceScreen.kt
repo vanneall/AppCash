@@ -5,6 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.finance.main_screen.components.FinanceViewModel
+import com.example.appcash.view.general.ErrorScreen
 
 @Composable
 fun MainFinanceScreen(
@@ -16,9 +17,13 @@ fun MainFinanceScreen(
         title = "Финансы",
     )
 
-    Finance(
-        viewModel.state.collectAsState().value,
-        viewModel::handle,
-        navigateTo
-    )
+    when (viewModel.state.collectAsState().value.isError) {
+        false -> Finance(
+            viewModel.state.collectAsState().value,
+            viewModel::handle,
+            navigateTo
+        )
+
+        true -> ErrorScreen()
+    }
 }

@@ -33,7 +33,6 @@ class TasksViewModel @AssistedInject constructor(
     private val folderId: Long,
     @Assisted(ArgsKeys.OPEN_MODE_KEY)
     private val mode: FolderOpenMode,
-    private val insertTaskToFolderLinkUseCaseImpl: InsertTaskToFolderLinkUseCaseImpl,
     private val getFolderNameByIdUseCase: GetFolderNameByIdUseCaseImpl,
     private val getMapTasksUseCase: GetMapTasksUseCaseImpl,
     private val getMapTasksByFolderIdUseCase: GetMapTasksByFolderIdUseCaseImpl,
@@ -172,11 +171,11 @@ class TasksViewModel @AssistedInject constructor(
     private fun initializePrivateState(): Flow<Map<MainTask, List<SubTask>?>> {
         return when (mode) {
             FolderOpenMode.ALL -> {
-                getMapTasksUseCase.invoke()
+                getMapTasksUseCase.invoke(onError = ::handle)
             }
 
             FolderOpenMode.DEFINED -> {
-                getMapTasksByFolderIdUseCase.invoke(id = folderId)
+                getMapTasksByFolderIdUseCase.invoke(id = folderId, onError = ::handle)
             }
 
             else -> flowOf()

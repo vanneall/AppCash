@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.appcash.view.TopAppBarState
+import com.example.appcash.view.general.ErrorScreen
 import com.example.appcash.view.tasks.task.components.TasksViewModel
 
 @Composable
@@ -34,9 +35,12 @@ fun TaskListScreen(
         }
     )
 
-    TaskList(
-        state = viewModel.state.collectAsState().value,
-        onEvent = viewModel::handle,
-        modifier = Modifier.padding(horizontal = 20.dp)
-    )
+    when (viewModel.state.collectAsState().value.isError) {
+        false -> TaskList(
+            state = viewModel.state.collectAsState().value,
+            onEvent = viewModel::handle,
+            modifier = Modifier.padding(horizontal = 20.dp)
+        )
+        true -> ErrorScreen()
+    }
 }
