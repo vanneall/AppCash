@@ -3,7 +3,7 @@ package com.example.appcash.view.notes.notes_folder.components
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcash.data.entities.Category.Discriminator
-import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
+import com.example.appcash.domain.notes.interfaces.GetCategoryByTypeUseCase
 import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainNotesViewModel @Inject constructor(
-    getFoldersByTypeUseCase: GetFoldersByTypeUseCase,
+    getCategoryByTypeUseCase: GetCategoryByTypeUseCase,
     private val insertFolderUseCase: Lazy<InsertFolderUseCase>,
 ) : ViewModel(), EventHandler {
 
@@ -32,10 +32,9 @@ class MainNotesViewModel @Inject constructor(
 
     private val _isShowed = MutableStateFlow(false)
 
-    private val _foldersDtoList = getFoldersByTypeUseCase
+    private val _foldersDtoList = getCategoryByTypeUseCase
         .invoke(
-            type = Discriminator.NOTES,
-            onError = ::handle
+            type = Discriminator.NOTES
         ).stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     val state = combine(
@@ -86,7 +85,6 @@ class MainNotesViewModel @Inject constructor(
                 colorIndex = colorIndex,
                 discriminator = Discriminator.NOTES,
                 iconId = "technic_folder_icon",
-                onError = ::handle
             )
         }
     }

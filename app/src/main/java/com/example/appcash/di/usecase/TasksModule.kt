@@ -4,12 +4,12 @@ import com.example.appcash.data.repository_interfaces.TasksRepository
 import com.example.appcash.domain.tasks.implementations.GetCompletedCountUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.GetPlannedCountUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.GetTaskUseCase
-import com.example.appcash.domain.tasks.implementations.InsertMaintaskUseCaseImpl
+import com.example.appcash.domain.tasks.implementations.InsertTaskUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.UpdateTaskUseCaseImpl
 import com.example.appcash.domain.tasks.interfaces.GetCompletedCountUseCase
-import com.example.appcash.domain.tasks.interfaces.GetMapTasksUseCase
+import com.example.appcash.domain.tasks.interfaces.GetTasksUseCase
 import com.example.appcash.domain.tasks.interfaces.GetPlannedCountUseCase
-import com.example.appcash.domain.tasks.interfaces.InsertMaintaskUseCase
+import com.example.appcash.domain.tasks.interfaces.InsertTaskUseCase
 import com.example.appcash.domain.tasks.interfaces.UpdateTaskUseCase
 import dagger.Module
 import dagger.Provides
@@ -34,14 +34,14 @@ class TasksModule {
 
     @Provides
     @ViewModelScoped
-    fun provideGetMapTasksUseCase(repository: TasksRepository): GetMapTasksUseCase {
+    fun provideGetMapTasksUseCase(repository: TasksRepository): GetTasksUseCase {
         return GetTaskUseCase(repository = repository)
     }
 
     @Provides
     @ViewModelScoped
-    fun provideInsertMainTasksUseCase(repository: TasksRepository): InsertMaintaskUseCase {
-        return InsertMaintaskUseCaseImpl(repository = repository)
+    fun provideInsertMainTasksUseCase(repository: TasksRepository): InsertTaskUseCase {
+        return InsertTaskUseCaseImpl(repository = repository)
     }
 
     @Provides

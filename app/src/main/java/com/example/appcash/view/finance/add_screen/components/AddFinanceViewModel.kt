@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.appcash.data.entities.Category
 import com.example.appcash.data.entities.Finance
 import com.example.appcash.domain.financial_transactions.interfaces.InsertFinanceUseCase
-import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
+import com.example.appcash.domain.notes.interfaces.GetCategoryByTypeUseCase
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.utils.events.SearchEvent
@@ -23,12 +23,12 @@ import kotlin.math.abs
 
 @HiltViewModel
 class AddFinanceViewModel @Inject constructor(
-    getFoldersByTypeUseCase: GetFoldersByTypeUseCase,
+    getCategoryByTypeUseCase: GetCategoryByTypeUseCase,
     private val insertFinanceUseCase: InsertFinanceUseCase,
 ) : ViewModel(), EventHandler {
 
     private val _list =
-        getFoldersByTypeUseCase.invoke(onError = ::handle, type = Category.Discriminator.FINANCES)
+        getCategoryByTypeUseCase.invoke(type = Category.Discriminator.FINANCES)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val _searchQuery = MutableStateFlow("")
@@ -52,23 +52,28 @@ class AddFinanceViewModel @Inject constructor(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), AddFinanceState())
 
     override fun handle(event: Event) {
-        when (event) {
-            is SearchEvent -> {
-                updateQuery(query = event.query)
-            }
+        try {
+            when (event) {
+                is SearchEvent -> {
+                    updateQuery(query = event.query)
+                }
 
-            is AddFinanceEvent.InputPriceEvent -> {
-                updatePrice(price = event.price)
-            }
+                is AddFinanceEvent.InputPriceEvent -> {
+                    updatePrice(price = event.price)
+                }
 
-            is AddFinanceEvent.CreateTransactionEvent -> {
-                createFinance(isMinus = event.isMinus, id = event.id)
-            }
+                is AddFinanceEvent.CreateTransactionEvent -> {
+                    createFinance(isMinus = event.isMinus, id = event.id)
+                }
 
-            is Event.ErrorEvent -> {
-                updateError()
+                is Event.ErrorEvent -> {
+                    updateError()
+                }
             }
+        } catch (ex: Exception) {
+            updateError()
         }
+
     }
 
     private fun updateQuery(query: String) {
@@ -92,8 +97,7 @@ class AddFinanceViewModel @Inject constructor(
                     ),
                     folderId = id,
                     date = YearMonth.now()
-                ),
-                onError = ::handle
+                )
             )
         }
     }

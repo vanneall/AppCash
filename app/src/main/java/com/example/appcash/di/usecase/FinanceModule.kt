@@ -1,11 +1,11 @@
 package com.example.appcash.di.usecase
 
 import com.example.appcash.data.repository_interfaces.FinancesRepository
-import com.example.appcash.domain.financial_transactions.implementations.GetTransactionsByFolderUseCaseImpl
-import com.example.appcash.domain.financial_transactions.implementations.GetTransactionsByYearMonthUseCaseImpl
+import com.example.appcash.domain.financial_transactions.implementations.GetFinancesByFolderUseCaseImpl
+import com.example.appcash.domain.financial_transactions.implementations.GetFinancesByYearMonthUseCaseImpl
 import com.example.appcash.domain.financial_transactions.implementations.InsertFinanceUseCaseImpl
-import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByFolderUseCase
-import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByYearMonthUseCase
+import com.example.appcash.domain.financial_transactions.interfaces.GetFinancesByFolderUseCase
+import com.example.appcash.domain.financial_transactions.interfaces.GetFinancesByYearMonthUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.InsertFinanceUseCase
 import dagger.Module
 import dagger.Provides
@@ -18,14 +18,14 @@ import dagger.hilt.android.scopes.ViewModelScoped
 class FinanceModule {
     @Provides
     @ViewModelScoped
-    fun provideGetTransactionsByYearMonthUseCase(repository: FinancesRepository): GetTransactionsByYearMonthUseCase {
-        return GetTransactionsByYearMonthUseCaseImpl(repository = repository)
+    fun provideGetTransactionsByYearMonthUseCase(repository: FinancesRepository): GetFinancesByYearMonthUseCase {
+        return GetFinancesByYearMonthUseCaseImpl(repository = repository)
     }
 
     @Provides
     @ViewModelScoped
-    fun provideGetTransactionsByFolderUseCase(repository: FinancesRepository): GetTransactionsByFolderUseCase {
-        return GetTransactionsByFolderUseCaseImpl(repository = repository)
+    fun provideGetTransactionsByFolderUseCase(repository: FinancesRepository): GetFinancesByFolderUseCase {
+        return GetFinancesByFolderUseCaseImpl(repository = repository)
     }
 
     @Provides

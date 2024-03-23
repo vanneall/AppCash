@@ -4,11 +4,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.yml.charts.ui.piechart.models.PieChartData
-import com.example.appcash.data.entities.Finance
 import com.example.appcash.data.entities.Category
+import com.example.appcash.data.entities.Finance
 import com.example.appcash.data.vo.FinanceCategoryVO
-import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByFolderUseCase
-import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByYearMonthUseCase
+import com.example.appcash.domain.financial_transactions.interfaces.GetFinancesByFolderUseCase
+import com.example.appcash.domain.financial_transactions.interfaces.GetFinancesByYearMonthUseCase
 import com.example.appcash.utils.ParamsStore.colorsList
 import com.example.appcash.utils.ParamsStore.getSafety
 import com.example.appcash.utils.events.Event
@@ -27,8 +27,8 @@ import kotlin.math.abs
 
 @HiltViewModel
 class FinanceViewModel @Inject constructor(
-    private val getTransactionsByYearMonthUseCase: GetTransactionsByYearMonthUseCase,
-    private val getTransactionsByFolderUseCase: GetTransactionsByFolderUseCase
+    private val getFinancesByYearMonthUseCase: GetFinancesByYearMonthUseCase,
+    private val getFinancesByFolderUseCase: GetFinancesByFolderUseCase
 ) : ViewModel(), EventHandler {
 
     private val _month = MutableStateFlow<YearMonth>(YearMonth.now())
@@ -41,15 +41,19 @@ class FinanceViewModel @Inject constructor(
     private val _error = MutableStateFlow(false)
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            getTransactionsByFolderUseCase.invoke(_month.value, ::handle).collect {
-                _categories.value = it
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                getFinancesByFolderUseCase.invoke(_month.value).collect {
+                    _categories.value = it
+                }
             }
-        }
-        viewModelScope.launch(Dispatchers.IO) {
-            getTransactionsByYearMonthUseCase.invoke(_month.value, ::handle).collect {
-                _transactions.value = it
+            viewModelScope.launch(Dispatchers.IO) {
+                getFinancesByYearMonthUseCase.invoke(_month.value).collect {
+                    _transactions.value = it
+                }
             }
+        } catch (exception: Exception) {
+            updateError()
         }
     }
 
@@ -84,14 +88,14 @@ class FinanceViewModel @Inject constructor(
     }
 
     override fun handle(event: Event) {
-        when (event) {
-            is FinanceEvent.SwitchEvent -> {
-                switchMonth(event.newMonthIndex.toLong())
+        try {
+            when (event) {
+                is FinanceEvent.SwitchEvent -> {
+                    switchMonth(event.newMonthIndex.toLong())
+                }
             }
-
-            is Event.ErrorEvent -> {
-                updateError()
-            }
+        } catch (exception: Exception) {
+            updateError()
         }
     }
 
@@ -121,13 +125,9 @@ class FinanceViewModel @Inject constructor(
         }
     }
 
-    private fun updateError() {
-        _error.update { true }
-    }
-
     private fun actualizeTransactions() {
         viewModelScope.launch(Dispatchers.IO) {
-            getTransactionsByFolderUseCase.invoke(_month.value, ::handle).collect {
+            getFinancesByFolderUseCase.invoke(_month.value).collect {
                 _categories.value = it
             }
         }
@@ -135,9 +135,13 @@ class FinanceViewModel @Inject constructor(
 
     private fun actualizeCategories() {
         viewModelScope.launch(Dispatchers.IO) {
-            getTransactionsByYearMonthUseCase.invoke(_month.value, ::handle).collect {
+            getFinancesByYearMonthUseCase.invoke(_month.value).collect {
                 _transactions.value = it
             }
         }
+    }
+
+    private fun updateError() {
+        _error.update { true }
     }
 }

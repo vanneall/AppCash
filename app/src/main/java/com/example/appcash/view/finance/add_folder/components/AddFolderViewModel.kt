@@ -40,8 +40,7 @@ class AddFolderViewModel @Inject constructor(
                         name = _state.value.name,
                         colorIndex = colorsList.getRandomColorIndex(),
                         discriminator = Discriminator.FINANCES,
-                        iconId = event.iconId,
-                        onError = {}
+                        iconId = event.iconId
                     )
                 }
             }

@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcash.data.entities.Note
 import com.example.appcash.domain.notes.implementations.DeleteFolderByIdImpl
-import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
+import com.example.appcash.domain.notes.implementations.GetCategoryNameByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNotesUseCaseImpl
-import com.example.appcash.domain.notes.implementations.UpdateFolderUseCaseImpl
+import com.example.appcash.domain.notes.implementations.UpdateCategoryUseCaseImpl
 import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
 import com.example.appcash.utils.ArgsKeys.OPEN_MODE_KEY
 import com.example.appcash.utils.events.Event
@@ -36,9 +36,9 @@ class NotesListViewModel @AssistedInject constructor(
     private val folderId: Long,
     @Assisted(OPEN_MODE_KEY)
     private val openMode: FolderOpenMode,
-    private val getFolderNameByIdUseCase: GetFolderNameByIdUseCaseImpl,
+    private val getFolderNameByIdUseCase: GetCategoryNameByIdUseCaseImpl,
     private val deleteFolderByIdImpl: Lazy<DeleteFolderByIdImpl>,
-    private val updateFolderUseCaseImpl: Lazy<UpdateFolderUseCaseImpl>,
+    private val updateCategoryUseCaseImpl: Lazy<UpdateCategoryUseCaseImpl>,
     private val getAllNotesUseCase: Lazy<GetNotesUseCaseImpl>,
 ) : ViewModel(), EventHandler {
 
@@ -110,11 +110,10 @@ class NotesListViewModel @AssistedInject constructor(
 
     private fun updateFolder(name: String, colorIndex: Int) {
         CoroutineScope(Dispatchers.IO).launch {
-            updateFolderUseCaseImpl.get().invoke(
+            updateCategoryUseCaseImpl.get().invoke(
                 id = folderId,
                 name = name.takeIf { it.trim().isNotEmpty() } ?: state.value.folderName,
-                colorIndex = colorIndex,
-                onError = ::handle
+                colorIndex = colorIndex
             )
         }
     }
@@ -132,14 +131,13 @@ class NotesListViewModel @AssistedInject constructor(
             delay(1000L) //TODO убрать костыль для удаления элемента
             deleteFolderByIdImpl.get().invoke(
                 id = id,
-                onError = ::handle
             )
         }
     }
 
     private fun initializePrivateState(): Flow<List<Note>> {
         return getAllNotesUseCase.get()
-            .invoke(folderId = folderId.takeIf { folderId > 0 }, onError = ::handle)
+            .invoke(folderId = folderId.takeIf { folderId > 0 })
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
@@ -151,8 +149,7 @@ class NotesListViewModel @AssistedInject constructor(
 
             FolderOpenMode.DEFINED -> {
                 getFolderNameByIdUseCase.invoke(
-                    id = folderId,
-                    onError = ::handle
+                    id = folderId
                 )
             }
 

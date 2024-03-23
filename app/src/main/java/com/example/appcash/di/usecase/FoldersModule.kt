@@ -3,12 +3,12 @@ package com.example.appcash.di.usecase
 import com.example.appcash.data.repository_interfaces.CategoriesRepository
 import com.example.appcash.domain.notes.implementations.DeleteFolderByIdImpl
 import com.example.appcash.domain.notes.implementations.GetFolderByTypeUseCaseImpl
-import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
+import com.example.appcash.domain.notes.implementations.GetCategoryNameByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.InsertFolderUseCaseImpl
-import com.example.appcash.domain.notes.implementations.UpdateFolderUseCaseImpl
+import com.example.appcash.domain.notes.implementations.UpdateCategoryUseCaseImpl
 import com.example.appcash.domain.notes.interfaces.DeleteByIdFolderUseCase
-import com.example.appcash.domain.notes.interfaces.GetFolderNameByIdUseCase
-import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
+import com.example.appcash.domain.notes.interfaces.GetCategoryNameByIdUseCase
+import com.example.appcash.domain.notes.interfaces.GetCategoryByTypeUseCase
 import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
 import com.example.appcash.domain.notes.interfaces.UpdateFolderUseCase
 import dagger.Module
@@ -29,12 +29,12 @@ class FoldersModule {
     @Provides
     @ViewModelScoped
     fun provideUpdateFolderUseCase(repository: CategoriesRepository): UpdateFolderUseCase {
-        return UpdateFolderUseCaseImpl(repository = repository)
+        return UpdateCategoryUseCaseImpl(repository = repository)
     }
 
     @Provides
     @ViewModelScoped
-    fun provideGetFoldersUseCase(repository: CategoriesRepository): GetFoldersByTypeUseCase {
+    fun provideGetFoldersUseCase(repository: CategoriesRepository): GetCategoryByTypeUseCase {
         return GetFolderByTypeUseCaseImpl(repository = repository)
     }
 
@@ -46,7 +46,7 @@ class FoldersModule {
 
     @Provides
     @ViewModelScoped
-    fun provideGetFolderNameByIdUseCase(repository: CategoriesRepository): GetFolderNameByIdUseCase {
-        return GetFolderNameByIdUseCaseImpl(repository = repository)
+    fun provideGetFolderNameByIdUseCase(repository: CategoriesRepository): GetCategoryNameByIdUseCase {
+        return GetCategoryNameByIdUseCaseImpl(repository = repository)
     }
 }

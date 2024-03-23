@@ -112,8 +112,7 @@ class NoteInfoViewModel @AssistedInject constructor(
             if (noteId == (0).toLong()) return@launch
             delay(1000L)
             deleteNoteByIdUseCaseImpl.get().invoke(
-                id = noteId,
-                onError = ::handle
+                id = noteId
             )
         }
 
@@ -133,7 +132,6 @@ class NoteInfoViewModel @AssistedInject constructor(
             NoteOpenMode.EDIT -> {
                 getNoteByIdUseCaseImpl.invoke(
                     id = noteId,
-                    onError = ::handle
                 ).stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(),
@@ -162,7 +160,6 @@ class NoteInfoViewModel @AssistedInject constructor(
                 title = title,
                 content = handledContent,
                 folderId = folderId.takeIf { folderId > 0 },
-                onError = ::handle
             )
         } else {
             upsertNoteUseCaseImpl.invoke(
@@ -170,7 +167,6 @@ class NoteInfoViewModel @AssistedInject constructor(
                 title = title,
                 content = handledContent,
                 folderId = folderId.takeIf { folderId > 0 },
-                onError = ::handle
             )
         }
     }

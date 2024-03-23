@@ -3,9 +3,9 @@ package com.example.appcash.view.tasks.task.components
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcash.data.entities.TaskWithTask
-import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
+import com.example.appcash.domain.notes.implementations.GetCategoryNameByIdUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.GetTaskUseCase
-import com.example.appcash.domain.tasks.implementations.InsertMaintaskUseCaseImpl
+import com.example.appcash.domain.tasks.implementations.InsertTaskUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.UpdateTaskUseCaseImpl
 import com.example.appcash.utils.ArgsKeys
 import com.example.appcash.utils.events.Event
@@ -30,9 +30,9 @@ class TasksViewModel @AssistedInject constructor(
     private val folderId: Long,
     @Assisted(ArgsKeys.OPEN_MODE_KEY)
     private val mode: FolderOpenMode,
-    private val getFolderNameByIdUseCase: GetFolderNameByIdUseCaseImpl,
+    private val getFolderNameByIdUseCase: GetCategoryNameByIdUseCaseImpl,
     private val getTaskUseCase: GetTaskUseCase,
-    private val insertMainTaskUseCase: InsertMaintaskUseCaseImpl,
+    private val insertMainTaskUseCase: InsertTaskUseCaseImpl,
     private val updateTaskUseCase: UpdateTaskUseCaseImpl
 ) : ViewModel(), EventHandler {
 
@@ -105,7 +105,6 @@ class TasksViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             insertMainTaskUseCase(
                 text = text,
-                onError = ::handle,
                 parentTaskId = parentId.takeIf { id -> id > 0 },
                 folderId = folderId.takeIf { id -> id > 0 }
             )
@@ -124,7 +123,6 @@ class TasksViewModel @AssistedInject constructor(
             updateTaskUseCase.invoke(
                 id = id,
                 isChecked = isChecked,
-                onError = ::handle
             )
         }
     }
@@ -144,7 +142,6 @@ class TasksViewModel @AssistedInject constructor(
     private fun initializePrivateState(): Flow<List<TaskWithTask>> {
         return getTaskUseCase.invoke(
             folderId = folderId.takeIf { folderId > 0 },
-            onError = ::handle
         ).stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
@@ -155,7 +152,7 @@ class TasksViewModel @AssistedInject constructor(
             }
 
             FolderOpenMode.DEFINED -> {
-                getFolderNameByIdUseCase.invoke(id = folderId, onError = {})
+                getFolderNameByIdUseCase.invoke(id = folderId)
             }
 
             else -> flowOf()

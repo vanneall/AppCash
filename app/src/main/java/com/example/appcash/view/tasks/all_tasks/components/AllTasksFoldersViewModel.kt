@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcash.data.entities.Category
 import com.example.appcash.data.entities.Category.Discriminator
-import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
+import com.example.appcash.domain.notes.interfaces.GetCategoryByTypeUseCase
 import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
 import com.example.appcash.domain.tasks.interfaces.GetCompletedCountUseCase
 import com.example.appcash.domain.tasks.interfaces.GetPlannedCountUseCase
@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AllTasksFoldersViewModel @Inject constructor(
-    getFoldersByTypeUseCase: GetFoldersByTypeUseCase,
+    getCategoryByTypeUseCase: GetCategoryByTypeUseCase,
     getPlannedCountUseCase: GetPlannedCountUseCase,
     getCompletedCountUseCase: GetCompletedCountUseCase,
     private val insertFolderUseCase: Lazy<InsertFolderUseCase>,
@@ -39,13 +39,13 @@ class AllTasksFoldersViewModel @Inject constructor(
     private val _isShowed = MutableStateFlow(false)
 
     private val _foldersList =
-        getFoldersByTypeUseCase.invoke(type = Discriminator.TASKS, onError = ::handle)
+        getCategoryByTypeUseCase.invoke(type = Discriminator.TASKS)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
-    private val _plannedCount = getPlannedCountUseCase.invoke(onError = ::handle)
+    private val _plannedCount = getPlannedCountUseCase.invoke()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
-    private val _completedCount = getCompletedCountUseCase.invoke(onError = ::handle)
+    private val _completedCount = getCompletedCountUseCase.invoke()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
     val state = combine(
@@ -101,7 +101,6 @@ class AllTasksFoldersViewModel @Inject constructor(
                 colorIndex = colorIndex,
                 discriminator = Discriminator.TASKS,
                 iconId = "game_folder_icon",
-                onError = ::handle
             )
         }
     }
