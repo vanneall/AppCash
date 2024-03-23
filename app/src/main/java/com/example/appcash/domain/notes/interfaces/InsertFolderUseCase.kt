@@ -1,8 +1,14 @@
 package com.example.appcash.domain.notes.interfaces
 
-import com.example.appcash.data.entities.FolderType
+import com.example.appcash.data.entities.Category.Discriminator
 import com.example.appcash.utils.events.Event.ErrorEvent
 
 interface InsertFolderUseCase {
-    fun invoke(name: String, colorIndex: Int, type: FolderType, onError: (ErrorEvent) -> Unit)
+    operator fun invoke(
+        name: String,
+        colorIndex: Int,
+        discriminator: Discriminator,
+        iconId: String,
+        onError: (ErrorEvent) -> Unit
+    )
 }

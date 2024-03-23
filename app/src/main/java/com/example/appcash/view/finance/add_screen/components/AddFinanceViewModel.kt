@@ -2,8 +2,8 @@ package com.example.appcash.view.finance.add_screen.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appcash.data.entities.FinancialTransaction
-import com.example.appcash.domain.financial_transactions.interfaces.GetIconFoldersUseCase
+import com.example.appcash.data.entities.Category
+import com.example.appcash.data.entities.Finance
 import com.example.appcash.domain.financial_transactions.interfaces.InsertFinanceUseCase
 import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
 import com.example.appcash.utils.events.Event
@@ -25,11 +25,11 @@ import kotlin.math.abs
 class AddFinanceViewModel @Inject constructor(
     getFoldersByTypeUseCase: GetFoldersByTypeUseCase,
     private val insertFinanceUseCase: InsertFinanceUseCase,
-    private val getIconFoldersUseCase: GetIconFoldersUseCase,
 ) : ViewModel(), EventHandler {
 
-    private val _list = getIconFoldersUseCase.invoke(onError = ::handle)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    private val _list =
+        getFoldersByTypeUseCase.invoke(onError = ::handle, type = Category.Discriminator.FINANCES)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val _searchQuery = MutableStateFlow("")
 
@@ -46,7 +46,7 @@ class AddFinanceViewModel @Inject constructor(
         AddFinanceState(
             price = price,
             query = query,
-            folders = list.filter { it.folder.name.contains(query) },
+            categories = list.filter { it.name.contains(query) },
             isError = error
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), AddFinanceState())
@@ -86,13 +86,13 @@ class AddFinanceViewModel @Inject constructor(
     private fun createFinance(isMinus: Boolean, id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             insertFinanceUseCase(
-                value = FinancialTransaction(
+                value = Finance(
                     price = if (isMinus) -1 * abs(_price.value.toInt()) else abs(
                         _price.value.toInt()
                     ),
+                    folderId = id,
                     date = YearMonth.now()
                 ),
-                id = id,
                 onError = ::handle
             )
         }

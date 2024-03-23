@@ -1,7 +1,7 @@
 package com.example.appcash.domain.financial_transactions.implementations
 
 import android.util.Log
-import com.example.appcash.data.repository_interfaces.FinancialTransactionsRepository
+import com.example.appcash.data.repository_interfaces.FinancesRepository
 import com.example.appcash.data.vo.FinanceCategoryVO
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByFolderUseCase
 import com.example.appcash.utils.events.Event
@@ -12,7 +12,7 @@ import java.time.YearMonth
 import javax.inject.Inject
 
 class GetTransactionsByFolderUseCaseImpl @Inject constructor(
-    private val repository: FinancialTransactionsRepository
+    private val repository: FinancesRepository
 ) : GetTransactionsByFolderUseCase {
     override fun invoke(
         yearMonth: YearMonth,
@@ -20,7 +20,7 @@ class GetTransactionsByFolderUseCaseImpl @Inject constructor(
     ): Flow<Map<FinanceCategoryVO, Int>> {
         return try {
             val monthId = yearMonth.toString()
-            val foldersFlow = repository.getTransactionByFolders(monthId)
+            val foldersFlow = repository.getFinancesByFolderId(monthId)
             foldersFlow.map {
                 it.mapKeys { map ->
                     FinanceCategoryVO(

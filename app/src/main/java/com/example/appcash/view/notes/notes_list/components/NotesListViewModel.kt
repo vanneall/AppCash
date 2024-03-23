@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.appcash.data.entities.Note
 import com.example.appcash.domain.notes.implementations.DeleteFolderByIdImpl
 import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
-import com.example.appcash.domain.notes.implementations.GetNotesByFolderIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNotesUseCaseImpl
 import com.example.appcash.domain.notes.implementations.UpdateFolderUseCaseImpl
 import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
@@ -40,7 +39,6 @@ class NotesListViewModel @AssistedInject constructor(
     private val getFolderNameByIdUseCase: GetFolderNameByIdUseCaseImpl,
     private val deleteFolderByIdImpl: Lazy<DeleteFolderByIdImpl>,
     private val updateFolderUseCaseImpl: Lazy<UpdateFolderUseCaseImpl>,
-    private val getNotesByFolderIdUseCase: Lazy<GetNotesByFolderIdUseCaseImpl>,
     private val getAllNotesUseCase: Lazy<GetNotesUseCaseImpl>,
 ) : ViewModel(), EventHandler {
 
@@ -140,23 +138,9 @@ class NotesListViewModel @AssistedInject constructor(
     }
 
     private fun initializePrivateState(): Flow<List<Note>> {
-        return when (openMode) {
-            FolderOpenMode.ALL -> {
-                getAllNotesUseCase.get().invoke(onError = ::handle)
-            }
-
-            FolderOpenMode.DEFINED -> {
-                getNotesByFolderIdUseCase.get().invoke(
-                    id = folderId,
-                    onError = ::handle
-                )
-            }
-
-            else -> {
-                handle(event = Event.ErrorEvent)
-                flowOf()
-            }
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+        return getAllNotesUseCase.get()
+            .invoke(folderId = folderId.takeIf { folderId > 0 }, onError = ::handle)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
     private fun initializePrivateFolderName(): Flow<String> {

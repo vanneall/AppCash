@@ -43,9 +43,9 @@ import co.yml.charts.common.model.PlotType
 import co.yml.charts.ui.piechart.charts.DonutPieChart
 import co.yml.charts.ui.piechart.models.PieChartConfig
 import co.yml.charts.ui.piechart.models.PieChartData
-import com.example.appcash.data.entities.FinancialTransaction
+import com.example.appcash.data.entities.Finance
+import com.example.appcash.data.entities.Category
 import com.example.appcash.data.vo.FinanceCategoryVO
-import com.example.appcash.data.vo.IconFolderVO
 import com.example.appcash.navigation.Destinations.FINANCE_ACCOUNTING_SCREEN
 import com.example.appcash.utils.ParamsStore.colorsList
 import com.example.appcash.utils.ParamsStore.getSafety
@@ -153,7 +153,7 @@ fun Finance(
 
 @Composable
 fun TransactionRow(
-    vo: Pair<FinancialTransaction, IconFolderVO>,
+    vo: Pair<Finance, Category>,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -163,7 +163,7 @@ fun TransactionRow(
         Icon(
             painter = painterResource(
                 id = LocalContext.current.resources.getIdentifier(
-                    vo.second.iconId,
+                    vo.second.icon,
                     "drawable",
                     LocalContext.current.packageName
                 ),
@@ -171,7 +171,7 @@ fun TransactionRow(
             contentDescription = null
         )
         Text(
-            text = vo.second.folder.name,
+            text = vo.second.name,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium
         )

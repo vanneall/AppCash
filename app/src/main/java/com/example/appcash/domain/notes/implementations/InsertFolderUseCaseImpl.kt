@@ -1,27 +1,28 @@
 package com.example.appcash.domain.notes.implementations
 
 import android.util.Log
-import com.example.appcash.data.entities.Folder
-import com.example.appcash.data.entities.FolderType
-import com.example.appcash.data.repository_interfaces.FoldersRepository
+import com.example.appcash.data.entities.Category
+import com.example.appcash.data.entities.Category.Discriminator
+import com.example.appcash.data.repository_interfaces.CategoriesRepository
 import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
 import com.example.appcash.utils.events.Event.ErrorEvent
 import javax.inject.Inject
 
 class InsertFolderUseCaseImpl @Inject constructor(
-    private val repository: FoldersRepository
+    private val repository: CategoriesRepository
 ) : InsertFolderUseCase {
-    override fun invoke(name: String, colorIndex: Int, type: FolderType, onError: (ErrorEvent) -> Unit) {
+    override fun invoke(name: String, colorIndex: Int, discriminator: Discriminator, iconId: String, onError: (ErrorEvent) -> Unit) {
         val nameTrimmed = name.trim()
 
         if (nameTrimmed.isEmpty()) return
 
         try {
-            repository.insertFolder(
-                folder = Folder(
+            repository.insertCategory(
+                category = Category(
                     name = nameTrimmed,
                     colorIndex = colorIndex,
-                    type = type
+                    discriminator = discriminator,
+                    icon = "car_folder_icon"
                 )
             )
         } catch (ex: Exception) {

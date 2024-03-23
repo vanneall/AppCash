@@ -2,9 +2,18 @@ package com.example.appcash.data.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(
+    tableName = "note",
+    foreignKeys = [ForeignKey(
+        entity = Category::class,
+        parentColumns = ["id"],
+        childColumns = ["category_id"],
+        onDelete = ForeignKey.CASCADE
+    )]
+)
 data class Note(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -14,5 +23,8 @@ data class Note(
     val title: String,
 
     @ColumnInfo(name = "content")
-    val content: String
+    val content: String,
+
+    @ColumnInfo("category_id")
+    val folderId: Long? = null
 )

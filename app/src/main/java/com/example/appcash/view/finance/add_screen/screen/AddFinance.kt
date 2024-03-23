@@ -120,13 +120,13 @@ fun AddFinance(
                 }
 
                 items(
-                    items = state.folders
+                    items = state.categories
                 ) {
                     ItemListView(
-                        name = it.folder.name,
+                        name = it.name,
                         icon = painterResource(
                             id = LocalContext.current.resources.getIdentifier(
-                                it.iconId,
+                                it.icon,
                                 "drawable",
                                 LocalContext.current.packageName
                             ),
@@ -137,7 +137,7 @@ fun AddFinance(
                         onClick = {
                             onEvent(
                                 AddFinanceEvent.CreateTransactionEvent(
-                                    it.folder.id,
+                                    it.id,
                                     pagerState.currentPage == 0
                                 )
                             )

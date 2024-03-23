@@ -2,7 +2,7 @@ package com.example.appcash.di.database
 
 import android.content.Context
 import androidx.room.Room
-import com.example.appcash.data.databases.FoldersDatabase
+import com.example.appcash.data.database.AppCashDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,11 +15,11 @@ import javax.inject.Singleton
 class DatabaseModule {
     @Provides
     @Singleton
-    fun provideFoldersDatabase(@ApplicationContext context: Context): FoldersDatabase {
+    fun provideFoldersDatabase(@ApplicationContext context: Context): AppCashDatabase {
         return Room.databaseBuilder(
             context = context,
-            klass = FoldersDatabase::class.java,
-            name = "Folders.db"
+            klass = AppCashDatabase::class.java,
+            name = "Appcash.db"
         ).build()
     }
 }

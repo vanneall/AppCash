@@ -38,14 +38,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
-import com.example.appcash.data.entities.MainTask
-import com.example.appcash.data.entities.SubTask
+import com.example.appcash.data.entities.TaskWithTask
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.general.other.BottomSheetEvent
 import com.example.appcash.view.general.other.SearchTextField
 import com.example.appcash.view.tasks.task.components.TaskEvent
-import com.example.appcash.view.tasks.task.components.TaskType
 import com.example.appcash.view.tasks.task.components.TasksState
 
 @Composable
@@ -72,11 +70,10 @@ fun TaskList(
         }
 
         itemsIndexed(
-            items = state.values.toList()
+            items = state.values
         ) { index, item ->
             TaskBlock(
-                task = item.first,
-                subtask = item.second,
+                task = item,
                 onEvent = onEvent,
                 taskId = selectedTaskId
             )
@@ -95,38 +92,33 @@ fun TaskList(
                 textStyle = TextStyle(color = Color.Gray, fontSize = 22.sp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onEvent(TaskEvent.ShowMaintaskBottomSheetEvent) }
+                    .clickable {
+                        onEvent(TaskEvent.ShowTaskBottomSheetEvent)
+                        selectedTaskId.longValue = 0
+                    }
             )
         }
     }
 
     if (state.isShowed.first) {
-        MaintaskModalBottomSheet(
-            onEvent = onEvent
-        )
-    }
-
-    if (state.isShowed.second) {
-        SubtaskModalBottomSheet(
-            mainTaskId = selectedTaskId.longValue,
-            onEvent = onEvent
+        TaskModalBottomSheet(
+            onEvent = onEvent,
+            parentTaskId = selectedTaskId.longValue,
         )
     }
 }
 
 @Composable
 fun TaskBlock(
-    task: MainTask,
+    task: TaskWithTask,
     taskId: MutableLongState,
     onEvent: (Event) -> Unit,
-    subtask: List<SubTask>?
 ) {
     Column {
         TaskRow(
             id = task.id,
             text = task.text,
             isChecked = task.isCompleted,
-            type = TaskType.MAIN,
             onEvent = onEvent,
             textStyle = TextStyle(
                 color = if (task.isCompleted) Color.Gray else Color.Black,
@@ -136,12 +128,11 @@ fun TaskBlock(
             ),
             modifier = Modifier.fillMaxWidth()
         )
-        subtask?.forEach { subtask ->
+        task.subtasks.forEach { subtask ->
             TaskRow(
                 id = subtask.id,
                 text = subtask.text,
                 isChecked = subtask.isCompleted,
-                type = TaskType.SUB,
                 textStyle = TextStyle(
                     color = if (subtask.isCompleted) Color.Gray else Color.Black,
                     fontSize = 16.sp,
@@ -161,7 +152,7 @@ fun TaskBlock(
                 .fillMaxWidth()
                 .padding(start = 43.dp)
                 .clickable {
-                    onEvent(TaskEvent.ShowSubtaskBottomSheetEvent)
+                    onEvent(TaskEvent.ShowTaskBottomSheetEvent)
                     taskId.longValue = task.id
                 }
         )
@@ -174,7 +165,6 @@ fun TaskRow(
     id: Long,
     text: String,
     isChecked: Boolean,
-    type: TaskType,
     textStyle: TextStyle,
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier,
@@ -186,12 +176,11 @@ fun TaskRow(
     ) {
         Checkbox(
             checked = isChecked,
-            onCheckedChange = {
+            onCheckedChange = { isChecked ->
                 onEvent(
-                    TaskEvent.UpdateCheckBoxEvent(
+                    TaskEvent.UpdateCompletedState(
                         id = id,
-                        isChecked = it,
-                        type = type
+                        isChecked = isChecked,
                     )
                 )
             },
@@ -228,13 +217,14 @@ fun AddTaskRow(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MaintaskModalBottomSheet(
+fun TaskModalBottomSheet(
+    parentTaskId: Long,
     onEvent: (Event) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val rememberTitle = remember { mutableStateOf("") }
-    val rememberText = remember { mutableStateOf("") }
 
     ModalBottomSheet(
         onDismissRequest = { onEvent(BottomSheetEvent.HideEvent) },
@@ -269,8 +259,9 @@ fun MaintaskModalBottomSheet(
                 Button(
                     onClick = {
                         onEvent(
-                            TaskEvent.CreateMaintaskEvent(
-                                text = rememberTitle.value
+                            TaskEvent.CreateTask(
+                                text = rememberTitle.value,
+                                parentTaskId = parentTaskId
                             )
                         )
                         onEvent(BottomSheetEvent.HideEvent)
@@ -286,66 +277,5 @@ fun MaintaskModalBottomSheet(
             }
         }
 
-    }
-}
-
-@Composable
-private fun SubtaskModalBottomSheet(
-    mainTaskId: Long,
-    onEvent: (Event) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val rememberText = remember { mutableStateOf("") }
-
-    ModalBottomSheet(
-        onDismissRequest = { onEvent(BottomSheetEvent.HideEvent) },
-        modifier = modifier
-    ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            OutlinedTextField(
-                value = rememberText.value,
-                onValueChange = { rememberText.value = it },
-                placeholder = { Text(text = "Название подзадачи") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 20.dp)
-            )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(20.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, bottom = 40.dp)
-            ) {
-                Button(
-                    onClick = { onEvent(BottomSheetEvent.HideEvent) },
-                    modifier = Modifier.weight(0.5f)
-                ) {
-                    Text(
-                        text = "Отменить",
-                        color = Color.White,
-                        fontSize = 16.sp
-                    )
-                }
-                Button(
-                    onClick = {
-                        onEvent(
-                            TaskEvent.CreateSubtaskEvent(
-                                mainTaskId = mainTaskId,
-                                text = rememberText.value
-                            )
-                        )
-                        onEvent(BottomSheetEvent.HideEvent)
-                    },
-                    modifier = Modifier.weight(0.5f)
-                ) {
-                    Text(
-                        text = "Сохранить",
-                        color = Color.White,
-                        fontSize = 16.sp
-                    )
-                }
-            }
-        }
     }
 }

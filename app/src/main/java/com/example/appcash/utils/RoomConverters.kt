@@ -1,25 +1,25 @@
 package com.example.appcash.utils
 
 import androidx.room.TypeConverter
-import com.example.appcash.data.entities.FolderType
+import com.example.appcash.data.entities.Category.Discriminator
 import java.time.YearMonth
 
 class RoomConverters {
     @TypeConverter
-    fun fromStringToFolderType(value: String): FolderType {
+    fun fromStringToFolderType(value: String): Discriminator {
         return when(value) {
-            FolderType.NOTES.name -> FolderType.NOTES
-            FolderType.FINANCIAL.name -> FolderType.FINANCIAL
-            else -> FolderType.TASKS
+            Discriminator.NOTES.name -> Discriminator.NOTES
+            Discriminator.FINANCES.name -> Discriminator.FINANCES
+            else -> Discriminator.TASKS
         }
     }
 
     @TypeConverter
-    fun fromFolderTypeToString(value: FolderType): String {
+    fun fromFolderTypeToString(value: Discriminator): String {
         return when(value) {
-            FolderType.NOTES -> FolderType.NOTES.name
-            FolderType.FINANCIAL -> FolderType.FINANCIAL.name
-            else -> FolderType.TASKS.name
+            Discriminator.NOTES -> Discriminator.NOTES.name
+            Discriminator.FINANCES -> Discriminator.FINANCES.name
+            else -> Discriminator.TASKS.name
         }
     }
 

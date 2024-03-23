@@ -2,7 +2,7 @@ package com.example.appcash.view.notes.notes_folder.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appcash.data.entities.FolderType
+import com.example.appcash.data.entities.Category.Discriminator
 import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
 import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
 import com.example.appcash.utils.events.Event
@@ -34,7 +34,7 @@ class MainNotesViewModel @Inject constructor(
 
     private val _foldersDtoList = getFoldersByTypeUseCase
         .invoke(
-            type = FolderType.NOTES,
+            type = Discriminator.NOTES,
             onError = ::handle
         ).stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
@@ -84,7 +84,8 @@ class MainNotesViewModel @Inject constructor(
             insertFolderUseCase.get().invoke(
                 name = name,
                 colorIndex = colorIndex,
-                type = FolderType.NOTES,
+                discriminator = Discriminator.NOTES,
+                iconId = "technic_folder_icon",
                 onError = ::handle
             )
         }

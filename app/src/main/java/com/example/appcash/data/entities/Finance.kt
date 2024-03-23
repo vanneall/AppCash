@@ -4,10 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.YearMonth
 
-//Используется вместе с TaskWithTask, потому как у каждой Task может быть своя Task
 @Entity(
-    tableName = "task",
+    tableName = "finance",
     foreignKeys = [ForeignKey(
         entity = Category::class,
         parentColumns = ["id"],
@@ -15,20 +15,17 @@ import androidx.room.PrimaryKey
         onDelete = ForeignKey.CASCADE
     )]
 )
-data class Task(
+data class Finance(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("id")
     val id: Long = 0,
 
-    @ColumnInfo("text")
-    val text: String,
+    @ColumnInfo("price")
+    val price: Int,
 
-    @ColumnInfo("isCompleted")
-    val isCompleted: Boolean = false,
-
-    @ColumnInfo("parent_id")
-    val parentId: Long? = null,
+    @ColumnInfo("date")
+    val date: YearMonth,
 
     @ColumnInfo("category_id")
-    val folderId: Long? = null
+    val folderId: Long
 )

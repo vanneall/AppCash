@@ -1,6 +1,6 @@
 package com.example.appcash.di.usecase
 
-import com.example.appcash.data.repository_interfaces.NoteRepository
+import com.example.appcash.data.repository_interfaces.NotesRepository
 import com.example.appcash.domain.notes.implementations.DeleteNoteByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNoteByIdUseCaseImpl
 import com.example.appcash.domain.notes.implementations.GetNotesUseCaseImpl
@@ -20,26 +20,25 @@ import dagger.hilt.android.scopes.ViewModelScoped
 class NotesModule {
     @Provides
     @ViewModelScoped
-    fun provideGetNoteByIdUseCase(repository: NoteRepository): GetNoteByIdUseCase {
+    fun provideGetNoteByIdUseCase(repository: NotesRepository): GetNoteByIdUseCase {
         return GetNoteByIdUseCaseImpl(repository = repository)
     }
 
     @Provides
     @ViewModelScoped
-    fun provideInsertNoteUseCase(repository: NoteRepository): UpsertNoteUseCase {
+    fun provideInsertNoteUseCase(repository: NotesRepository): UpsertNoteUseCase {
         return UpsertNoteUseCaseImpl(repository = repository)
     }
 
     @Provides
     @ViewModelScoped
-    fun provideGetNotesUseCase(repository: NoteRepository): GetNotesUseCase {
+    fun provideGetNotesUseCase(repository: NotesRepository): GetNotesUseCase {
         return GetNotesUseCaseImpl(repository = repository)
     }
 
-
     @Provides
     @ViewModelScoped
-    fun provideDeleteNoteUseCase(repository: NoteRepository): DeleteNoteByIdUseCase {
+    fun provideDeleteNoteUseCase(repository: NotesRepository): DeleteNoteByIdUseCase {
         return DeleteNoteByIdUseCaseImpl(repository = repository)
     }
 }

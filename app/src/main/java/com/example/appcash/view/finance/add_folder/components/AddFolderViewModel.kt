@@ -2,9 +2,8 @@ package com.example.appcash.view.finance.add_folder.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appcash.data.entities.Folder
-import com.example.appcash.data.entities.FolderType
-import com.example.appcash.domain.financial_transactions.interfaces.InsertFolderWithIconUseCase
+import com.example.appcash.data.entities.Category.Discriminator
+import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
 import com.example.appcash.utils.ParamsStore.colorsList
 import com.example.appcash.utils.ParamsStore.getRandomColorIndex
 import com.example.appcash.utils.events.Event
@@ -19,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddFolderViewModel @Inject constructor(
-    private val insertFolderWithIconUseCase: InsertFolderWithIconUseCase
+    private val insertFolderUseCase: InsertFolderUseCase
 ) : ViewModel(), EventHandler {
     private val _state = MutableStateFlow(AddFolderState())
 
@@ -37,13 +36,12 @@ class AddFolderViewModel @Inject constructor(
 
             is AddFolderEvent.CreateFolderEvent -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    insertFolderWithIconUseCase(
-                        folder = Folder(
-                            name = _state.value.name,
-                            colorIndex = colorsList.getRandomColorIndex(),
-                            type = FolderType.FINANCIAL
-                        ),
-                        event.iconId
+                    insertFolderUseCase(
+                        name = _state.value.name,
+                        colorIndex = colorsList.getRandomColorIndex(),
+                        discriminator = Discriminator.FINANCES,
+                        iconId = event.iconId,
+                        onError = {}
                     )
                 }
             }

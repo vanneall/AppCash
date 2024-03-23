@@ -1,17 +1,13 @@
 package com.example.appcash.di.repository
 
-import com.example.appcash.data.databases.FoldersDatabase
-import com.example.appcash.data.repository_implementations.FinancialTransactionsRepositoryImpl
-import com.example.appcash.data.repository_implementations.FoldersRepositoryImpl
-import com.example.appcash.data.repository_implementations.NoteRepositoryImpl
-import com.example.appcash.data.repository_implementations.NoteToFolderLinkRepositoryImpl
-import com.example.appcash.data.repository_implementations.TaskToFolderRepositoryImpl
+import com.example.appcash.data.database.AppCashDatabase
+import com.example.appcash.data.repository_implementations.CategoriesRepositoryImpl
+import com.example.appcash.data.repository_implementations.FinancesRepositoryImpl
+import com.example.appcash.data.repository_implementations.NotesRepositoryImpl
 import com.example.appcash.data.repository_implementations.TasksRepositoryImpl
-import com.example.appcash.data.repository_interfaces.FinancialTransactionsRepository
-import com.example.appcash.data.repository_interfaces.FoldersRepository
-import com.example.appcash.data.repository_interfaces.NoteRepository
-import com.example.appcash.data.repository_interfaces.NoteToFolderLinkRepository
-import com.example.appcash.data.repository_interfaces.TaskToFolderRepository
+import com.example.appcash.data.repository_interfaces.CategoriesRepository
+import com.example.appcash.data.repository_interfaces.FinancesRepository
+import com.example.appcash.data.repository_interfaces.NotesRepository
 import com.example.appcash.data.repository_interfaces.TasksRepository
 import dagger.Module
 import dagger.Provides
@@ -24,37 +20,25 @@ import javax.inject.Singleton
 class RepositoryModule {
     @Provides
     @Singleton
-    fun provideFoldersRepository(database: FoldersDatabase): FoldersRepository {
-        return FoldersRepositoryImpl(database = database)
+    fun provideFoldersRepository(database: AppCashDatabase): CategoriesRepository {
+        return CategoriesRepositoryImpl(categoryDao = database.getCategoryDao())
     }
 
     @Provides
     @Singleton
-    fun provideNoteToFolderLinkRepository(database: FoldersDatabase): NoteToFolderLinkRepository {
-        return NoteToFolderLinkRepositoryImpl(database = database)
+    fun provideNoteRepository(database: AppCashDatabase): NotesRepository {
+        return NotesRepositoryImpl(noteDao = database.getNoteDao())
     }
 
     @Provides
     @Singleton
-    fun provideNoteRepository(database: FoldersDatabase): NoteRepository {
-        return NoteRepositoryImpl(database = database)
+    fun provideTasksRepository(database: AppCashDatabase): TasksRepository {
+        return TasksRepositoryImpl(taskDao = database.getTaskDao())
     }
 
     @Provides
     @Singleton
-    fun provideTasksRepository(database: FoldersDatabase): TasksRepository {
-        return TasksRepositoryImpl(database = database)
-    }
-
-    @Provides
-    @Singleton
-    fun provideTaskToFolderRepository(database: FoldersDatabase): TaskToFolderRepository {
-        return TaskToFolderRepositoryImpl(database = database)
-    }
-
-    @Provides
-    @Singleton
-    fun provideFinancialTransactionsRepository(database: FoldersDatabase): FinancialTransactionsRepository {
-        return FinancialTransactionsRepositoryImpl(database = database)
+    fun provideFinancialTransactionsRepository(database: AppCashDatabase): FinancesRepository {
+        return FinancesRepositoryImpl(financeDao = database.getFinanceDao())
     }
 }

@@ -109,14 +109,14 @@ fun AllTasks(
         }
 
         items(
-            items = state.folders,
+            items = state.categories,
             key = { dto -> dto.id }
-        ) { folderDto ->
+        ) { category ->
             ItemListView(
-                name = folderDto.name,
+                name = category.name,
                 icon = painterResource(id = R.drawable.tasks_folder_icon),
-                backgroundIconColor = folderDto.color,
-                onClick = { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.DEFINED.name}/${folderDto.id}") }
+                backgroundIconColor = Color.Gray,
+                onClick = { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.DEFINED.name}/${category.id}") }
             )
         }
     }

@@ -4,9 +4,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.yml.charts.ui.piechart.models.PieChartData
-import com.example.appcash.data.entities.FinancialTransaction
+import com.example.appcash.data.entities.Finance
+import com.example.appcash.data.entities.Category
 import com.example.appcash.data.vo.FinanceCategoryVO
-import com.example.appcash.data.vo.IconFolderVO
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByFolderUseCase
 import com.example.appcash.domain.financial_transactions.interfaces.GetTransactionsByYearMonthUseCase
 import com.example.appcash.utils.ParamsStore.colorsList
@@ -34,7 +34,7 @@ class FinanceViewModel @Inject constructor(
     private val _month = MutableStateFlow<YearMonth>(YearMonth.now())
 
     private val _transactions =
-        MutableStateFlow<Map<FinancialTransaction, IconFolderVO>>(emptyMap())
+        MutableStateFlow<Map<Finance, Category>>(emptyMap())
 
     private val _categories = MutableStateFlow<Map<FinanceCategoryVO, Int>>(emptyMap())
 

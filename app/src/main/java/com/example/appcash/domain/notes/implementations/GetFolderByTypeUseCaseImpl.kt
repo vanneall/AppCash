@@ -2,24 +2,23 @@ package com.example.appcash.domain.notes.implementations
 
 import android.util.Log
 import com.example.appcash.data.dto.FolderDto
-import com.example.appcash.data.entities.Folder
-import com.example.appcash.data.entities.FolderType
-import com.example.appcash.data.repository_interfaces.FoldersRepository
+import com.example.appcash.data.entities.Category
+import com.example.appcash.data.entities.Category.Discriminator
+import com.example.appcash.data.repository_interfaces.CategoriesRepository
 import com.example.appcash.domain.notes.interfaces.GetFoldersByTypeUseCase
 import com.example.appcash.utils.ParamsStore.colorsList
 import com.example.appcash.utils.ParamsStore.getSafety
 import com.example.appcash.utils.events.Event.ErrorEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetFolderByTypeUseCaseImpl @Inject constructor(
-    private val repository: FoldersRepository
+    private val repository: CategoriesRepository
 ) : GetFoldersByTypeUseCase {
-    override fun invoke(type: FolderType, onError: (ErrorEvent) -> Unit): Flow<List<FolderDto>> {
+    override fun invoke(type: Discriminator, onError: (ErrorEvent) -> Unit): Flow<List<Category>> {
         return try {
-            repository.getFoldersByType(type = type).map { list -> list.toFolderDtoList()}
+            repository.getCategoryByType(type = type)
         } catch (ex: Exception) {
             onError(ErrorEvent)
 
@@ -28,7 +27,7 @@ class GetFolderByTypeUseCaseImpl @Inject constructor(
         }
     }
 
-    private fun List<Folder>.toFolderDtoList(): List<FolderDto> {
+    private fun List<Category>.toFolderDtoList(): List<FolderDto> {
         return map { folder ->
             FolderDto(
                 id = folder.id,

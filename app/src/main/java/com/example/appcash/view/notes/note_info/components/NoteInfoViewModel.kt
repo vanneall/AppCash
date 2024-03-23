@@ -9,7 +9,6 @@ import com.example.appcash.domain.notes.implementations.UpsertNoteUseCaseImpl
 import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
 import com.example.appcash.utils.ArgsKeys.ID_KEY
 import com.example.appcash.utils.ArgsKeys.OPEN_MODE_KEY
-import com.example.appcash.utils.OpenParamsMagicNumbers.OPEN_WITHOUT_FOLDER
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.Event.ErrorEvent
 import com.example.appcash.utils.events.EventHandler
@@ -152,47 +151,27 @@ class NoteInfoViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun upsertNote(title: String, content: String) {
+    private fun upsertNote(title: String, content: String) {
         val handledTitle = title.trim()
         val handledContent = content.trim()
 
         if (handledTitle.isEmpty()) return
 
-        when (openMode) {
-            NoteOpenMode.CREATE -> {
-                if (folderId == OPEN_WITHOUT_FOLDER.toLong()) {
-                    upsertNoteUseCaseImpl.invoke(
-                        title = title,
-                        content = content,
-                        openMode = openMode,
-                        onError = ::handle
-                    )
-                } else {
-                    upsertNoteUseCaseImpl.invoke(
-                        folderId = folderId,
-                        title = title,
-                        content = content,
-                        openMode = openMode,
-                        onError = ::handle
-                    )
-                }
-            }
-
-            NoteOpenMode.EDIT -> {
-                _note.collect { state ->
-                    upsertNoteUseCaseImpl.invoke(
-                        noteId = state.id,
-                        title = handledTitle,
-                        content = handledContent,
-                        openMode = openMode,
-                        onError = ::handle
-                    )
-                }
-            }
-
-            else -> {
-                handle(event = ErrorEvent)
-            }
+        if (noteId == (-1).toLong()) {
+            upsertNoteUseCaseImpl.invoke(
+                title = title,
+                content = handledContent,
+                folderId = folderId.takeIf { folderId > 0 },
+                onError = ::handle
+            )
+        } else {
+            upsertNoteUseCaseImpl.invoke(
+                id = noteId,
+                title = title,
+                content = handledContent,
+                folderId = folderId.takeIf { folderId > 0 },
+                onError = ::handle
+            )
         }
     }
 }

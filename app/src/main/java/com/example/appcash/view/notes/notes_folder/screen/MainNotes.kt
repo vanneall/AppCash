@@ -87,7 +87,7 @@ fun MainNotes(
             ItemListView(
                 name = folderDto.name,
                 icon = painterResource(id = R.drawable.folder_icon),
-                backgroundIconColor = folderDto.color,
+                backgroundIconColor = Color.Gray,
                 onClick = { navigateTo("$NOTES_LIST_SCREEN/${folderDto.id}/${DEFINED.name}") }
             )
         }

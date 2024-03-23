@@ -2,13 +2,10 @@ package com.example.appcash.view.tasks.task.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appcash.data.entities.MainTask
-import com.example.appcash.data.entities.SubTask
+import com.example.appcash.data.entities.TaskWithTask
 import com.example.appcash.domain.notes.implementations.GetFolderNameByIdUseCaseImpl
-import com.example.appcash.domain.tasks.implementations.GetMapTasksByFolderIdUseCaseImpl
-import com.example.appcash.domain.tasks.implementations.GetMapTasksUseCaseImpl
+import com.example.appcash.domain.tasks.implementations.GetTaskUseCase
 import com.example.appcash.domain.tasks.implementations.InsertMaintaskUseCaseImpl
-import com.example.appcash.domain.tasks.implementations.InsertSubtaskUseCaseImpl
 import com.example.appcash.domain.tasks.implementations.UpdateTaskUseCaseImpl
 import com.example.appcash.utils.ArgsKeys
 import com.example.appcash.utils.events.Event
@@ -34,10 +31,8 @@ class TasksViewModel @AssistedInject constructor(
     @Assisted(ArgsKeys.OPEN_MODE_KEY)
     private val mode: FolderOpenMode,
     private val getFolderNameByIdUseCase: GetFolderNameByIdUseCaseImpl,
-    private val getMapTasksUseCase: GetMapTasksUseCaseImpl,
-    private val getMapTasksByFolderIdUseCase: GetMapTasksByFolderIdUseCaseImpl,
+    private val getTaskUseCase: GetTaskUseCase,
     private val insertMainTaskUseCase: InsertMaintaskUseCaseImpl,
-    private val insertSubTaskUseCase: InsertSubtaskUseCaseImpl,
     private val updateTaskUseCase: UpdateTaskUseCaseImpl
 ) : ViewModel(), EventHandler {
 
@@ -60,7 +55,7 @@ class TasksViewModel @AssistedInject constructor(
     ) { tasksMap, query, name, isError, isShowed ->
         TasksState(
             folderName = name,
-            values = tasksMap.filterKeys { it.text.contains(query) },
+            values = tasksMap.filter { it.text.contains(query) },
             querySearch = query,
             isError = isError,
             isShowed = isShowed
@@ -69,31 +64,23 @@ class TasksViewModel @AssistedInject constructor(
 
     override fun handle(event: Event) {
         when (event) {
-            is TaskEvent.CreateMaintaskEvent -> {
-                insertMaintask(text = event.text)
-            }
-
-            is TaskEvent.CreateSubtaskEvent -> {
-                insertSubtask(
-                    mainTaskId = event.mainTaskId,
-                    text = event.text
+            is TaskEvent.CreateTask -> {
+                insertTask(
+                    text = event.text,
+                    parentId = event.parentTaskId,
+                    folderId = folderId
                 )
             }
 
-            is TaskEvent.UpdateCheckBoxEvent -> {
+            is TaskEvent.UpdateCompletedState -> {
                 updateTaskChecked(
                     id = event.id,
-                    isChecked = event.isChecked,
-                    type = event.type
+                    isChecked = event.isChecked
                 )
             }
 
-            is TaskEvent.ShowMaintaskBottomSheetEvent -> {
+            is TaskEvent.ShowTaskBottomSheetEvent -> {
                 showMaintaskBottomSheet()
-            }
-
-            is TaskEvent.ShowSubtaskBottomSheetEvent -> {
-                showSubtaskBottomSheet()
             }
 
             is SearchEvent -> {
@@ -110,25 +97,17 @@ class TasksViewModel @AssistedInject constructor(
         }
     }
 
-    private fun insertMaintask(text: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            insertMainTaskUseCase(
-                folderId = folderId,
-                text = text,
-                onError = ::handle
-            )
-        }
-    }
-
-    private fun insertSubtask(
-        mainTaskId: Long,
-        text: String
+    private fun insertTask(
+        text: String,
+        parentId: Long,
+        folderId: Long,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            insertSubTaskUseCase(
-                mainTaskId = mainTaskId,
+            insertMainTaskUseCase(
                 text = text,
-                onError = ::handle
+                onError = ::handle,
+                parentTaskId = parentId.takeIf { id -> id > 0 },
+                folderId = folderId.takeIf { id -> id > 0 }
             )
         }
     }
@@ -137,20 +116,14 @@ class TasksViewModel @AssistedInject constructor(
         _isShowed.update { it.copy(first = true) }
     }
 
-    private fun showSubtaskBottomSheet() {
-        _isShowed.update { it.copy(second = true) }
-    }
-
     private fun updateTaskChecked(
         id: Long,
-        isChecked: Boolean,
-        type: TaskType
+        isChecked: Boolean
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             updateTaskUseCase.invoke(
                 id = id,
                 isChecked = isChecked,
-                type = type,
                 onError = ::handle
             )
         }
@@ -168,18 +141,11 @@ class TasksViewModel @AssistedInject constructor(
         _isError.update { true }
     }
 
-    private fun initializePrivateState(): Flow<Map<MainTask, List<SubTask>?>> {
-        return when (mode) {
-            FolderOpenMode.ALL -> {
-                getMapTasksUseCase.invoke(onError = ::handle)
-            }
-
-            FolderOpenMode.DEFINED -> {
-                getMapTasksByFolderIdUseCase.invoke(id = folderId, onError = ::handle)
-            }
-
-            else -> flowOf()
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyMap())
+    private fun initializePrivateState(): Flow<List<TaskWithTask>> {
+        return getTaskUseCase.invoke(
+            folderId = folderId.takeIf { folderId > 0 },
+            onError = ::handle
+        ).stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
     private fun initializePrivateFolderName(): Flow<String> {

@@ -4,8 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
-data class Folder(
+@Entity(
+    tableName = "category"
+)
+data class Category(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Long = 0,
@@ -17,10 +19,14 @@ data class Folder(
     val colorIndex: Int,
 
     @ColumnInfo(name = "type")
-    val type: FolderType
-)
-enum class FolderType {
-    TASKS,
-    NOTES,
-    FINANCIAL
+    val discriminator: Discriminator,
+
+    @ColumnInfo(name = "icon")
+    val icon: String
+) {
+    enum class Discriminator {
+        TASKS,
+        NOTES,
+        FINANCES
+    }
 }
