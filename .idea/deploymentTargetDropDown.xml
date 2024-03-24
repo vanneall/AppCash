@@ -2,7 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="CategoryDaoTest">
+        <State />
+      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="shouldCreateAndReturnByIdCategory()">
+        <State />
+      </entry>
+      <entry key="shouldCreateCategory()">
+        <State />
+      </entry>
+      <entry key="shouldGetAllCategories()">
+        <State />
+      </entry>
+      <entry key="shouldReturnListOfCategories()">
         <State />
       </entry>
     </value>
