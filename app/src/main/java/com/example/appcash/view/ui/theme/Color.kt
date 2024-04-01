@@ -20,3 +20,14 @@ val Gray = Color(0xFFADADAD)
 
 val Orange = Color(0xFFFF9900)
 val DarkRed = Color(0xFFBB2828)
+
+val Turquoise = Color(0xFF4FCBC3)
+val ToxicPink = Color(0xFFF100D9)
+val Purple = Color(0xFFB04CFE)
+
+
+val IncomeTurquoise = Turquoise
+val IncomeToxicPink = ToxicPink
+val IncomePurple = Purple
+val IncomeOrange = Orange
+val IncomeBlue = Blue

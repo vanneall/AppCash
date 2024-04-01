@@ -18,7 +18,7 @@ fun MainFinanceScreen(
     )
 
     when (viewModel.state.collectAsState().value.isError) {
-        false -> Finance(
+        false -> FinanceChart(
             viewModel.state.collectAsState().value,
             viewModel::handle,
             navigateTo
