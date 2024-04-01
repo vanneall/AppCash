@@ -14,5 +14,6 @@ val TopBarDateColor = Color(0xFF14008D)
 val NotesListBackgroundColor = Color(0xFF6199BB)
 
 val Blue = Color(0xFF0171C2)
+val DarkBlue = Color(0xFF2969FE)
 val LightGray = Color(0xFFF6F7FB)
 val Gray = Color(0xFFADADAD)

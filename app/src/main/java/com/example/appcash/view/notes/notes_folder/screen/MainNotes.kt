@@ -3,6 +3,7 @@ package com.example.appcash.view.notes.notes_folder.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,43 +48,43 @@ fun MainNotes(
     navigateTo: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-    ) {
-        item {
-            Header(
-                name = stringResource(id = R.string.my_categories),
-                modifier = Modifier.padding(vertical = 15.dp)
-            )
-        }
+    Column {
+        Header(
+            name = stringResource(id = R.string.my_categories),
+            modifier = Modifier.padding(vertical = 15.dp)
+        )
 
-        items(
-            items = state.foldersList,
-            key = { item -> item.id }
-        ) { item ->
-            CategoryListItem(
-                name = item.name,
-                countOfInnerItems = "2",
-                icon = Icons.Default.Home,
-                iconBackgroundColor = Blue,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp)
-                    .background(
-                        color = LightGray,
-                        shape = RoundedCornerShape(20.dp)
-                    )
-                    .padding(horizontal = 12.dp)
-                    .clickable { navigateTo("$NOTES_LIST_SCREEN/${item.id}/${FolderOpenMode.DEFINED.name}") }
-            )
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+        ) {
+            items(
+                items = state.foldersList,
+                key = { item -> item.id }
+            ) { item ->
+                CategoryListItem(
+                    name = item.name,
+                    countOfInnerItems = "2",
+                    icon = Icons.Default.Home,
+                    iconBackgroundColor = Blue,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(64.dp)
+                        .background(
+                            color = LightGray,
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                        .padding(horizontal = 12.dp)
+                        .clickable { navigateTo("$NOTES_LIST_SCREEN/${item.id}/${FolderOpenMode.DEFINED.name}") }
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun CategoryListItem(
+fun CategoryListItem(
     name: String,
     countOfInnerItems: String,
     icon: ImageVector,

@@ -2,24 +2,24 @@
 
 package com.example.appcash.view.tasks.all_tasks.screen
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,19 +28,19 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.navigation.Destinations
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.general.list.Header
-import com.example.appcash.view.general.list.ItemListView
-import com.example.appcash.view.general.list.RoundedIconView
-import com.example.appcash.view.general.other.BottomSheetEvent
-import com.example.appcash.view.general.other.FolderSettingsModalBottomSheet
-import com.example.appcash.view.general.other.SearchTextField
 import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
+import com.example.appcash.view.notes.notes_folder.screen.CategoryListItem
 import com.example.appcash.view.tasks.all_tasks.components.AllTasksState
+import com.example.appcash.view.ui.theme.Blue
+import com.example.appcash.view.ui.theme.DarkBlue
+import com.example.appcash.view.ui.theme.LightGray
 
 @Composable
 fun AllTasks(
@@ -49,137 +49,149 @@ fun AllTasks(
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val modalBottomSheetState = rememberModalBottomSheetState()
-
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(15.dp),
-        contentPadding = PaddingValues(bottom = 50.dp),
+    Column(
         modifier = modifier
     ) {
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                TaskCheeps(
-                    title = stringResource(id = R.string.planned),
-                    icon = painterResource(id = R.drawable.planned_task_icon),
-                    iconBgColor = Color.Red,
-                    count = state.plannedTasks.toString().takeIf { it != "0" } ?: "",
-                    modifier = Modifier.weight(0.5f)
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                TaskCheeps(
-                    title = stringResource(id = R.string.completed),
-                    icon = painterResource(id = R.drawable.confirm_icon),
-                    iconBgColor = Color.Green,
-                    count = state.completeTasks.toString().takeIf { it != "0" } ?: "",
-                    modifier = Modifier.weight(0.5f)
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            InfoCheep(
+                title = "Задачи",
+                count = "21",
+                textColor = Color.White,
+                icon = painterResource(id = R.drawable.task_alt),
+                modifier = Modifier
+                    .height(height = 124.dp)
+                    .background(color = DarkBlue, shape = RoundedCornerShape(20.dp))
+                    .padding(16.dp)
+                    .weight(1f)
+            )
+
+            InfoCheep(
+                title = "Избранное",
+                count = "8",
+                textColor = Color.Black,
+                icon = painterResource(id = R.drawable.bookmark),
+                modifier = Modifier
+                    .height(height = 124.dp)
+                    .background(color = LightGray, shape = RoundedCornerShape(20.dp))
+                    .padding(16.dp)
+                    .weight(1f)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(40.dp))
+        
+        Header(
+            name = stringResource(id = R.string.my_categories),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 15.dp)
+        )
+
+        Spacer(modifier = Modifier.height(25.dp))
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            items(
+                items = state.categories,
+                key = { item -> item.id }
+            ) { item ->
+                CategoryListItem(
+                    name = item.name,
+                    countOfInnerItems = "2",
+                    icon = Icons.Default.Home,
+                    iconBackgroundColor = Blue,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(64.dp)
+                        .background(
+                            color = LightGray,
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                        .padding(horizontal = 12.dp)
+                        .clickable { navigate("${Destinations.NOTES_LIST_SCREEN}/${item.id}/${FolderOpenMode.DEFINED.name}") }
                 )
             }
         }
-
-        item { Header(name = stringResource(id = R.string.my_tasks_folder)) }
-
-        item {
-            SearchTextField(
-                state.searchQuery,
-                onEvent,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 10.dp)
-            )
-        }
-
-        item {
-            ItemListView(
-                name = stringResource(id = R.string.new_tasks),
-                icon = painterResource(id = R.drawable.new_tasks_folder_icon),
-                backgroundIconColor = Color.Gray,
-                onClick = { onEvent(BottomSheetEvent.ShowEvent) }
-            )
-        }
-
-        item {
-            ItemListView(
-                name = "Все задачи",
-                icon = painterResource(id = R.drawable.kid_star),
-                backgroundIconColor = Color(0xFFE9AD14),
-                onClick = { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.ALL.name}/${0}") }
-            )
-        }
-
-        items(
-            items = state.categories,
-            key = { dto -> dto.id }
-        ) { category ->
-            ItemListView(
-                name = category.name,
-                icon = painterResource(id = R.drawable.tasks_folder_icon),
-                backgroundIconColor = Color.Gray,
-                onClick = { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.DEFINED.name}/${category.id}") }
-            )
-        }
     }
 
-    if (state.isShowed) {
-        FolderSettingsModalBottomSheet(
-            sheetState = modalBottomSheetState,
-            onEvent = onEvent,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
+
 }
 
 @Composable
-private fun TaskCheeps(
+fun InfoCheep(
     title: String,
-    icon: Painter,
-    iconBgColor: Color,
     count: String,
+    textColor: Color,
+    icon: Painter,
     modifier: Modifier = Modifier
 ) {
     Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.Start,
         modifier = modifier
-            .border(
-                border = BorderStroke(width = 1.dp, color = Color.Black),
-                shape = RoundedCornerShape(corner = CornerSize(size = 25.dp))
-            )
-            .padding(
-                horizontal = 25.dp,
-                vertical = 15.dp
-            )
     ) {
-        TaskCounterBlockInfo(
-            icon = icon,
-            iconBgColor = iconBgColor,
-            count = count
-        )
-        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                painter = icon,
+                contentDescription = null,
+                tint = if (textColor == Color.White) Color.White else DarkBlue
+            )
+
+            Text(
+                text = count,
+                fontSize = 28.sp,
+                color = textColor,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+
         Text(
             text = title,
-            color = Color.LightGray,
-            fontSize = 16.sp
+            fontSize = 20.sp,
+            color = textColor,
+            fontWeight = FontWeight.Normal
         )
     }
+
 }
 
+
+@Preview(showBackground = true)
 @Composable
-private fun TaskCounterBlockInfo(
-    icon: Painter,
-    iconBgColor: Color,
-    count: String,
-) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        RoundedIconView(icon = icon, tint = Color.White, backGroundColor = iconBgColor, size = 28.dp)
-        Text(
-            text = count,
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
-        )
-    }
+fun InfoCheepPreview() {
+    InfoCheep(
+        title = "Задачи",
+        count = "21",
+        textColor = Color.White,
+        icon = painterResource(id = R.drawable.task_alt),
+        modifier = Modifier
+            .size(174.dp, 124.dp)
+            .background(color = DarkBlue, shape = RoundedCornerShape(20.dp))
+            .padding(16.dp)
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun InfoCheepPreviewBookmark() {
+    InfoCheep(
+        title = "Избранное",
+        count = "8",
+        textColor = Color.Black,
+        icon = painterResource(id = R.drawable.bookmark),
+        modifier = Modifier
+            .size(174.dp, 124.dp)
+            .background(color = LightGray, shape = RoundedCornerShape(20.dp))
+            .padding(16.dp)
+    )
 }

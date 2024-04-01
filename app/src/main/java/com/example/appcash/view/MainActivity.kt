@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val topAppBarState = remember { mutableStateOf(TopAppBarState()) }
             val navController = rememberNavController()
-            AppCashTheme {
+            AppCashTheme(dynamicColor = false) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

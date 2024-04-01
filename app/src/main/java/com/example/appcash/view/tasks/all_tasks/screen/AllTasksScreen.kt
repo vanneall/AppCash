@@ -24,7 +24,7 @@ fun AllTasksScreen(
             state = viewModel.state.collectAsState().value,
             onEvent = viewModel::handle,
             navigate = navigateTo,
-            modifier = Modifier.padding(horizontal = 20.dp)
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         true -> ErrorScreen()
