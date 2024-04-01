@@ -5,6 +5,8 @@ import com.example.appcash.data.entities.Category
 data class AllTasksState(
     val searchQuery: String = "",
     val categories: List<Category> = emptyList(),
+    val isConfigPopupShowed: Boolean = false,
+    val isEditPopupShowed: Boolean = false,
     val plannedTasks: Int = 0,
     val completeTasks: Int = 0,
     val isShowed: Boolean = false,

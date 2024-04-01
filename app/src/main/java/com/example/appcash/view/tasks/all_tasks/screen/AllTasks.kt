@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,10 +39,13 @@ import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
 import com.example.appcash.view.notes.notes_folder.screen.CategoryListItem
 import com.example.appcash.view.tasks.all_tasks.components.AllTasksState
+import com.example.appcash.view.tasks.popup.ConfigPopup
+import com.example.appcash.view.tasks.popup.EditPopup
 import com.example.appcash.view.ui.theme.Blue
 import com.example.appcash.view.ui.theme.DarkBlue
 import com.example.appcash.view.ui.theme.LightGray
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllTasks(
     state: AllTasksState,
@@ -120,6 +124,29 @@ fun AllTasks(
         }
     }
 
+    if (state.isConfigPopupShowed) {
+        ModalBottomSheet(
+            onDismissRequest = { },
+            containerColor = Color.White,
+            modifier = Modifier.size(390.dp, 240.dp)
+        ) {
+            ConfigPopup(
+                name = "Какая-то задача",
+            )
+        }
+    }
+
+    if (state.isEditPopupShowed) {
+        ModalBottomSheet(
+            onDismissRequest = { },
+            containerColor = Color.White
+        ) {
+            EditPopup(
+                modifier
+                    .padding(horizontal = 24.dp)
+            )
+        }
+    }
 
 }
 
