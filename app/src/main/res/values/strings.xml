@@ -7,7 +7,7 @@
     <string name="search">Поиск</string>
 
     <!-- FolderListScreen -->
-    <string name="my_folders">Мои папки</string>
+    <string name="my_categories">Мои списки</string>
     <string name="new_folder">Новая папка</string>
     <string name="folder_name">Название папки</string>
     <string name="all_notes">Все заметки</string>
