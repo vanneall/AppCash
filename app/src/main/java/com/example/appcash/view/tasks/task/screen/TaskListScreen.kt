@@ -39,7 +39,7 @@ fun TaskListScreen(
         false -> TaskList(
             state = viewModel.state.collectAsState().value,
             onEvent = viewModel::handle,
-            modifier = Modifier.padding(horizontal = 20.dp)
+            modifier = Modifier.padding(horizontal = 20.dp).padding(top = 40.dp)
         )
         true -> ErrorScreen()
     }

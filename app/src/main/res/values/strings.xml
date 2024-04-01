@@ -21,6 +21,7 @@
     <string name="new_tasks">Добавить список</string>
     <string name="planned">Запланировано</string>
     <string name="completed">Выполнено</string>
+    <string name="add_new_subtask">Новая подзадача</string>
 
 
 </resources>

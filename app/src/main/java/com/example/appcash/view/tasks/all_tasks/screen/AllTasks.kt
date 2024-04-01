@@ -84,7 +84,7 @@ fun AllTasks(
         }
 
         Spacer(modifier = Modifier.height(40.dp))
-        
+
         Header(
             name = stringResource(id = R.string.my_categories),
             modifier = Modifier
@@ -114,7 +114,7 @@ fun AllTasks(
                             shape = RoundedCornerShape(20.dp)
                         )
                         .padding(horizontal = 12.dp)
-                        .clickable { navigate("${Destinations.NOTES_LIST_SCREEN}/${item.id}/${FolderOpenMode.DEFINED.name}") }
+                        .clickable { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.DEFINED.name}/${item.id}") }
                 )
             }
         }
