@@ -3,6 +3,7 @@
 package com.example.appcash.view.notes.notes_list.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +29,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.appcash.navigation.Destinations.NOTE_SCREEN
 import com.example.appcash.utils.events.Event
+import com.example.appcash.view.notes.note_info.components.NoteOpenMode
 import com.example.appcash.view.notes.notes_list.components.NotesListState
 import com.example.appcash.view.ui.theme.Gray
 import com.example.appcash.view.ui.theme.LightGray
@@ -57,6 +60,7 @@ fun NotesList(
                         color = LightGray, shape = RoundedCornerShape(20.dp)
                     )
                     .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .clickable { navigateTo("$NOTE_SCREEN/${state.folderId}/${item.id}/${NoteOpenMode.EDIT.name}") }
             )
         }
     }

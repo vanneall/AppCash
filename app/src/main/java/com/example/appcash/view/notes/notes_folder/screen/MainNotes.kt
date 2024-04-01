@@ -1,6 +1,7 @@
 package com.example.appcash.view.notes.notes_folder.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,8 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.data.entities.Category
+import com.example.appcash.navigation.Destinations.NOTES_LIST_SCREEN
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.general.list.Header
+import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
 import com.example.appcash.view.notes.notes_folder.components.MainNotesState
 import com.example.appcash.view.ui.theme.Blue
 import com.example.appcash.view.ui.theme.Gray
@@ -73,6 +76,7 @@ fun MainNotes(
                         shape = RoundedCornerShape(20.dp)
                     )
                     .padding(horizontal = 12.dp)
+                    .clickable { navigateTo("$NOTES_LIST_SCREEN/${item.id}/${FolderOpenMode.DEFINED.name}") }
             )
         }
     }

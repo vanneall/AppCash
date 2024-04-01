@@ -11,10 +11,7 @@
       <entry key="shouldCreateAndReturnByIdCategory()">
         <State />
       </entry>
-      <entry key="shouldCreateCategory()">
-        <State />
-      </entry>
-      <entry key="shouldGetAllCategories()">
+      <entry key="shouldDeleteCategoryById()">
         <State />
       </entry>
       <entry key="shouldReturnListOfCategories()">
