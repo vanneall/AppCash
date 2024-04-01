@@ -26,29 +26,32 @@ object Destinations {
 
 val screenBottomItems = listOf(
     Screen(
-        "Календарь",
         Destinations.MAIN_CALENDAR_SCREEN,
-        iconId = R.drawable.kid_star
+        iconId = R.drawable.calendar_nav_icon
     ),
     Screen(
-        "Заметки",
+        Destinations.MAIN_FINANCE_SCREEN,
+        iconId = R.drawable.chart_nav_icon
+    ),
+
+    //Заглушка для красивого распределения иконок
+    Screen(
         Destinations.MAIN_NOTES_FOLDER_SCREEN,
         iconId = R.drawable.notes_icon
     ),
+
     Screen(
-        "Задачник",
         Destinations.MAIN_TASKS_FOLDER_SCREEN,
-        iconId = R.drawable.some_icon
+        iconId = R.drawable.tasks_nav_icon
     ),
+
     Screen(
-        "Финансы",
-        Destinations.MAIN_FINANCE_SCREEN,
-        iconId = R.drawable.chart_icon
-    )
+        Destinations.MAIN_NOTES_FOLDER_SCREEN,
+        iconId = R.drawable.note_nav_icon
+    ),
 )
 
 data class Screen(
-    val name: String,
     val route: String,
     val iconId: Int
 )
