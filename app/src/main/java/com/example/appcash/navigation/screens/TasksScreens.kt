@@ -45,7 +45,8 @@ fun MainTasksScreenNavigation(
 fun TasksScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
     navHostController: NavHostController,
-    topAppBarState: MutableState<TopAppBarState>
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
 ) {
     navGraphBuilder.composable(
         route = "${Destinations.TASKS_SCREEN}/{${ArgsKeys.OPEN_MODE_KEY}}/{${ArgsKeys.FOLDER_ID_KEY}}",
@@ -80,6 +81,7 @@ fun TasksScreenNavigation(
             viewModel = viewModel,
             navigateBack = navHostController::popBackStack,
             topAppBarState = topAppBarState,
+            fabState = fabState
         )
     }
 }

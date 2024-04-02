@@ -24,11 +24,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
+import com.example.appcash.utils.events.Event
 import com.example.appcash.view.ui.theme.DarkBlue
 import com.example.appcash.view.ui.theme.LightGray
 
 @Composable
 fun EditPopup(
+    state: EditPopupState,
+    onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -38,28 +41,36 @@ fun EditPopup(
     ) {
         Option(
             name = stringResource(id = R.string.folder),
-            hint = "Пока недоступно"
+            value = "",
+            hint = "Пока недоступно",
+            onEvent = { }
         )
 
         Option(
             name = stringResource(id = R.string.task_name),
-            hint = stringResource(id = R.string.task_name_hint)
+            hint = stringResource(id = R.string.task_name_hint),
+            value = state.name,
+            onEvent = { value -> onEvent(EditPopupEvent.InsertName(value)) }
         )
 
         Option(
             name = stringResource(id = R.string.task_description),
-            hint = stringResource(id = R.string.task_description_hint)
+            hint = stringResource(id = R.string.task_description_hint),
+            value = state.description,
+            onEvent = { value -> onEvent(EditPopupEvent.InsertDescription(value)) }
         )
 
         Option(
             name = stringResource(id = R.string.date_and_time_of_end),
-            hint = "Пока йццйц"
+            hint = "Пока недоступно",
+            value = "",
+            onEvent = { }
         )
 
         Button(
             shape = CircleShape,
             colors = ButtonDefaults.buttonColors(containerColor = DarkBlue),
-            onClick = { /*TODO*/ },
+            onClick = { onEvent(EditPopupEvent.CreateTask(state.parentId)) },
             modifier = Modifier.size(52.dp)
         ) {
             Icon(
@@ -74,7 +85,9 @@ fun EditPopup(
 @Composable
 private fun Option(
     name: String,
+    value: String,
     hint: String,
+    onEvent: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -89,9 +102,10 @@ private fun Option(
         )
 
         TextField(
-            value = "",
-            onValueChange = {},
+            value = value,
+            onValueChange = { onEvent(it) },
             maxLines = 1,
+            singleLine = true,
             textStyle = TextStyle(fontSize = 14.sp),
             label = { Text(text = hint) },
             modifier = Modifier.fillMaxWidth(),

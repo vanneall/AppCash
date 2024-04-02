@@ -88,6 +88,7 @@ class AllTasksFoldersViewModel @Inject constructor(
                 discriminator = Discriminator.TASKS,
                 iconId = "game_folder_icon",
             )
+            updateHide()
         }
     }
 

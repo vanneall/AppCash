@@ -41,10 +41,8 @@ import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.notes.notefolders.components.FolderOpenMode
 import com.example.appcash.view.notes.notefolders.screen.CategoryListItem
-import com.example.appcash.view.popup.ConfigPopup
 import com.example.appcash.view.popup.CreateCategoryPopup
 import com.example.appcash.view.popup.CreateCategoryPopupEvent
-import com.example.appcash.view.popup.EditPopup
 import com.example.appcash.view.tasks.all_tasks.components.AllTasksFoldersViewModel
 import com.example.appcash.view.tasks.all_tasks.components.AllTasksState
 import com.example.appcash.view.ui.theme.DarkBlue
@@ -166,31 +164,6 @@ private fun AllTasks(
             )
         }
     }
-
-    if (state.isConfigPopupShowed) {
-        ModalBottomSheet(
-            onDismissRequest = { },
-            containerColor = Color.White,
-            modifier = Modifier.size(390.dp, 240.dp)
-        ) {
-            ConfigPopup(
-                name = "Какая-то задача",
-            )
-        }
-    }
-
-    if (state.isEditPopupShowed) {
-        ModalBottomSheet(
-            onDismissRequest = { },
-            containerColor = Color.White
-        ) {
-            EditPopup(
-                modifier
-                    .padding(horizontal = 24.dp)
-            )
-        }
-    }
-
 }
 
 @Composable

@@ -13,7 +13,7 @@ sealed class CreateCategoryPopupEvent() : Event {
         val name: String
     ) : CreateCategoryPopupEvent()
 
-    object ShowCreatePopup : CreateCategoryPopupEvent()
+     object ShowCreatePopup: CreateCategoryPopupEvent()
 
     object HideCreatePopup : CreateCategoryPopupEvent()
 }
