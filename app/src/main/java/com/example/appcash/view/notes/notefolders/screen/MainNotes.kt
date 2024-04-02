@@ -1,5 +1,6 @@
-package com.example.appcash.view.notes.notes_folder.screen
+package com.example.appcash.view.notes.notefolders.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,57 +18,89 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
-import ru.point.data.data.entities.Category
 import com.example.appcash.navigation.Destinations.NOTES_LIST_SCREEN
 import com.example.appcash.utils.events.Event
+import com.example.appcash.view.FabState
+import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.general.list.Header
-import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
-import com.example.appcash.view.notes.notes_folder.components.MainNotesState
+import com.example.appcash.view.notes.notefolders.components.MainNotesEvent
+import com.example.appcash.view.notes.notefolders.components.MainNotesState
+import com.example.appcash.view.notes.notefolders.components.MainNotesViewModel
+import com.example.appcash.view.notes.popup.CreateCategoryPopup
 import com.example.appcash.view.ui.theme.Blue
+import com.example.appcash.view.ui.theme.DarkTurquoise
 import com.example.appcash.view.ui.theme.Gray
 import com.example.appcash.view.ui.theme.LightGray
+import ru.point.data.data.entities.Category
 
 @Composable
-fun MainNotes(
+fun MainNotesScreen(
+    viewModel: MainNotesViewModel,
+    navigateTo: (String) -> Unit,
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
+) {
+    topAppBarState.value = TopAppBarState(
+        title = stringResource(id = R.string.note_screen)
+    )
+
+    fabState.value = FabState {
+        viewModel.handle(MainNotesEvent.ShowCreatePopup)
+        Log.d("FabState", "Fab action setted")
+    }
+
+    MainNotes(
+        state = viewModel.state.collectAsState().value,
+        onEvent = viewModel::handle,
+        navigateTo = navigateTo,
+        modifier = Modifier.padding(horizontal = 20.dp)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MainNotes(
     state: MainNotesState,
     onEvent: (Event) -> Unit,
     navigateTo: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column {
+    Column(modifier = modifier) {
         Header(
             name = stringResource(id = R.string.my_categories),
             modifier = Modifier.padding(vertical = 15.dp)
         )
 
+        Spacer(modifier = Modifier.height(25.dp))
+
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(
-                items = state.foldersList,
-                key = { item -> item.id }
-            ) { item ->
+            item {
                 CategoryListItem(
-                    name = item.name,
-                    countOfInnerItems = "2",
-                    icon = Icons.Default.Home,
-                    iconBackgroundColor = Blue,
+                    name = stringResource(id = R.string.all_notes),
+                    countOfInnerItems = state.notesCount,
+                    icon = painterResource(id = R.drawable.note_nav_icon),
+                    iconBackgroundColor = DarkTurquoise,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(64.dp)
@@ -76,9 +109,49 @@ fun MainNotes(
                             shape = RoundedCornerShape(20.dp)
                         )
                         .padding(horizontal = 12.dp)
-                        .clickable { navigateTo("$NOTES_LIST_SCREEN/${item.id}/${FolderOpenMode.DEFINED.name}") }
+                        .clickable { navigateTo("$NOTES_LIST_SCREEN/0") }
                 )
             }
+
+
+
+            items(
+                items = state.foldersList,
+                key = { item -> item.id }
+            ) { item ->
+                CategoryListItem(
+                    name = item.name,
+                    countOfInnerItems = "2",
+                    icon = painterResource(id = R.drawable.note_nav_icon),
+                    iconBackgroundColor = Color(item.color),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(64.dp)
+                        .background(
+                            color = LightGray,
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                        .padding(horizontal = 12.dp)
+                        .clickable { navigateTo("$NOTES_LIST_SCREEN/${item.id}") }
+                )
+            }
+        }
+    }
+
+    if (state.isCreatePopupShowed) {
+        ModalBottomSheet(
+            onDismissRequest = { onEvent(MainNotesEvent.HideCreatePopup) },
+            containerColor = Color.White,
+            modifier = Modifier
+                .height(280.dp)
+        ) {
+            CreateCategoryPopup(
+                state = state.popupState,
+                onEvent = onEvent,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp)
+            )
         }
     }
 }
@@ -87,7 +160,7 @@ fun MainNotes(
 fun CategoryListItem(
     name: String,
     countOfInnerItems: String,
-    icon: ImageVector,
+    icon: Painter,
     iconBackgroundColor: Color,
     modifier: Modifier = Modifier,
 ) {
@@ -96,7 +169,7 @@ fun CategoryListItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = icon,
+            painter = icon,
             tint = Color.White,
             contentDescription = "Иконка фолдера",
             modifier = Modifier
@@ -147,7 +220,7 @@ private fun CategoryListItemPreview() {
     CategoryListItem(
         name = "Дом",
         countOfInnerItems = "2",
-        icon = Icons.Default.Home,
+        icon = painterResource(id = R.drawable.task_alt),
         iconBackgroundColor = Blue,
         modifier = Modifier
             .fillMaxWidth()
@@ -171,15 +244,15 @@ private fun ScreenPreview() {
             foldersList = listOf(
                 Category(
                     name = "Дом",
-                    colorIndex = 0,
+                    color = 0,
                     discriminator = Category.Discriminator.NOTES,
-                    icon = "wewe"
+                    icon = "wewe",
                 ),
                 Category(
                     name = "Работа",
-                    colorIndex = 0,
+                    color = 0,
                     discriminator = Category.Discriminator.NOTES,
-                    icon = "wewe"
+                    icon = "wewe",
                 )
             )
         ),

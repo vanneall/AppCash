@@ -1,7 +1,10 @@
 package com.example.appcash.utils
 
 import androidx.compose.ui.graphics.Color
-import kotlin.random.Random
+import com.example.appcash.view.ui.theme.DarkBlue
+import com.example.appcash.view.ui.theme.DarkRed
+import com.example.appcash.view.ui.theme.DarkTurquoise
+import com.example.appcash.view.ui.theme.Orange
 
 object ParamsStore {
     val icons
@@ -25,25 +28,11 @@ object ParamsStore {
             "travel_folder_icon"
         )
 
-    val colorsList
+    val colorsList: List<Color>
         get() = listOf(
-            Color(0xFF86986A),
-            Color(0xFF940B25),
-            Color(0xFFC65911),
-            Color(0xFF55828B),
-            Color(0xFFC88B18),
-            Color(0xFF9C1448),
-            Color(0xFFBE95C4),
-            Color(0xFFBC8A5F),
-            Color(0xFF9CAEA9)
+            DarkRed,
+            DarkBlue,
+            Orange,
+            DarkTurquoise
         )
-
-    fun List<Color>.getSafety(i: Int): Color {
-        if (i in indices) return this[i]
-        return Color.Black
-    }
-
-    fun List<Color>.getRandomColorIndex(): Int {
-        return Random.nextInt(0, this.size)
-    }
 }

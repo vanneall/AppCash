@@ -10,4 +10,5 @@ interface NotesRepository {
     fun createNote(note: Note)
     fun updateNote(note: Note)
     fun deleteNote(id: Long)
+    fun getNoteCount(): Flow<Int>
 }

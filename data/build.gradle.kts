@@ -36,6 +36,9 @@ android {
 
 dependencies {
 
+    //ComposeGraphics
+    implementation("androidx.activity:activity-compose:1.8.2")
+
     //Hilt
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-android-compiler:2.44")

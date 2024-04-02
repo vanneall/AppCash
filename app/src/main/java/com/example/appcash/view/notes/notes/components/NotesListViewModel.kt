@@ -1,15 +1,13 @@
-package com.example.appcash.view.notes.notes_list.components
+package com.example.appcash.view.notes.notes.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
-import com.example.appcash.utils.ArgsKeys.OPEN_MODE_KEY
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.utils.events.SearchEvent
 import com.example.appcash.view.general.other.BottomSheetEvent
-import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
-import com.example.appcash.view.notes.notes_folder.components.MainNotesEvent
+import com.example.appcash.view.notes.notefolders.components.MainNotesEvent
 import dagger.Lazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -33,13 +31,11 @@ import ru.point.domain.notes.implementations.UpdateCategoryUseCaseImpl
 
 class NotesListViewModel @AssistedInject constructor(
     @Assisted(FOLDER_ID_KEY)
-    private val folderId: Long,
-    @Assisted(OPEN_MODE_KEY)
-    private val openMode: FolderOpenMode,
+    private val folderId: Long?,
     private val getFolderNameByIdUseCase: GetCategoryNameByIdUseCaseImpl,
     private val deleteFolderByIdImpl: Lazy<DeleteFolderByIdImpl>,
     private val updateCategoryUseCaseImpl: Lazy<UpdateCategoryUseCaseImpl>,
-    private val getAllNotesUseCase: Lazy<GetNotesUseCaseImpl>,
+    private val getAllNotesUseCase: GetNotesUseCaseImpl,
 ) : ViewModel(), EventHandler {
 
     private val _notes = initializePrivateState()
@@ -80,7 +76,7 @@ class NotesListViewModel @AssistedInject constructor(
             }
 
             is NoteListEvent.DeleteFolder -> {
-                deleteFolder(id = folderId)
+                if (folderId != null) deleteFolder(id = folderId)
             }
 
             is NoteListEvent.ShowEdit -> {
@@ -91,10 +87,10 @@ class NotesListViewModel @AssistedInject constructor(
                 hideEdit()
             }
 
-            is MainNotesEvent.UpsertFolderEvent -> {
+            is MainNotesEvent.InsertFolder -> {
                 updateFolder(
                     name = event.name,
-                    colorIndex = event.colorIndex
+                    colorIndex = event.color
                 )
             }
         }
@@ -110,11 +106,13 @@ class NotesListViewModel @AssistedInject constructor(
 
     private fun updateFolder(name: String, colorIndex: Int) {
         CoroutineScope(Dispatchers.IO).launch {
-            updateCategoryUseCaseImpl.get().invoke(
-                id = folderId,
-                name = name.takeIf { it.trim().isNotEmpty() } ?: state.value.folderName,
-                colorIndex = colorIndex
-            )
+            if (folderId != null) {
+                updateCategoryUseCaseImpl.get().invoke(
+                    id = folderId,
+                    name = name.takeIf { it.trim().isNotEmpty() } ?: state.value.folderName,
+                    colorIndex = colorIndex
+                )
+            }
         }
     }
 
@@ -136,28 +134,29 @@ class NotesListViewModel @AssistedInject constructor(
     }
 
     private fun initializePrivateState(): Flow<List<Note>> {
-        return getAllNotesUseCase.get()
-            .invoke(folderId = folderId.takeIf { folderId > 0 })
+        return getAllNotesUseCase
+            .invoke(folderId = folderId)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
     private fun initializePrivateFolderName(): Flow<String> {
-        return when (openMode) {
-            FolderOpenMode.ALL -> {
-                flowOf("Все заметки")
-            }
-
-            FolderOpenMode.DEFINED -> {
-                getFolderNameByIdUseCase.invoke(
-                    id = folderId
-                )
-            }
-
-            else -> {
-                handle(event = Event.ErrorEvent)
-                flowOf()
-            }
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
+//        return when (openMode) {
+//            FolderOpenMode.ALL -> {
+//                flowOf("Все заметки")
+//            }
+//
+//            FolderOpenMode.DEFINED -> {
+//                getFolderNameByIdUseCase.invoke(
+//                    id = folderId
+//                )
+//            }
+//
+//            else -> {
+//                handle(event = Event.ErrorEvent)
+//                flowOf()
+//            }
+//        }
+        return flowOf("wewe")
     }
 }
 

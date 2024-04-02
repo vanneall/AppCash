@@ -32,4 +32,8 @@ class NotesRepositoryImpl @Inject constructor(
     override fun deleteNote(id: Long) {
         noteDao.delete(id = id)
     }
+
+    override fun getNoteCount(): Flow<Int> {
+        return noteDao.getCount()
+    }
 }

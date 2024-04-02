@@ -16,7 +16,7 @@ data class Category(
     val name: String,
 
     @ColumnInfo(name = "color")
-    val colorIndex: Int,
+    val color: Int,
 
     @ColumnInfo(name = "type")
     val discriminator: Discriminator,

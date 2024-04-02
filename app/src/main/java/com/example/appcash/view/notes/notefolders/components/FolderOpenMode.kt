@@ -1,4 +1,4 @@
-package com.example.appcash.view.notes.notes_folder.components
+package com.example.appcash.view.notes.notefolders.components
 
 import com.example.appcash.utils.mode.OpenMode
 import com.example.appcash.utils.mode.OpenModeHandler

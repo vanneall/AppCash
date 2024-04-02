@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.appcash.view.notes.notes_list.screen
+package com.example.appcash.view.notes.notes.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.navigation.Destinations.NOTE_SCREEN
 import com.example.appcash.utils.events.Event
-import com.example.appcash.view.notes.note_info.components.NoteOpenMode
-import com.example.appcash.view.notes.notes_list.components.NotesListState
+import com.example.appcash.view.notes.info.components.NoteOpenMode
+import com.example.appcash.view.notes.notes.components.NotesListState
 import com.example.appcash.view.ui.theme.Gray
 import com.example.appcash.view.ui.theme.LightGray
 

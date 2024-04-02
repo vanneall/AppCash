@@ -2,8 +2,6 @@ package com.example.appcash.view.finance.add_folder.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appcash.utils.ParamsStore.colorsList
-import com.example.appcash.utils.ParamsStore.getRandomColorIndex
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,7 +36,7 @@ class AddFolderViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     insertFolderUseCase(
                         name = _state.value.name,
-                        colorIndex = colorsList.getRandomColorIndex(),
+                        colorIndex = 1,
                         discriminator = Discriminator.FINANCES,
                         iconId = event.iconId
                     )

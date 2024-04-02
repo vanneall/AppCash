@@ -27,4 +27,7 @@ interface NoteDao {
 
     @Query("DELETE FROM note WHERE id = :id")
     fun delete(id: Long)
+
+    @Query("SELECT COUNT(id) FROM category")
+    fun getCount(): Flow<Int>
 }

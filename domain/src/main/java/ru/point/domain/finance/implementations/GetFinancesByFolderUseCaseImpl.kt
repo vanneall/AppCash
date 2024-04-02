@@ -21,7 +21,7 @@ class GetFinancesByFolderUseCaseImpl @Inject constructor(
             it.mapKeys { map ->
                 FinanceCategoryVO(
                     name = map.key.name,
-                    color = map.key.colorIndex
+                    color = map.key.color
                 )
             }
         }

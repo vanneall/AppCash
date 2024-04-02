@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                         },
                         floatingActionButton = {
                             FloatingActionButton(
-                                onClick = { fabActionState.value.action },
+                                onClick = fabActionState.value.action,
                                 shape = CircleShape,
                                 elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
                                 containerColor = Color.Black,
@@ -93,6 +93,7 @@ class MainActivity : ComponentActivity() {
                         AppCashNavHost(
                             navHostController = navController,
                             topAppBarState = topAppBarState,
+                            fabState = fabActionState,
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(paddingValues = paddingValues)
@@ -111,7 +112,7 @@ data class TopAppBarState(
 )
 
 data class FabState(
-    val action: (@Composable RowScope.() -> Unit)
+    val action: () -> Unit
 )
 
 @Composable

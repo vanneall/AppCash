@@ -1,4 +1,4 @@
-package com.example.appcash.view.notes.note_info.components
+package com.example.appcash.view.notes.info.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

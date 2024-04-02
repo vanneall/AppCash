@@ -1,4 +1,4 @@
-package com.example.appcash.view.notes.note_info.components
+package com.example.appcash.view.notes.info.components
 
 import com.example.appcash.utils.ArgsKeys
 import dagger.assisted.Assisted

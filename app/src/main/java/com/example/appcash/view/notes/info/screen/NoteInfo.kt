@@ -1,4 +1,4 @@
-package com.example.appcash.view.notes.note_info.screen
+package com.example.appcash.view.notes.info.screen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.utils.events.Event
-import com.example.appcash.view.notes.note_info.components.NoteInfoEvent
-import com.example.appcash.view.notes.note_info.components.NoteInfoState
+import com.example.appcash.view.notes.info.components.NoteInfoEvent
+import com.example.appcash.view.notes.info.components.NoteInfoState
 
 @Composable
 fun NoteInfo(

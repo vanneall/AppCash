@@ -16,21 +16,22 @@ import com.example.appcash.navigation.Destinations
 import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
 import com.example.appcash.utils.ArgsKeys.ID_KEY
 import com.example.appcash.utils.ArgsKeys.OPEN_MODE_KEY
+import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
-import com.example.appcash.view.notes.note_info.components.NoteInfoViewModelFactoryProvider
-import com.example.appcash.view.notes.note_info.components.NoteOpenMode
-import com.example.appcash.view.notes.note_info.screen.NoteInfoScreen
-import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
-import com.example.appcash.view.notes.notes_folder.components.MainNotesViewModel
-import com.example.appcash.view.notes.notes_folder.screen.MainNotesScreen
-import com.example.appcash.view.notes.notes_list.components.NoteListViewModelFactoryProvider
-import com.example.appcash.view.notes.notes_list.screen.NotesListScreen
+import com.example.appcash.view.notes.info.components.NoteInfoViewModelFactoryProvider
+import com.example.appcash.view.notes.info.components.NoteOpenMode
+import com.example.appcash.view.notes.info.screen.NoteInfoScreen
+import com.example.appcash.view.notes.notefolders.components.MainNotesViewModel
+import com.example.appcash.view.notes.notefolders.screen.MainNotesScreen
+import com.example.appcash.view.notes.notes.components.NoteListViewModelFactoryProvider
+import com.example.appcash.view.notes.notes.screen.NotesListScreen
 import dagger.hilt.android.EntryPointAccessors
 
 fun MainNotesScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
     navHostController: NavHostController,
-    topAppBarState: MutableState<TopAppBarState>
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
 ) {
     navGraphBuilder.composable(
         route = Destinations.MAIN_NOTES_FOLDER_SCREEN
@@ -39,7 +40,8 @@ fun MainNotesScreenNavigation(
         MainNotesScreen(
             viewModel = viewModel,
             navigateTo = navHostController::navigate,
-            topAppBarState = topAppBarState
+            topAppBarState = topAppBarState,
+            fabState = fabState
         )
     }
 }
@@ -50,14 +52,12 @@ fun NotesListScreenNavigation(
     topAppBarState: MutableState<TopAppBarState>
 ) {
     navGraphBuilder.composable(
-        route = "${Destinations.NOTES_LIST_SCREEN}/{$ID_KEY}/{$OPEN_MODE_KEY}",
+        route = "${Destinations.NOTES_LIST_SCREEN}/{$ID_KEY}",
 
         arguments = listOf(
-            navArgument(name = OPEN_MODE_KEY) {
-                type = NavType.StringType
-            },
             navArgument(name = ID_KEY) {
                 type = NavType.LongType
+                defaultValue = 0
             }
         )
     ) { backStackEntry ->
@@ -67,16 +67,10 @@ fun NotesListScreenNavigation(
             entryPoint = NoteListViewModelFactoryProvider::class.java
         ).provideNoteListViewModelFactory()
 
-        val openModeString = backStackEntry.arguments?.getString(OPEN_MODE_KEY)
-            ?: FolderOpenMode.Definition.ERROR_VALUE_STRING
-
-        val openModeEnum = FolderOpenMode.Definition.handle(mode = openModeString)
-        val folderId = backStackEntry.arguments?.getLong(ID_KEY)
-            ?: 0
+        val folderId = backStackEntry.arguments?.getLong(ID_KEY).takeIf { id -> id != (0).toLong() }
 
         val viewModel = viewModel {
             factory.create(
-                openMode = openModeEnum,
                 folderId = folderId
             )
         }

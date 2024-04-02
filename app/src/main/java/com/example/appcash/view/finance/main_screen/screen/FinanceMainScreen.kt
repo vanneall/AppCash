@@ -234,7 +234,7 @@ fun FinanceRowPreview() {
                 "Категория 1",
                 1,
                 discriminator = Category.Discriminator.FINANCES,
-                icon = "wewew"
+                icon = "wewew",
             )
         )
     )

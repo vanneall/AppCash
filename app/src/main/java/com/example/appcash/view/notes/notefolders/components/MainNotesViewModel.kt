@@ -1,11 +1,9 @@
-package com.example.appcash.view.notes.notes_folder.components
+package com.example.appcash.view.notes.notefolders.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
-import com.example.appcash.utils.events.SearchEvent
-import com.example.appcash.view.general.other.BottomSheetEvent
 import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.point.data.data.entities.Category.Discriminator
+import ru.point.domain.notes.interfaces.GetAllNotesCountUseCase
 import ru.point.domain.notes.interfaces.GetCategoryByTypeUseCase
 import ru.point.domain.notes.interfaces.InsertFolderUseCase
 import javax.inject.Inject
@@ -23,12 +22,16 @@ import javax.inject.Inject
 @HiltViewModel
 class MainNotesViewModel @Inject constructor(
     getCategoryByTypeUseCase: GetCategoryByTypeUseCase,
+    getAllNotesCountUseCase: GetAllNotesCountUseCase,
     private val insertFolderUseCase: Lazy<InsertFolderUseCase>,
-) : ViewModel(), EventHandler {
 
-    private val _searchQuery = MutableStateFlow("")
+    ) : ViewModel(), EventHandler {
 
-    private val _error = MutableStateFlow(false)
+    private val _notesCount = getAllNotesCountUseCase.invoke()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
+
+
+    private val _popupState = MutableStateFlow(CreatePopupState())
 
     private val _isShowed = MutableStateFlow(false)
 
@@ -39,69 +42,68 @@ class MainNotesViewModel @Inject constructor(
 
     val state = combine(
         _foldersDtoList,
-        _searchQuery,
-        _error,
+        _notesCount,
+        _popupState,
         _isShowed
-    ) { list, searchQuery, isError, isShowed ->
+    ) { list, notesCount, popupState, isShowed ->
         MainNotesState(
-            foldersList = list.filter { it.name.contains(searchQuery) },
-            query = searchQuery,
-            error = isError,
-            isShow = isShowed
+            foldersList = list,
+            notesCount = notesCount.toString(),
+            popupState = popupState,
+            isCreatePopupShowed = isShowed
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), MainNotesState())
 
     override fun handle(event: Event) {
         when (event) {
-            is MainNotesEvent.UpsertFolderEvent -> {
+            is MainNotesEvent.InsertFolder -> {
                 insertFolder(
                     name = event.name,
-                    colorIndex = event.colorIndex
+                    color = event.color
                 )
             }
 
-            is SearchEvent -> {
-                updateSearchQuery(query = event.query)
-            }
-
-            is Event.ErrorEvent -> {
-                updateIsError()
-            }
-
-            is BottomSheetEvent.ShowEvent -> {
+            is MainNotesEvent.ShowCreatePopup -> {
                 showBottomSheet()
             }
 
-            is BottomSheetEvent.HideEvent -> {
+            is MainNotesEvent.HideCreatePopup -> {
                 hideBottomSheet()
+            }
+
+            is MainNotesEvent.InputName -> {
+                inputFolderName(event.name)
             }
         }
     }
 
-    private fun insertFolder(name: String, colorIndex: Int) {
+    private fun insertFolder(name: String, color: Int) {
         viewModelScope.launch(context = Dispatchers.IO) {
             insertFolderUseCase.get().invoke(
                 name = name,
-                colorIndex = colorIndex,
+                colorIndex = color,
                 discriminator = Discriminator.NOTES,
                 iconId = "technic_folder_icon",
             )
+            hideBottomSheet()
         }
     }
 
-    private fun updateSearchQuery(query: String) {
-        _searchQuery.update { query }
-    }
-
-    private fun updateIsError() {
-        _error.update { true }
-    }
 
     private fun showBottomSheet() {
         _isShowed.update { true }
     }
 
+    private fun inputFolderName(name: String) {
+        _popupState.update { state ->
+            state.copy(
+                name = name
+            )
+        }
+    }
+
     private fun hideBottomSheet() {
         _isShowed.update { false }
+        _popupState.update { CreatePopupState() }
     }
 }

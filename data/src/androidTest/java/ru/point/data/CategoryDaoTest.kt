@@ -3,9 +3,6 @@ package ru.point.data
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import ru.point.data.data.database.AppCashDatabase
-import ru.point.data.data.entities.Category
-import com.example.appcash.entities.CategoryFactoryTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -14,6 +11,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import ru.point.data.data.dao.CategoryDao
+import ru.point.data.data.database.AppCashDatabase
+import ru.point.data.data.entities.Category
 
 
 @RunWith(AndroidJUnit4::class)

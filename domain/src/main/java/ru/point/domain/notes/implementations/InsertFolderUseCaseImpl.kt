@@ -8,7 +8,12 @@ import javax.inject.Inject
 class InsertFolderUseCaseImpl @Inject constructor(
     private val repository: CategoriesRepository
 ) : InsertFolderUseCase {
-    override fun invoke(name: String, colorIndex: Int, discriminator: Category.Discriminator, iconId: String) {
+    override fun invoke(
+        name: String,
+        colorIndex: Int,
+        discriminator: Category.Discriminator,
+        iconId: String
+    ) {
         val nameTrimmed = name.trim()
 
         if (nameTrimmed.isEmpty()) return
@@ -16,7 +21,7 @@ class InsertFolderUseCaseImpl @Inject constructor(
         repository.insertCategory(
             category = Category(
                 name = nameTrimmed,
-                colorIndex = colorIndex,
+                color = colorIndex,
                 discriminator = discriminator,
                 icon = "car_folder_icon"
             )

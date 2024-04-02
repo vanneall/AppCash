@@ -22,6 +22,7 @@ val Orange = Color(0xFFFF9900)
 val DarkRed = Color(0xFFBB2828)
 
 val Turquoise = Color(0xFF4FCBC3)
+val DarkTurquoise = Color(0xFF51AFBC)
 val ToxicPink = Color(0xFFF100D9)
 val Purple = Color(0xFFB04CFE)
 

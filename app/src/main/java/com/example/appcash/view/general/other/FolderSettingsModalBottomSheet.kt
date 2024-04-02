@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.utils.ParamsStore.colorsList
 import com.example.appcash.utils.events.Event
-import com.example.appcash.view.notes.notes_folder.components.MainNotesEvent.UpsertFolderEvent
+import com.example.appcash.view.notes.notefolders.components.MainNotesEvent.InsertFolder
 
 @Composable
 fun FolderSettingsModalBottomSheet(
@@ -108,9 +108,9 @@ fun FolderSettingsModalBottomSheet(
             Button(
                 onClick = {
                     onEvent(
-                        UpsertFolderEvent(
+                        InsertFolder(
                             name = name.value,
-                            colorIndex = selectedColorIndex.intValue
+                            color = selectedColorIndex.intValue
                         )
                     )
                     onEvent(BottomSheetEvent.HideEvent)

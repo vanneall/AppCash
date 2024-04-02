@@ -2,7 +2,7 @@ package com.example.appcash.view.tasks.task.components
 
 import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
 import com.example.appcash.utils.ArgsKeys.OPEN_MODE_KEY
-import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
+import com.example.appcash.view.notes.notefolders.components.FolderOpenMode
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.hilt.EntryPoint

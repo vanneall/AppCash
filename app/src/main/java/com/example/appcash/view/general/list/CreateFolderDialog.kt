@@ -27,7 +27,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.appcash.R
-import com.example.appcash.view.notes.notes_folder.components.MainNotesEvent
+import com.example.appcash.view.notes.notefolders.components.MainNotesEvent
 
 @Composable
 fun CreateFolderDialogView(
@@ -84,9 +84,9 @@ private fun CreateCancelButtonsRowView(
         Button(
             onClick = {
                 onEvent(
-                    MainNotesEvent.UpsertFolderEvent(
+                    MainNotesEvent.InsertFolder(
                         name = name,
-                        colorIndex = 0
+                        color = 0
                     )
                 )
                 isDialogOpenedMutableState.value = false

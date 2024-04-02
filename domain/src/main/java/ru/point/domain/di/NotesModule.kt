@@ -7,10 +7,12 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import ru.point.data.data.repository_interfaces.NotesRepository
 import ru.point.domain.notes.implementations.DeleteNoteByIdUseCaseImpl
+import ru.point.domain.notes.implementations.GetAllNotesCountUseCaseImpl
 import ru.point.domain.notes.implementations.GetNoteByIdUseCaseImpl
 import ru.point.domain.notes.implementations.GetNotesUseCaseImpl
 import ru.point.domain.notes.implementations.UpsertNoteUseCaseImpl
 import ru.point.domain.notes.interfaces.DeleteNoteByIdUseCase
+import ru.point.domain.notes.interfaces.GetAllNotesCountUseCase
 import ru.point.domain.notes.interfaces.GetNoteByIdUseCase
 import ru.point.domain.notes.interfaces.GetNotesUseCase
 import ru.point.domain.notes.interfaces.UpsertNoteUseCase
@@ -40,5 +42,11 @@ class NotesModule {
     @ViewModelScoped
     fun provideDeleteNoteUseCase(repository: NotesRepository): DeleteNoteByIdUseCase {
         return DeleteNoteByIdUseCaseImpl(repository = repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetNotesCountUseCase(repository: NotesRepository): GetAllNotesCountUseCase {
+        return GetAllNotesCountUseCaseImpl(repository = repository)
     }
 }

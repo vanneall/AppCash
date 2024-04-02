@@ -5,6 +5,9 @@
       <entry key="CategoryDaoTest">
         <State />
       </entry>
+      <entry key="CategoryDaoTest (1)">
+        <State />
+      </entry>
       <entry key="app">
         <State />
       </entry>
@@ -12,9 +15,6 @@
         <State />
       </entry>
       <entry key="shouldDeleteCategoryById()">
-        <State />
-      </entry>
-      <entry key="shouldReturnListOfCategories()">
         <State />
       </entry>
     </value>

@@ -36,8 +36,8 @@ import com.example.appcash.R
 import com.example.appcash.navigation.Destinations
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.general.list.Header
-import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
-import com.example.appcash.view.notes.notes_folder.screen.CategoryListItem
+import com.example.appcash.view.notes.notefolders.components.FolderOpenMode
+import com.example.appcash.view.notes.notefolders.screen.CategoryListItem
 import com.example.appcash.view.tasks.all_tasks.components.AllTasksState
 import com.example.appcash.view.tasks.popup.ConfigPopup
 import com.example.appcash.view.tasks.popup.EditPopup
@@ -108,7 +108,7 @@ fun AllTasks(
                 CategoryListItem(
                     name = item.name,
                     countOfInnerItems = "2",
-                    icon = Icons.Default.Home,
+                    icon = painterResource(id = R.drawable.task_alt),
                     iconBackgroundColor = Blue,
                     modifier = Modifier
                         .fillMaxWidth()

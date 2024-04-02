@@ -102,7 +102,6 @@ private fun Option(
                 unfocusedContainerColor = LightGray,
                 focusedContainerColor = LightGray
             )
-
         )
     }
 }

@@ -7,7 +7,7 @@ import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.utils.events.SearchEvent
 import com.example.appcash.view.general.other.BottomSheetEvent
-import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
+import com.example.appcash.view.notes.notefolders.components.FolderOpenMode
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers

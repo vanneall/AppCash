@@ -16,6 +16,7 @@ import com.example.appcash.navigation.screens.MainTasksScreenNavigation
 import com.example.appcash.navigation.screens.NoteScreenNavigation
 import com.example.appcash.navigation.screens.NotesListScreenNavigation
 import com.example.appcash.navigation.screens.TasksScreenNavigation
+import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 
 
@@ -23,6 +24,7 @@ import com.example.appcash.view.TopAppBarState
 fun AppCashNavHost(
     navHostController: NavHostController,
     topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -33,7 +35,8 @@ fun AppCashNavHost(
         MainNotesScreenNavigation(
             navGraphBuilder = this,
             navHostController = navHostController,
-            topAppBarState = topAppBarState
+            topAppBarState = topAppBarState,
+            fabState = fabState
         )
         NotesListScreenNavigation(
             navGraphBuilder = this,

@@ -4,8 +4,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.yml.charts.ui.piechart.models.PieChartData
-import com.example.appcash.utils.ParamsStore.colorsList
-import com.example.appcash.utils.ParamsStore.getSafety
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -83,7 +81,7 @@ class FinanceViewModel @Inject constructor(
         return PieChartData.Slice(
             label = vo.name,
             value = value.toFloat(),
-            color = colorsList.getSafety(vo.color)
+            color = Color.Gray
         )
     }
 

@@ -1,9 +1,9 @@
-package com.example.appcash.view.notes.notes_list.components
+package com.example.appcash.view.notes.notes.components
 
 import ru.point.data.data.entities.Note
 
 data class NotesListState(
-    val folderId: Long = 0,
+    val folderId: Long? = null,
     val folderName: String = "",
     val searchQuery: String = "",
     val notesList: List<Note> = emptyList(),

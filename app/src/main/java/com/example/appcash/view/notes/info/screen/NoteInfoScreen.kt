@@ -1,4 +1,4 @@
-package com.example.appcash.view.notes.notes_list.screen
+package com.example.appcash.view.notes.info.screen
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
@@ -6,7 +6,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -14,23 +13,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.general.ErrorScreen
-import com.example.appcash.view.notes.notes_list.components.NoteListEvent.DeleteFolder
-import com.example.appcash.view.notes.notes_list.components.NoteListEvent.ShowEdit
-import com.example.appcash.view.notes.notes_list.components.NotesListViewModel
+import com.example.appcash.view.notes.info.components.NoteInfoEvent
+import com.example.appcash.view.notes.info.components.NoteInfoViewModel
 
 @Composable
-fun NotesListScreen(
-    viewModel: NotesListViewModel,
-    navigateTo: (String) -> Unit,
+fun NoteInfoScreen(
+    viewModel: NoteInfoViewModel,
     navigateBack: () -> Unit,
     topAppBarState: MutableState<TopAppBarState>
 ) {
     topAppBarState.value = TopAppBarState(
-        title = "Заметки",
+        title = "",
         navigationIcon = {
             IconButton(
                 onClick = {
                     navigateBack()
+                    viewModel.handle(NoteInfoEvent.SaveNoteEvent)
                 }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
@@ -39,18 +37,13 @@ fun NotesListScreen(
             }
         },
         actions = {
-            IconButton(onClick = {
-                viewModel.handle(ShowEdit)
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = null
-                )
-            }
-            IconButton(onClick = {
-                navigateBack()
-                viewModel.handle(DeleteFolder)
-            }) {
+            IconButton(
+                onClick = {
+                    navigateBack()
+                    viewModel.handle(NoteInfoEvent.DeleteNoteEvent)
+
+                }
+            ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = null
@@ -59,14 +52,15 @@ fun NotesListScreen(
         }
     )
 
-    when (viewModel.state.collectAsState().value.error) {
-        false -> NotesList(
+    when (viewModel.state.collectAsState().value.isError) {
+        false -> NoteInfo(
             state = viewModel.state.collectAsState().value,
             onEvent = viewModel::handle,
-            navigateTo = navigateTo,
+            onNavigateBack = navigateBack,
             modifier = Modifier.padding(horizontal = 20.dp)
         )
 
         true -> ErrorScreen()
     }
+
 }

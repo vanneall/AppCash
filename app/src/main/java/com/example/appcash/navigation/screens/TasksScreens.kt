@@ -15,7 +15,7 @@ import androidx.navigation.navArgument
 import com.example.appcash.navigation.Destinations
 import com.example.appcash.utils.ArgsKeys
 import com.example.appcash.view.TopAppBarState
-import com.example.appcash.view.notes.notes_folder.components.FolderOpenMode
+import com.example.appcash.view.notes.notefolders.components.FolderOpenMode
 import com.example.appcash.view.tasks.all_tasks.components.AllTasksFoldersViewModel
 import com.example.appcash.view.tasks.all_tasks.screen.AllTasksScreen
 import com.example.appcash.view.tasks.task.components.TasksViewModelFactoryProvider
