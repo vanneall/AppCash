@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import com.example.appcash.view.TopAppBarState
-import com.example.appcash.view.finance.add_screen.components.AddFinanceViewModel
+import com.example.appcash.view.finance.main_screen.components.components.AddFinanceViewModel
 import com.example.appcash.view.general.ErrorScreen
 
 @Composable

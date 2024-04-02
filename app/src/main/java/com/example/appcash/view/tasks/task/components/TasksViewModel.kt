@@ -2,11 +2,6 @@ package com.example.appcash.view.tasks.task.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appcash.data.entities.TaskWithTask
-import com.example.appcash.domain.notes.implementations.GetCategoryNameByIdUseCaseImpl
-import com.example.appcash.domain.tasks.implementations.GetTaskUseCase
-import com.example.appcash.domain.tasks.implementations.InsertTaskUseCaseImpl
-import com.example.appcash.domain.tasks.implementations.UpdateTaskUseCaseImpl
 import com.example.appcash.utils.ArgsKeys
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
@@ -24,6 +19,11 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.point.data.data.entities.TaskWithTask
+import ru.point.domain.notes.implementations.GetCategoryNameByIdUseCaseImpl
+import ru.point.domain.tasks.implementations.GetTaskUseCase
+import ru.point.domain.tasks.implementations.InsertTaskUseCaseImpl
+import ru.point.domain.tasks.implementations.UpdateTaskUseCaseImpl
 
 class TasksViewModel @AssistedInject constructor(
     @Assisted(ArgsKeys.FOLDER_ID_KEY)

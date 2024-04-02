@@ -2,11 +2,6 @@ package com.example.appcash.view.notes.notes_list.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appcash.data.entities.Note
-import com.example.appcash.domain.notes.implementations.DeleteFolderByIdImpl
-import com.example.appcash.domain.notes.implementations.GetCategoryNameByIdUseCaseImpl
-import com.example.appcash.domain.notes.implementations.GetNotesUseCaseImpl
-import com.example.appcash.domain.notes.implementations.UpdateCategoryUseCaseImpl
 import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
 import com.example.appcash.utils.ArgsKeys.OPEN_MODE_KEY
 import com.example.appcash.utils.events.Event
@@ -29,6 +24,11 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.point.data.data.entities.Note
+import ru.point.domain.notes.implementations.DeleteFolderByIdImpl
+import ru.point.domain.notes.implementations.GetCategoryNameByIdUseCaseImpl
+import ru.point.domain.notes.implementations.GetNotesUseCaseImpl
+import ru.point.domain.notes.implementations.UpdateCategoryUseCaseImpl
 
 
 class NotesListViewModel @AssistedInject constructor(

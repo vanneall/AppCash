@@ -11,7 +11,7 @@ import com.example.appcash.navigation.Destinations
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.finance.add_folder.components.AddFolderViewModel
 import com.example.appcash.view.finance.add_folder.screen.CreatingFinanceFolderScreen
-import com.example.appcash.view.finance.add_screen.components.AddFinanceViewModel
+import com.example.appcash.view.finance.main_screen.components.components.AddFinanceViewModel
 import com.example.appcash.view.finance.add_screen.screen.FinanceAccountingScreen
 import com.example.appcash.view.finance.main_screen.components.FinanceViewModel
 import com.example.appcash.view.finance.main_screen.screen.MainFinanceScreen

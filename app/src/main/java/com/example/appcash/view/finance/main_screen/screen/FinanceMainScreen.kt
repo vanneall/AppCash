@@ -43,8 +43,8 @@ import co.yml.charts.ui.piechart.charts.DonutPieChart
 import co.yml.charts.ui.piechart.models.PieChartConfig
 import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.appcash.R
-import com.example.appcash.data.entities.Category
-import com.example.appcash.data.entities.Finance
+import ru.point.data.data.entities.Category
+import ru.point.data.data.entities.Finance
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.finance.main_screen.components.FinanceEvent
 import com.example.appcash.view.finance.main_screen.components.FinanceState

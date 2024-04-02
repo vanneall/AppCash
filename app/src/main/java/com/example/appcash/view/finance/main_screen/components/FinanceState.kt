@@ -2,9 +2,9 @@ package com.example.appcash.view.finance.main_screen.components
 
 import androidx.compose.ui.graphics.Color
 import co.yml.charts.ui.piechart.models.PieChartData
-import com.example.appcash.data.entities.Finance
-import com.example.appcash.data.entities.Category
-import com.example.appcash.data.vo.FinanceCategoryVO
+import ru.point.data.data.entities.Finance
+import ru.point.data.data.entities.Category
+import ru.point.data.data.vo.FinanceCategoryVO
 import java.time.YearMonth
 
 data class FinanceState(

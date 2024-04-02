@@ -1,6 +1,6 @@
 package com.example.appcash.view.tasks.all_tasks.components
 
-import com.example.appcash.data.entities.Category
+import ru.point.data.data.entities.Category
 
 data class AllTasksState(
     val searchQuery: String = "",

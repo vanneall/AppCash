@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import com.example.appcash.R
 import com.example.appcash.navigation.Destinations.CREATING_FINANCE_FOLDER_SCREEN
 import com.example.appcash.utils.events.Event
-import com.example.appcash.view.finance.add_screen.components.AddFinanceEvent
-import com.example.appcash.view.finance.add_screen.components.AddFinanceState
+import com.example.appcash.view.finance.main_screen.components.components.AddFinanceEvent
+import com.example.appcash.view.finance.main_screen.components.components.AddFinanceState
 import com.example.appcash.view.general.list.ItemListView
 import com.example.appcash.view.general.other.SearchTextField
 

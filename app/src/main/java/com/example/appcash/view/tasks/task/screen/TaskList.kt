@@ -34,8 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
-import com.example.appcash.data.entities.Task
-import com.example.appcash.data.entities.TaskWithTask
+import ru.point.data.data.entities.Task
+import ru.point.data.data.entities.TaskWithTask
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.tasks.task.components.TasksState
 import com.example.appcash.view.ui.theme.DarkBlue

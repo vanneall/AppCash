@@ -1,6 +1,6 @@
 package com.example.appcash.view.tasks.task.components
 
-import com.example.appcash.data.entities.TaskWithTask
+import ru.point.data.data.entities.TaskWithTask
 
 data class TasksState(
     val folderName: String = "",

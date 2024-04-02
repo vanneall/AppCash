@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
-import com.example.appcash.data.entities.Category
+import ru.point.data.data.entities.Category
 import com.example.appcash.navigation.Destinations.NOTES_LIST_SCREEN
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.general.list.Header

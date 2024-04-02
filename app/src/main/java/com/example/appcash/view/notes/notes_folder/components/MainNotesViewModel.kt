@@ -2,9 +2,6 @@ package com.example.appcash.view.notes.notes_folder.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appcash.data.entities.Category.Discriminator
-import com.example.appcash.domain.notes.interfaces.GetCategoryByTypeUseCase
-import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.utils.events.SearchEvent
@@ -18,6 +15,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.point.data.data.entities.Category.Discriminator
+import ru.point.domain.notes.interfaces.GetCategoryByTypeUseCase
+import ru.point.domain.notes.interfaces.InsertFolderUseCase
 import javax.inject.Inject
 
 @HiltViewModel

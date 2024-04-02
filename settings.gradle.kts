@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "AppCash"
 include(":app")
+include(":data")
+include(":domain")

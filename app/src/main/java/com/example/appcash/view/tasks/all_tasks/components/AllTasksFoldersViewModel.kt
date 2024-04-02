@@ -2,12 +2,6 @@ package com.example.appcash.view.tasks.all_tasks.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appcash.data.entities.Category
-import com.example.appcash.data.entities.Category.Discriminator
-import com.example.appcash.domain.notes.interfaces.GetCategoryByTypeUseCase
-import com.example.appcash.domain.notes.interfaces.InsertFolderUseCase
-import com.example.appcash.domain.tasks.interfaces.GetCompletedCountUseCase
-import com.example.appcash.domain.tasks.interfaces.GetPlannedCountUseCase
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.utils.events.SearchEvent
@@ -22,6 +16,12 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.point.data.data.entities.Category
+import ru.point.data.data.entities.Category.Discriminator
+import ru.point.domain.notes.interfaces.GetCategoryByTypeUseCase
+import ru.point.domain.notes.interfaces.InsertFolderUseCase
+import ru.point.domain.tasks.interfaces.GetCompletedCountUseCase
+import ru.point.domain.tasks.interfaces.GetPlannedCountUseCase
 import javax.inject.Inject
 
 @HiltViewModel

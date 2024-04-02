@@ -4,11 +4,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.yml.charts.ui.piechart.models.PieChartData
-import com.example.appcash.data.entities.Category
-import com.example.appcash.data.entities.Finance
-import com.example.appcash.data.vo.FinanceCategoryVO
-import com.example.appcash.domain.financial_transactions.interfaces.GetFinancesByFolderUseCase
-import com.example.appcash.domain.financial_transactions.interfaces.GetFinancesByYearMonthUseCase
 import com.example.appcash.utils.ParamsStore.colorsList
 import com.example.appcash.utils.ParamsStore.getSafety
 import com.example.appcash.utils.events.Event
@@ -21,6 +16,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.point.data.data.entities.Category
+import ru.point.data.data.entities.Finance
+import ru.point.data.data.vo.FinanceCategoryVO
+import ru.point.domain.finance.interfaces.GetFinancesByFolderUseCase
+import ru.point.domain.finance.interfaces.GetFinancesByYearMonthUseCase
 import java.time.YearMonth
 import javax.inject.Inject
 import kotlin.math.abs
