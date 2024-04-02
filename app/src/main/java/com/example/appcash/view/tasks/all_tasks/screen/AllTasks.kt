@@ -88,7 +88,7 @@ private fun AllTasks(
         ) {
             InfoCheep(
                 title = stringResource(id = R.string.tasks),
-                count = "21",
+                count = state.plannedTasks,
                 textColor = Color.White,
                 icon = painterResource(id = R.drawable.task_alt),
                 modifier = Modifier

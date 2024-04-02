@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -44,6 +45,8 @@ import com.example.appcash.R
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
+import com.example.appcash.view.popup.ConfigPopup
+import com.example.appcash.view.popup.ConfigPopupEvent
 import com.example.appcash.view.popup.EditPopup
 import com.example.appcash.view.popup.EditPopupEvent
 import com.example.appcash.view.tasks.task.components.TaskEvent
@@ -110,27 +113,36 @@ private fun TaskList(
         }
     }
 
-//    if (state.isConfigPopupShowed) {
-//        ModalBottomSheet(
-//            onDismissRequest = { },
-//            containerColor = Color.White,
-//            modifier = Modifier.size(390.dp, 240.dp)
-//        ) {
-//            ConfigPopup(
-//                name = "Какая-то задача",
-//            )
-//        }
-//    }
+    if (state.configPopupState.isShowed) {
+        ModalBottomSheet(
+            onDismissRequest = { onEvent(ConfigPopupEvent.HidePopup) },
+            containerColor = Color.White,
+            modifier = Modifier
+                .height(height = 240.dp)
+        ) {
+            ConfigPopup(
+                state = state.configPopupState,
+                onEvent = onEvent,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp)
+            )
+        }
+    }
 
     if (state.editPopupState.isShowed) {
         ModalBottomSheet(
             onDismissRequest = { onEvent(EditPopupEvent.HidePopup) },
-            containerColor = Color.White
+            containerColor = Color.White,
+            modifier = Modifier
+                .fillMaxSize()
         ) {
             EditPopup(
                 state = state.editPopupState,
                 onEvent = onEvent,
-                modifier = modifier.padding(horizontal = 24.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp)
             )
         }
     }
@@ -219,6 +231,7 @@ fun TaskListItem(
                 contentDescription = "Иконка больше",
                 modifier = Modifier
                     .size(24.dp)
+                    .clickable { onEvent(ConfigPopupEvent.ShowPopup(id, text)) }
             )
         }
     }

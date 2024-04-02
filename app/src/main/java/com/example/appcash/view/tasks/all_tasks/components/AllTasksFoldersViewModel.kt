@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import ru.point.data.data.entities.Category.Discriminator
 import ru.point.domain.notes.interfaces.GetCategoryByTypeUseCase
 import ru.point.domain.notes.interfaces.InsertFolderUseCase
-import ru.point.domain.tasks.interfaces.GetCompletedCountUseCase
+import ru.point.domain.tasks.interfaces.GetAllTasksCountUseCase
 import ru.point.domain.tasks.interfaces.GetPlannedCountUseCase
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class AllTasksFoldersViewModel @Inject constructor(
     getCategoryByTypeUseCase: GetCategoryByTypeUseCase,
     getPlannedCountUseCase: GetPlannedCountUseCase,
-    getCompletedCountUseCase: GetCompletedCountUseCase,
+    getAllTasksCountUseCase: GetAllTasksCountUseCase,
     private val insertFolderUseCase: Lazy<InsertFolderUseCase>,
 ) : ViewModel(), EventHandler {
 
@@ -39,7 +39,7 @@ class AllTasksFoldersViewModel @Inject constructor(
     private val _plannedCount = getPlannedCountUseCase.invoke()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
-    private val _completedCount = getCompletedCountUseCase.invoke()
+    private val _completedCount = getAllTasksCountUseCase.invoke()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
     val state = combine(
@@ -51,7 +51,7 @@ class AllTasksFoldersViewModel @Inject constructor(
         AllTasksState(
             categories = list,
             createCategoryPopupState = popupState,
-            plannedTasks = planned,
+            plannedTasks = planned.toString(),
             bookmarkTasks = completed,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), AllTasksState())

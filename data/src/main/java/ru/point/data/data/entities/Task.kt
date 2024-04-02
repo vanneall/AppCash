@@ -8,10 +8,10 @@ import androidx.room.PrimaryKey
 //Используется вместе с TaskWithTask, потому как у каждой Task может быть своя Task
 @Entity(
     tableName = "task",
-    foreignKeys = [ForeignKey(
+    foreignKeys = [ ForeignKey(
         entity = Category::class,
         parentColumns = ["id"],
-        childColumns = ["category_id"],
+        childColumns = ["parent_id"],
         onDelete = ForeignKey.CASCADE
     )]
 )

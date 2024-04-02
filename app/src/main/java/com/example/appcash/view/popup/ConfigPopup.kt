@@ -1,6 +1,7 @@
 package com.example.appcash.view.popup
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,13 +25,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.appcash.utils.events.Event
 import com.example.appcash.view.ui.theme.DarkBlue
 import com.example.appcash.view.ui.theme.DarkRed
 import com.example.appcash.view.ui.theme.Orange
 
 @Composable
 fun ConfigPopup(
-    name: String,
+    state: ConfigPopupState,
+    onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -39,7 +42,7 @@ fun ConfigPopup(
         verticalArrangement = Arrangement.spacedBy(40.dp)
     ) {
         Text(
-            text = name,
+            text = state.name,
             fontSize = 24.sp,
             fontWeight = FontWeight.Medium,
             color = Color.Black
@@ -56,6 +59,7 @@ fun ConfigPopup(
                 tint = Color.White,
                 modifier = Modifier
                     .size(size = 40.dp)
+                    .clickable { onEvent(ConfigPopupEvent.DeleteTask(state.id)) }
                     .background(color = DarkRed, shape = CircleShape)
                     .padding(5.dp)
             )
@@ -66,6 +70,7 @@ fun ConfigPopup(
                 tint = Color.White,
                 modifier = Modifier
                     .size(size = 40.dp)
+                    .clickable { onEvent(ConfigPopupEvent.BookmarkTask(state.id)) }
                     .background(color = Orange, shape = CircleShape)
                     .padding(5.dp)
             )
@@ -76,6 +81,7 @@ fun ConfigPopup(
                 tint = Color.White,
                 modifier = Modifier
                     .size(size = 40.dp)
+                    .clickable { onEvent(ConfigPopupEvent.EditTask(state.id)) }
                     .background(color = DarkBlue, shape = CircleShape)
                     .padding(5.dp)
             )
@@ -88,7 +94,8 @@ fun ConfigPopup(
 @Composable
 fun ConfigPopupPreview() {
     ConfigPopup(
-        name = "Название задачи 1",
+        state = ConfigPopupState(),
+        onEvent = {},
         modifier = Modifier.size(width = 390.dp, height = 240.dp)
     )
 }

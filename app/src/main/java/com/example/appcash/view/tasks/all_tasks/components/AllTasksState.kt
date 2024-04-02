@@ -8,6 +8,6 @@ data class AllTasksState(
     val isConfigPopupShowed: Boolean = false,
     val createCategoryPopupState: CreateCategoryPopupState = CreateCategoryPopupState(),
     val isEditPopupShowed: Boolean = false,
-    val plannedTasks: Int = 0,
+    val plannedTasks: String = "",
     val bookmarkTasks: Int = 0,
 )

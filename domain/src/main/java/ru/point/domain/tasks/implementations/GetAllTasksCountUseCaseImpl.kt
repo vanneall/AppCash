@@ -2,13 +2,13 @@ package ru.point.domain.tasks.implementations
 
 import kotlinx.coroutines.flow.Flow
 import ru.point.data.data.repository_interfaces.TasksRepository
-import ru.point.domain.tasks.interfaces.GetCompletedCountUseCase
+import ru.point.domain.tasks.interfaces.GetAllTasksCountUseCase
 import javax.inject.Inject
 
-class GetCompletedCountUseCaseImpl @Inject constructor(
+class GetAllTasksCountUseCaseImpl @Inject constructor(
     private val repository: TasksRepository
-) : GetCompletedCountUseCase {
+) : GetAllTasksCountUseCase {
     override fun invoke(): Flow<Int> {
-        return repository.getCompletedCount()
+        return repository.getAllTasksCount()
     }
 }

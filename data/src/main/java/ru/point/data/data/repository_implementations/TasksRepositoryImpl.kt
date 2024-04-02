@@ -1,10 +1,10 @@
 package ru.point.data.data.repository_implementations
 
+import kotlinx.coroutines.flow.Flow
 import ru.point.data.data.dao.TaskDao
 import ru.point.data.data.entities.Task
 import ru.point.data.data.entities.TaskWithTask
 import ru.point.data.data.repository_interfaces.TasksRepository
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class TasksRepositoryImpl @Inject constructor(
@@ -27,11 +27,15 @@ class TasksRepositoryImpl @Inject constructor(
         taskDao.update(id = id, isChecked = isChecked)
     }
 
-    override fun getCompletedCount(): Flow<Int> {
-        return taskDao.getCompletedCount()
+    override fun getAllTasksCount(): Flow<Int> {
+        return taskDao.getAllTasksCount()
     }
 
     override fun getPlannedCount(): Flow<Int> {
         return taskDao.getPlannedCount()
+    }
+
+    override fun deleteTaskById(id: Long) {
+        taskDao.deleteById(id = id)
     }
 }

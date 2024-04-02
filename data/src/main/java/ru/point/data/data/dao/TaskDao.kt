@@ -5,9 +5,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import kotlinx.coroutines.flow.Flow
 import ru.point.data.data.entities.Task
 import ru.point.data.data.entities.TaskWithTask
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
@@ -29,9 +29,12 @@ interface TaskDao {
     @Query("UPDATE task SET isCompleted = :isChecked WHERE id = :id")
     fun update(id: Long, isChecked: Boolean)
 
-    @Query("SELECT COUNT(id) FROM task WHERE isCompleted = 1")
-    fun getCompletedCount(): Flow<Int>
+    @Query("SELECT COUNT(id) FROM task ")
+    fun getAllTasksCount(): Flow<Int>
 
     @Query("SELECT COUNT(id) FROM task WHERE isCompleted = 0")
     fun getPlannedCount(): Flow<Int>
+
+    @Query("DELETE FROM task WHERE id = :id ")
+    fun deleteById(id: Long)
 }

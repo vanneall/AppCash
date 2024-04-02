@@ -6,10 +6,13 @@ import com.example.appcash.utils.ArgsKeys
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.view.notes.notefolders.components.FolderOpenMode
+import com.example.appcash.view.popup.ConfigPopupEvent
+import com.example.appcash.view.popup.ConfigPopupState
 import com.example.appcash.view.popup.EditPopupEvent
 import com.example.appcash.view.popup.EditPopupState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +24,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.point.data.data.entities.TaskWithTask
 import ru.point.domain.notes.implementations.GetCategoryNameByIdUseCaseImpl
+import ru.point.domain.tasks.implementations.DeleteTaskByIdUseCaseImpl
 import ru.point.domain.tasks.implementations.GetTaskUseCase
 import ru.point.domain.tasks.implementations.InsertTaskUseCaseImpl
 import ru.point.domain.tasks.implementations.UpdateTaskUseCaseImpl
@@ -31,6 +35,7 @@ class TasksViewModel @AssistedInject constructor(
     @Assisted(ArgsKeys.OPEN_MODE_KEY)
     private val mode: FolderOpenMode,
     private val getFolderNameByIdUseCase: GetCategoryNameByIdUseCaseImpl,
+    private val deleteTaskByIdUseCaseImpl: DeleteTaskByIdUseCaseImpl,
     private val getTaskUseCase: GetTaskUseCase,
     private val insertMainTaskUseCase: InsertTaskUseCaseImpl,
     private val updateTaskUseCase: UpdateTaskUseCaseImpl
@@ -42,15 +47,19 @@ class TasksViewModel @AssistedInject constructor(
 
     private val _editPopupState = MutableStateFlow(EditPopupState())
 
+    private val _configPopupState = MutableStateFlow(ConfigPopupState())
+
     val state = combine(
         _tasksMap,
         _folderName,
-        _editPopupState
-    ) { tasksMap, name, editState ->
+        _editPopupState,
+        _configPopupState
+    ) { tasksMap, name, editState, configState ->
         TasksState(
             folderName = name,
             values = tasksMap,
-            editPopupState = editState
+            editPopupState = editState,
+            configPopupState = configState
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TasksState())
 
@@ -91,6 +100,34 @@ class TasksViewModel @AssistedInject constructor(
                     id = event.id,
                     isChecked = event.isChecked
                 )
+            }
+
+            is ConfigPopupEvent.ShowPopup -> {
+                showConfigPopup(event.id, event.name)
+            }
+
+            is ConfigPopupEvent.HidePopup -> {
+                hideConfigPopup()
+            }
+
+            is ConfigPopupEvent.DeleteTask -> {
+                deleteTaskById(id = event.id)
+            }
+
+            is ConfigPopupEvent.EditTask -> {
+                hideConfigPopup()
+                viewModelScope.launch {
+                    _tasksMap.collect { list ->
+                        val task = list.first { task -> task.id == event.id }
+                        showEditPopup(
+                            id = task.id,
+                            parentId = null,
+                            name = task.text,
+                            description = null,
+                            date = null
+                        )
+                    }
+                }
             }
         }
     }
@@ -146,6 +183,29 @@ class TasksViewModel @AssistedInject constructor(
         }
     }
 
+    private fun hideConfigPopup() {
+        _configPopupState.update { state ->
+            state.copy(
+                isShowed = false,
+                id = 0,
+                name = ""
+            )
+        }
+    }
+
+    private fun showConfigPopup(
+        id: Long,
+        name: String,
+    ) {
+        _configPopupState.update { state ->
+            state.copy(
+                isShowed = true,
+                id = id,
+                name = name
+            )
+        }
+    }
+
     private fun updateTaskChecked(
         id: Long,
         isChecked: Boolean
@@ -156,6 +216,13 @@ class TasksViewModel @AssistedInject constructor(
                 isChecked = isChecked,
             )
         }
+    }
+
+    private fun deleteTaskById(id: Long) {
+        CoroutineScope(Dispatchers.IO).launch {
+            deleteTaskByIdUseCaseImpl.invoke(id = id)
+        }
+        hideConfigPopup()
     }
 
     private fun initializePrivateState(): Flow<List<TaskWithTask>> {
