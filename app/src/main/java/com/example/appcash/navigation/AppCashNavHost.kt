@@ -41,7 +41,8 @@ fun AppCashNavHost(
         NotesListScreenNavigation(
             navGraphBuilder = this,
             navHostController = navHostController,
-            topAppBarState = topAppBarState
+            topAppBarState = topAppBarState,
+            fabState = fabState
         )
         NoteScreenNavigation(
             navGraphBuilder = this,

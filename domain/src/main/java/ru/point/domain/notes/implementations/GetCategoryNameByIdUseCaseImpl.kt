@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetCategoryNameByIdUseCaseImpl @Inject constructor(
     private val repository: CategoriesRepository
 ): GetCategoryNameByIdUseCase {
-    override fun invoke(id: Long): Flow<String> {
+    override operator fun invoke(id: Long): Flow<String> {
         return repository.getCategoryNameById(id = id)
     }
 }

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
 import com.example.appcash.utils.ArgsKeys.ID_KEY
-import com.example.appcash.utils.ArgsKeys.OPEN_MODE_KEY
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.Event.ErrorEvent
 import com.example.appcash.utils.events.EventHandler
@@ -18,7 +17,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -30,11 +28,9 @@ import ru.point.domain.notes.implementations.UpsertNoteUseCaseImpl
 
 class NoteInfoViewModel @AssistedInject constructor(
     @Assisted(ID_KEY)
-    private val noteId: Long,
-    @Assisted(OPEN_MODE_KEY)
-    private val openMode: NoteOpenMode,
+    private val noteId: Long?,
     @Assisted(FOLDER_ID_KEY)
-    private val folderId: Long,
+    private val folderId: Long?,
     private val getNoteByIdUseCaseImpl: GetNoteByIdUseCaseImpl,
     private val upsertNoteUseCaseImpl: UpsertNoteUseCaseImpl,
     private val deleteNoteByIdUseCaseImpl: Lazy<DeleteNoteByIdUseCaseImpl>
@@ -109,7 +105,7 @@ class NoteInfoViewModel @AssistedInject constructor(
 
     private fun deleteNote() {
         CoroutineScope(Dispatchers.IO).launch {
-            if (noteId == (0).toLong()) return@launch
+            if (noteId == null) return@launch
             delay(1000L)
             deleteNoteByIdUseCaseImpl.get().invoke(
                 id = noteId
@@ -119,8 +115,8 @@ class NoteInfoViewModel @AssistedInject constructor(
     }
 
     private fun initializePrivateState(): Flow<Note> {
-        return when (openMode) {
-            NoteOpenMode.CREATE -> {
+        return when (noteId) {
+            null -> {
                 flowOf(
                     value = Note(
                         title = "",
@@ -129,7 +125,7 @@ class NoteInfoViewModel @AssistedInject constructor(
                 )
             }
 
-            NoteOpenMode.EDIT -> {
+            else -> {
                 getNoteByIdUseCaseImpl.invoke(
                     id = noteId,
                 ).stateIn(
@@ -141,11 +137,6 @@ class NoteInfoViewModel @AssistedInject constructor(
                     )
                 )
             }
-
-            else -> {
-                handle(event = ErrorEvent)
-                emptyFlow()
-            }
         }
     }
 
@@ -155,18 +146,18 @@ class NoteInfoViewModel @AssistedInject constructor(
 
         if (handledTitle.isEmpty()) return
 
-        if (noteId == (-1).toLong()) {
+        if (noteId == null) {
             upsertNoteUseCaseImpl.invoke(
                 title = title,
                 content = handledContent,
-                folderId = folderId.takeIf { folderId > 0 },
+                folderId = folderId,
             )
         } else {
             upsertNoteUseCaseImpl.invoke(
                 id = noteId,
                 title = title,
                 content = handledContent,
-                folderId = folderId.takeIf { folderId > 0 },
+                folderId = folderId,
             )
         }
     }

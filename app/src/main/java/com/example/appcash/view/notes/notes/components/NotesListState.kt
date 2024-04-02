@@ -5,8 +5,5 @@ import ru.point.data.data.entities.Note
 data class NotesListState(
     val folderId: Long? = null,
     val folderName: String = "",
-    val searchQuery: String = "",
     val notesList: List<Note> = emptyList(),
-    val error: Boolean = false,
-    val showEdit: Boolean = false
 )

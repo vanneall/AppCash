@@ -15,12 +15,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,13 +35,50 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.navigation.Destinations.NOTE_SCREEN
 import com.example.appcash.utils.events.Event
-import com.example.appcash.view.notes.info.components.NoteOpenMode
+import com.example.appcash.view.FabState
+import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.notes.notes.components.NotesListState
+import com.example.appcash.view.notes.notes.components.NotesListViewModel
 import com.example.appcash.view.ui.theme.Gray
 import com.example.appcash.view.ui.theme.LightGray
 
 @Composable
-fun NotesList(
+fun NotesListScreen(
+    viewModel: NotesListViewModel,
+    navigateTo: (String) -> Unit,
+    navigateBack: () -> Unit,
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
+) {
+    val state = viewModel.state.collectAsState().value
+    topAppBarState.value = TopAppBarState(
+        title = state.folderName,
+        navigationIcon = {
+            IconButton(
+                onClick = {
+                    navigateBack()
+                }) {
+                androidx.compose.material.Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null
+                )
+            }
+        },
+        actions = {
+        }
+    )
+    fabState.value = FabState { navigateTo("$NOTE_SCREEN/${state.folderId ?: 0}/0") }
+
+    NotesList(
+        state = state,
+        onEvent = viewModel::handle,
+        navigateTo = navigateTo,
+        modifier = Modifier.padding(horizontal = 20.dp)
+    )
+}
+
+@Composable
+private fun NotesList(
     state: NotesListState,
     onEvent: (Event) -> Unit,
     navigateTo: (String) -> Unit,
@@ -60,7 +101,7 @@ fun NotesList(
                         color = LightGray, shape = RoundedCornerShape(20.dp)
                     )
                     .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .clickable { navigateTo("$NOTE_SCREEN/${state.folderId}/${item.id}/${NoteOpenMode.EDIT.name}") }
+                    .clickable { navigateTo("$NOTE_SCREEN/${state.folderId ?: 0}/${item.id}") }
             )
         }
     }
