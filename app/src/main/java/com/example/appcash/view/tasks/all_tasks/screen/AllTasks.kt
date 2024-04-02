@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,13 +16,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,19 +36,44 @@ import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.navigation.Destinations
 import com.example.appcash.utils.events.Event
+import com.example.appcash.view.FabState
+import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.notes.notefolders.components.FolderOpenMode
 import com.example.appcash.view.notes.notefolders.screen.CategoryListItem
+import com.example.appcash.view.popup.ConfigPopup
+import com.example.appcash.view.popup.CreateCategoryPopup
+import com.example.appcash.view.popup.CreateCategoryPopupEvent
+import com.example.appcash.view.popup.EditPopup
+import com.example.appcash.view.tasks.all_tasks.components.AllTasksFoldersViewModel
 import com.example.appcash.view.tasks.all_tasks.components.AllTasksState
-import com.example.appcash.view.tasks.popup.ConfigPopup
-import com.example.appcash.view.tasks.popup.EditPopup
-import com.example.appcash.view.ui.theme.Blue
 import com.example.appcash.view.ui.theme.DarkBlue
 import com.example.appcash.view.ui.theme.LightGray
 
+@Composable
+fun AllTasksScreen(
+    viewModel: AllTasksFoldersViewModel,
+    navigateTo: (String) -> Unit,
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
+) {
+    topAppBarState.value = TopAppBarState(
+        title = stringResource(id = R.string.task_screen)
+    )
+
+    fabState.value = FabState { viewModel.handle(CreateCategoryPopupEvent.ShowCreatePopup) }
+
+    AllTasks(
+        state = viewModel.state.collectAsState().value,
+        onEvent = viewModel::handle,
+        navigate = navigateTo,
+        modifier = Modifier.padding(horizontal = 16.dp)
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AllTasks(
+private fun AllTasks(
     state: AllTasksState,
     navigate: (String) -> Unit,
     onEvent: (Event) -> Unit,
@@ -63,7 +89,7 @@ fun AllTasks(
                 .fillMaxWidth()
         ) {
             InfoCheep(
-                title = "Задачи",
+                title = stringResource(id = R.string.tasks),
                 count = "21",
                 textColor = Color.White,
                 icon = painterResource(id = R.drawable.task_alt),
@@ -75,7 +101,7 @@ fun AllTasks(
             )
 
             InfoCheep(
-                title = "Избранное",
+                title = stringResource(id = R.string.bookmarks),
                 count = "8",
                 textColor = Color.Black,
                 icon = painterResource(id = R.drawable.bookmark),
@@ -109,7 +135,7 @@ fun AllTasks(
                     name = item.name,
                     countOfInnerItems = "2",
                     icon = painterResource(id = R.drawable.task_alt),
-                    iconBackgroundColor = Blue,
+                    iconBackgroundColor = Color(item.color),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(64.dp)
@@ -121,6 +147,23 @@ fun AllTasks(
                         .clickable { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.DEFINED.name}/${item.id}") }
                 )
             }
+        }
+    }
+
+    if (state.createCategoryPopupState.isShowed) {
+        ModalBottomSheet(
+            onDismissRequest = { onEvent(CreateCategoryPopupEvent.HideCreatePopup) },
+            containerColor = Color.White,
+            modifier = Modifier
+                .height(280.dp)
+        ) {
+            CreateCategoryPopup(
+                state = state.createCategoryPopupState,
+                onEvent = onEvent,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp)
+            )
         }
     }
 

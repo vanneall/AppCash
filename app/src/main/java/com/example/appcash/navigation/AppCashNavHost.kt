@@ -54,7 +54,8 @@ fun AppCashNavHost(
         MainTasksScreenNavigation(
             navGraphBuilder = this,
             navHostController = navHostController,
-            topAppBarState = topAppBarState
+            topAppBarState = topAppBarState,
+            fabState
         )
         TasksScreenNavigation(
             navGraphBuilder = this,

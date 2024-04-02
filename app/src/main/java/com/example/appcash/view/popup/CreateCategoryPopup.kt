@@ -1,4 +1,4 @@
-package com.example.appcash.view.notes.popup
+package com.example.appcash.view.popup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,13 +30,11 @@ import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.utils.ParamsStore.colorsList
 import com.example.appcash.utils.events.Event
-import com.example.appcash.view.notes.notefolders.components.CreatePopupState
-import com.example.appcash.view.notes.notefolders.components.MainNotesEvent
 import com.example.appcash.view.ui.theme.LightGray
 
 @Composable
 fun CreateCategoryPopup(
-    state: CreatePopupState,
+    state: CreateCategoryPopupState,
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -55,7 +53,7 @@ fun CreateCategoryPopup(
         TextField(
             value = state.name,
             onValueChange = { newName ->
-                onEvent(MainNotesEvent.InputName(newName))
+                onEvent(CreateCategoryPopupEvent.InputName(newName))
             },
             maxLines = 1,
             singleLine = true,
@@ -88,7 +86,7 @@ fun CreateCategoryPopup(
                     .background(color = color, shape = CircleShape)
                     .clickable {
                         onEvent(
-                            MainNotesEvent.InsertFolder(
+                            CreateCategoryPopupEvent.InsertFolder(
                                 state.name, color.toArgb()
                             )
                         )

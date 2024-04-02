@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
+import com.example.appcash.view.popup.CreateCategoryPopupEvent
+import com.example.appcash.view.popup.CreateCategoryPopupState
 import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +33,7 @@ class MainNotesViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
 
-    private val _popupState = MutableStateFlow(CreatePopupState())
+    private val _popupState = MutableStateFlow(CreateCategoryPopupState())
 
     private val _isShowed = MutableStateFlow(false)
 
@@ -56,22 +58,22 @@ class MainNotesViewModel @Inject constructor(
 
     override fun handle(event: Event) {
         when (event) {
-            is MainNotesEvent.InsertFolder -> {
+            is CreateCategoryPopupEvent.InsertFolder -> {
                 insertFolder(
                     name = event.name,
                     color = event.color
                 )
             }
 
-            is MainNotesEvent.ShowCreatePopup -> {
+            is CreateCategoryPopupEvent.ShowCreatePopup -> {
                 showBottomSheet()
             }
 
-            is MainNotesEvent.HideCreatePopup -> {
+            is CreateCategoryPopupEvent.HideCreatePopup -> {
                 hideBottomSheet()
             }
 
-            is MainNotesEvent.InputName -> {
+            is CreateCategoryPopupEvent.InputName -> {
                 inputFolderName(event.name)
             }
         }
@@ -104,6 +106,6 @@ class MainNotesViewModel @Inject constructor(
 
     private fun hideBottomSheet() {
         _isShowed.update { false }
-        _popupState.update { CreatePopupState() }
+        _popupState.update { CreateCategoryPopupState() }
     }
 }

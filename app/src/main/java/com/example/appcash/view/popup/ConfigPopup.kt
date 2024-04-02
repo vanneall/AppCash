@@ -1,4 +1,4 @@
-package com.example.appcash.view.tasks.popup
+package com.example.appcash.view.popup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

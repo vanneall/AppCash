@@ -4,9 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
-import com.example.appcash.utils.events.SearchEvent
-import com.example.appcash.view.general.other.BottomSheetEvent
-import com.example.appcash.view.notes.notefolders.components.MainNotesEvent
+import com.example.appcash.view.popup.CreateCategoryPopupEvent
+import com.example.appcash.view.popup.CreateCategoryPopupState
 import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.point.data.data.entities.Category
 import ru.point.data.data.entities.Category.Discriminator
 import ru.point.domain.notes.interfaces.GetCategoryByTypeUseCase
 import ru.point.domain.notes.interfaces.InsertFolderUseCase
@@ -32,11 +30,7 @@ class AllTasksFoldersViewModel @Inject constructor(
     private val insertFolderUseCase: Lazy<InsertFolderUseCase>,
 ) : ViewModel(), EventHandler {
 
-    private val _searchQuery = MutableStateFlow("")
-
-    private val _isError = MutableStateFlow(false)
-
-    private val _isShowed = MutableStateFlow(false)
+    private val _createPopupState = MutableStateFlow(CreateCategoryPopupState())
 
     private val _foldersList =
         getCategoryByTypeUseCase.invoke(type = Discriminator.TASKS)
@@ -50,74 +44,75 @@ class AllTasksFoldersViewModel @Inject constructor(
 
     val state = combine(
         _foldersList,
-        _searchQuery,
+        _createPopupState,
         _plannedCount,
         _completedCount,
-        _isShowed,
-        _isError
-    ) { args ->
+    ) { list, popupState, planned, completed ->
         AllTasksState(
-            categories = args[0] as List<Category>,
-            searchQuery = args[1] as String,
-            plannedTasks = args[2] as Int,
-            completeTasks = args[3] as Int,
-            isShowed = args[4] as Boolean,
-            isError = args[5] as Boolean
+            categories = list,
+            createCategoryPopupState = popupState,
+            plannedTasks = planned,
+            bookmarkTasks = completed,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), AllTasksState())
 
     override fun handle(event: Event) {
         when (event) {
-            is MainNotesEvent.InsertFolder -> {
+            is CreateCategoryPopupEvent.InsertFolder -> {
                 insertFolder(
                     name = event.name,
-                    colorIndex = event.color
+                    color = event.color
                 )
             }
 
-            is SearchEvent -> {
-                updateSearch(query = event.query)
+            is CreateCategoryPopupEvent.InputName -> {
+                inputFolderName(event.name)
             }
 
-            is BottomSheetEvent.ShowEvent -> {
+            is CreateCategoryPopupEvent.ShowCreatePopup -> {
                 updateShow()
             }
 
-            is BottomSheetEvent.HideEvent -> {
+            is CreateCategoryPopupEvent.HideCreatePopup -> {
                 updateHide()
-            }
-
-            is Event.ErrorEvent -> {
-                updateIsError()
             }
         }
     }
 
 
-    private fun insertFolder(name: String, colorIndex: Int) {
+    private fun insertFolder(name: String, color: Int) {
         viewModelScope.launch(context = Dispatchers.IO) {
             insertFolderUseCase.get().invoke(
                 name = name,
-                colorIndex = colorIndex,
+                colorIndex = color,
                 discriminator = Discriminator.TASKS,
                 iconId = "game_folder_icon",
             )
         }
     }
 
-    private fun updateSearch(query: String) {
-        _searchQuery.update { query }
+    private fun updateShow() {
+        _createPopupState.update { state ->
+            state.copy(
+                isShowed = true
+            )
+        }
     }
 
-    private fun updateShow() {
-        _isShowed.update { true }
+    private fun inputFolderName(name: String) {
+        _createPopupState.update { state ->
+            state.copy(
+                name = name
+            )
+        }
     }
 
     private fun updateHide() {
-        _isShowed.update { false }
-    }
-
-    private fun updateIsError() {
-        _isError.update { true }
+        _createPopupState.update { state ->
+            state.copy(
+                isShowed = false,
+                name = ""
+            )
+        }
     }
 }

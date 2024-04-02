@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.appcash.navigation.Destinations
 import com.example.appcash.utils.ArgsKeys
+import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.notes.notefolders.components.FolderOpenMode
 import com.example.appcash.view.tasks.all_tasks.components.AllTasksFoldersViewModel
@@ -25,7 +26,8 @@ import dagger.hilt.android.EntryPointAccessors
 fun MainTasksScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
     navHostController: NavHostController,
-    topAppBarState: MutableState<TopAppBarState>
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
 ) {
     navGraphBuilder.composable(
         route = Destinations.MAIN_TASKS_FOLDER_SCREEN
@@ -34,7 +36,8 @@ fun MainTasksScreenNavigation(
         AllTasksScreen(
             viewModel = viewModel,
             navigateTo = navHostController::navigate,
-            topAppBarState = topAppBarState
+            topAppBarState = topAppBarState,
+            fabState = fabState
         )
     }
 }

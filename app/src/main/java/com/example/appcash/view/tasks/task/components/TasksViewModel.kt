@@ -6,7 +6,6 @@ import com.example.appcash.utils.ArgsKeys
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.utils.events.SearchEvent
-import com.example.appcash.view.general.other.BottomSheetEvent
 import com.example.appcash.view.notes.notefolders.components.FolderOpenMode
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -85,10 +84,6 @@ class TasksViewModel @AssistedInject constructor(
 
             is SearchEvent -> {
                 updateQuery(query = event.query)
-            }
-
-            is BottomSheetEvent.HideEvent -> {
-                updateHide()
             }
 
             is Event.ErrorEvent -> {

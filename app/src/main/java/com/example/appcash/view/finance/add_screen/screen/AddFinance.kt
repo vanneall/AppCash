@@ -39,7 +39,6 @@ import com.example.appcash.utils.events.Event
 import com.example.appcash.view.finance.main_screen.components.components.AddFinanceEvent
 import com.example.appcash.view.finance.main_screen.components.components.AddFinanceState
 import com.example.appcash.view.general.list.ItemListView
-import com.example.appcash.view.general.other.SearchTextField
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -95,16 +94,6 @@ fun AddFinance(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 20.dp)
-                    )
-                }
-
-                item {
-                    SearchTextField(
-                        searchQuery = state.query,
-                        onEvent = onEvent,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 50.dp, bottom = 10.dp)
                     )
                 }
 

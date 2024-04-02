@@ -41,10 +41,10 @@ import com.example.appcash.utils.events.Event
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.general.list.Header
-import com.example.appcash.view.notes.notefolders.components.MainNotesEvent
 import com.example.appcash.view.notes.notefolders.components.MainNotesState
 import com.example.appcash.view.notes.notefolders.components.MainNotesViewModel
-import com.example.appcash.view.notes.popup.CreateCategoryPopup
+import com.example.appcash.view.popup.CreateCategoryPopup
+import com.example.appcash.view.popup.CreateCategoryPopupEvent
 import com.example.appcash.view.ui.theme.Blue
 import com.example.appcash.view.ui.theme.DarkTurquoise
 import com.example.appcash.view.ui.theme.Gray
@@ -63,7 +63,7 @@ fun MainNotesScreen(
     )
 
     fabState.value = FabState {
-        viewModel.handle(MainNotesEvent.ShowCreatePopup)
+        viewModel.handle(CreateCategoryPopupEvent.ShowCreatePopup)
         Log.d("FabState", "Fab action setted")
     }
 
@@ -140,7 +140,7 @@ private fun MainNotes(
 
     if (state.isCreatePopupShowed) {
         ModalBottomSheet(
-            onDismissRequest = { onEvent(MainNotesEvent.HideCreatePopup) },
+            onDismissRequest = { onEvent(CreateCategoryPopupEvent.HideCreatePopup) },
             containerColor = Color.White,
             modifier = Modifier
                 .height(280.dp)
