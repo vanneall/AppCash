@@ -11,8 +11,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -21,11 +28,63 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.utils.events.Event
+import com.example.appcash.view.TopAppBarState
+import com.example.appcash.view.general.ErrorScreen
 import com.example.appcash.view.notes.info.components.NoteInfoEvent
 import com.example.appcash.view.notes.info.components.NoteInfoState
+import com.example.appcash.view.notes.info.components.NoteInfoViewModel
 
 @Composable
-fun NoteInfo(
+fun NoteInfoScreen(
+    viewModel: NoteInfoViewModel,
+    navigateBack: () -> Unit,
+    topAppBarState: MutableState<TopAppBarState>
+) {
+    topAppBarState.value = TopAppBarState(
+        title = "",
+        navigationIcon = {
+            IconButton(
+                onClick = {
+                    navigateBack()
+                    viewModel.handle(NoteInfoEvent.SaveNoteEvent)
+                }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null
+                )
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = {
+                    navigateBack()
+                    viewModel.handle(NoteInfoEvent.DeleteNoteEvent)
+
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = null
+                )
+            }
+        }
+    )
+
+    when (viewModel.state.collectAsState().value.isError) {
+        false -> NoteInfo(
+            state = viewModel.state.collectAsState().value,
+            onEvent = viewModel::handle,
+            onNavigateBack = navigateBack,
+            modifier = Modifier.padding(horizontal = 20.dp)
+        )
+
+        true -> ErrorScreen()
+    }
+
+}
+
+@Composable
+private fun NoteInfo(
     state: NoteInfoState,
     onEvent: (Event) -> Unit,
     onNavigateBack: () -> Unit,
