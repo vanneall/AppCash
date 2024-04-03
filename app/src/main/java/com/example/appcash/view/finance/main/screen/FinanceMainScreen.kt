@@ -26,12 +26,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
+import com.example.appcash.navigation.Destinations
 import com.example.appcash.navigation.Destinations.FINANCE_ACCOUNTING_SCREEN
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.finance.general.FinanceRow
-import com.example.appcash.view.finance.main.components.FinanceState
+import com.example.appcash.view.finance.main.components.FinanceMainState
 import com.example.appcash.view.finance.main.components.FinanceViewModel
 
 @Composable
@@ -48,14 +49,16 @@ fun MainFinanceScreen(
     fabState.value = FabState { navigateTo(FINANCE_ACCOUNTING_SCREEN) }
 
     MainMorda(
-        viewModel.state.collectAsState().value, viewModel::handle, navigateTo,
-        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
+        viewModel.state.collectAsState(FinanceMainState()).value, viewModel::handle, navigateTo,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
     )
 }
 
 @Composable
 fun MainMorda(
-    state: FinanceState,
+    state: FinanceMainState,
     onEvent: (Event) -> Unit,
     navigate: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -66,7 +69,7 @@ fun MainMorda(
 
         item {
             Text(
-                text = "68 000 Р",
+                text = state.sum.toString(),
                 fontSize = 36.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Medium,
@@ -82,15 +85,24 @@ fun MainMorda(
 
         item {
             NavigateAddButton(
-                onNavigate = {}, modifier = Modifier
+                onNavigate = {
+                    navigate(Destinations.CREATING_FINANCE_FOLDER_SCREEN)
+                }, modifier = Modifier
                     .fillMaxWidth()
             )
         }
 
+        item {
+            Spacer(modifier = Modifier.height(40.dp))
+        }
+
         items(
-            items = state.transactionsByYearMonth.toList()
-        ) { pair ->
-            FinanceRow(icon = painterResource(id = R.drawable.task_alt), pair = pair)
+            items = state.transactionsByYearMonth
+        ) { financeSubset ->
+            FinanceRow(
+                icon = painterResource(id = R.drawable.task_alt),
+                financeSubset = financeSubset
+            )
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
@@ -98,7 +110,8 @@ fun MainMorda(
 
 @Composable
 private fun NavigateAddButton(
-    onNavigate: (String) -> Unit, modifier: Modifier = Modifier
+    onNavigate: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
@@ -106,7 +119,7 @@ private fun NavigateAddButton(
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         OutlinedButton(
-            onClick = { onNavigate("") },
+            onClick = { onNavigate() },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.weight(1f)
         ) {
@@ -121,7 +134,7 @@ private fun NavigateAddButton(
         }
 
         OutlinedButton(
-            onClick = { onNavigate("") },
+            onClick = { onNavigate() },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.weight(1f)
         ) {

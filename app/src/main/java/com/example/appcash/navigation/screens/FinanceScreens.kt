@@ -10,12 +10,12 @@ import androidx.navigation.compose.composable
 import com.example.appcash.navigation.Destinations
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
-import com.example.appcash.view.finance.add_folder.components.AddFolderViewModel
-import com.example.appcash.view.finance.add_folder.screen.CreatingFinanceFolderScreen
-import com.example.appcash.view.finance.add_screen.screen.FinanceAccountingScreen
+import com.example.appcash.view.finance.chart.components.ChartScreenViewModel
+import com.example.appcash.view.finance.chart.screen.CreatingFinanceFolderScreen
 import com.example.appcash.view.finance.main.components.FinanceViewModel
-import com.example.appcash.view.finance.add_screen.screen.components.AddFinanceViewModel
 import com.example.appcash.view.finance.main.screen.MainFinanceScreen
+import com.example.appcash.view.finance.newfinance.components.AddFinanceViewModel
+import com.example.appcash.view.finance.newfinance.screen.FinanceAccountingScreen
 
 fun MainFinanceScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
@@ -62,7 +62,7 @@ fun CreatingFinanceFolderScreenNavigation(
     navGraphBuilder.composable(
         route = Destinations.CREATING_FINANCE_FOLDER_SCREEN
     ) {
-        val viewModel: AddFolderViewModel = hiltViewModel()
+        val viewModel: ChartScreenViewModel = hiltViewModel()
         CreatingFinanceFolderScreen(
             viewModel = viewModel,
             navigateBack = navHostController::popBackStack,

@@ -1,4 +1,4 @@
-package com.example.appcash.view.finance.add_screen.screen.components
+package com.example.appcash.view.finance.newfinance.components
 
 import ru.point.data.data.entities.Category
 

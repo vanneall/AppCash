@@ -1,4 +1,4 @@
-package com.example.appcash.view.finance
+package com.example.appcash.view.finance.chart.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -21,8 +21,11 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -45,10 +48,11 @@ import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.appcash.R
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.TopAppBarState
+import com.example.appcash.view.finance.chart.components.ChartScreenViewModel
+import com.example.appcash.view.finance.chart.components.ChartState
+import com.example.appcash.view.finance.general.FinanceRow
 import com.example.appcash.view.finance.main.components.FinanceEvent
-import com.example.appcash.view.finance.main.components.FinanceState
-import com.example.appcash.view.finance.main.components.FinanceViewModel
-import com.example.appcash.view.general.ErrorScreen
+import com.example.appcash.view.ui.theme.DarkRed
 import com.example.appcash.view.ui.theme.Gray
 import com.example.appcash.view.ui.theme.LightGray
 import com.example.appcash.view.ui.theme.Turquoise
@@ -57,32 +61,38 @@ import java.util.Locale
 const val CURRENT_MONTH_INDEX = 11
 
 @Composable
-fun MainFinance(
-    viewModel: FinanceViewModel,
-    navigateTo: (String) -> Unit,
+fun CreatingFinanceFolderScreen(
+    viewModel: ChartScreenViewModel,
+    navigateBack: () -> Unit,
     topAppBarState: MutableState<TopAppBarState>
 ) {
     topAppBarState.value = TopAppBarState(
-        title = "Финансы",
+        title = "Добавить папку",
+        navigationIcon = {
+            IconButton(
+                onClick = {
+                    navigateBack()
+                }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null
+                )
+            }
+        }
     )
 
-    when (viewModel.state.collectAsState().value.isError) {
-        false -> FinanceChart(
-            viewModel.state.collectAsState().value,
-            viewModel::handle,
-            navigateTo
-        )
-
-        true -> ErrorScreen()
-    }
+    FinanceChart(
+        state = viewModel.state.collectAsState().value,
+        onEvent = viewModel::handle,
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FinanceChart(
-    state: FinanceState,
+private fun FinanceChart(
+    state: ChartState,
     onEvent: (Event) -> Unit,
-    navigateTo: (String) -> Unit
+    modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(
         pageCount = {
@@ -98,7 +108,7 @@ fun FinanceChart(
             state = gridState,
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
         ) {
             item(span = { GridItemSpan(maxCurrentLineSpan) }) {
                 HorizontalPager(
@@ -120,9 +130,13 @@ fun FinanceChart(
                 }
             }
             items(
-                items = state.categories.toList(),
-            ) {
-
+                items = state.categories,
+            ) { financeCategoryVo ->
+                ChartCheep(
+                    name = financeCategoryVo.name ?: "",
+                    price = financeCategoryVo.sum.toString(),
+                    color = DarkRed,
+                )
             }
 
             item(
@@ -134,8 +148,11 @@ fun FinanceChart(
             items(
                 span = { GridItemSpan(maxCurrentLineSpan) },
                 items = state.transactionsByYearMonth.toList()
-            ) {
-
+            ) { financeSubset ->
+                FinanceRow(
+                    icon = painterResource(id = R.drawable.task_alt),
+                    financeSubset = financeSubset
+                )
             }
         }
     }
@@ -164,7 +181,7 @@ private fun ChartCheep(
             .background(color = LightGray)
             .padding(start = 2.dp, top = 2.dp, bottom = 2.dp, end = 20.dp)
     ) {
-        Icon(
+        androidx.compose.material3.Icon(
             painter = painterResource(id = R.drawable.car_folder_icon),
             contentDescription = null,
             tint = Color.White,

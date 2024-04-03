@@ -1,4 +1,4 @@
-package com.example.appcash.view.finance.add_screen.screen
+package com.example.appcash.view.finance.newfinance.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,9 +43,9 @@ import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.TopAppBarState
-import com.example.appcash.view.finance.add_screen.screen.components.AddFinanceEvent
-import com.example.appcash.view.finance.add_screen.screen.components.AddFinanceState
-import com.example.appcash.view.finance.add_screen.screen.components.AddFinanceViewModel
+import com.example.appcash.view.finance.newfinance.components.AddFinanceEvent
+import com.example.appcash.view.finance.newfinance.components.AddFinanceState
+import com.example.appcash.view.finance.newfinance.components.AddFinanceViewModel
 import com.example.appcash.view.notes.notefolders.screen.CategoryListItem
 import com.example.appcash.view.ui.theme.LightGray
 import com.example.appcash.view.ui.theme.LightGray2

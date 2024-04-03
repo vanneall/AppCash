@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import java.time.YearMonth
+import java.time.LocalDate
 
 @Entity(
     tableName = "finance",
@@ -24,7 +24,7 @@ data class Finance(
     val price: Int,
 
     @ColumnInfo("date")
-    val date: YearMonth,
+    val date: LocalDate,
 
     @ColumnInfo("category_id")
     val folderId: Long

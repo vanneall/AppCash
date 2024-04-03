@@ -15,24 +15,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.appcash.R
 import com.example.appcash.view.ui.theme.Dark
 import com.example.appcash.view.ui.theme.LightGray2
-import ru.point.data.data.entities.Category
-import ru.point.data.data.entities.Finance
-import java.time.YearMonth
+import ru.point.data.data.vo.FinanceSubset
 
 @Composable
 fun FinanceRow(
     icon: Painter,
-    pair: Pair<Finance, Category>,
+    financeSubset: FinanceSubset,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -52,14 +48,14 @@ fun FinanceRow(
         Spacer(modifier = Modifier.width(12.dp))
 
         Text(
-            text = pair.second.name,
+            text = financeSubset.folderName ?: "",
             fontSize = 18.sp,
             fontWeight = FontWeight.Normal,
             overflow = TextOverflow.Ellipsis
         )
         Text(
             fontSize = 18.sp,
-            text = pair.first.price.toString(),
+            text = financeSubset.price.toString(),
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.End,
             modifier = Modifier.fillMaxWidth(),
@@ -71,21 +67,21 @@ fun FinanceRow(
 @Preview
 @Composable
 private fun FinanceRowPreview() {
-    FinanceRow(
-        painterResource(id = R.drawable.car_folder_icon), Pair(
-            Finance(
-                1,
-                1600,
-                YearMonth.now(),
-                folderId = 1
-            ),
-            Category(
-                1,
-                "Категория 1",
-                1,
-                discriminator = Category.Discriminator.FINANCES,
-                icon = "wewew",
-            )
-        )
-    )
+//    FinanceRow(
+//        painterResource(id = R.drawable.car_folder_icon), Pair(
+//            Finance(
+//                1,
+//                1600,
+//                YearMonth.now(),
+//                folderId = 1
+//            ),
+//            Category(
+//                1,
+//                "Категория 1",
+//                1,
+//                discriminator = Category.Discriminator.FINANCES,
+//                icon = "wewew",
+//            )
+//        )
+//    )
 }

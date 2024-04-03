@@ -1,4 +1,4 @@
-package com.example.appcash.view.finance.add_screen.screen.components
+package com.example.appcash.view.finance.newfinance.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,7 +17,7 @@ import ru.point.data.data.entities.Category
 import ru.point.data.data.entities.Finance
 import ru.point.domain.finance.interfaces.InsertFinanceUseCase
 import ru.point.domain.notes.interfaces.GetCategoryByTypeUseCase
-import java.time.YearMonth
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -88,7 +88,7 @@ class AddFinanceViewModel @Inject constructor(
                 value = Finance(
                     price = _price.value.toInt(),
                     folderId = id,
-                    date = YearMonth.now()
+                    date = LocalDate.now()
                 )
             )
         }

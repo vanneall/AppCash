@@ -1,9 +1,9 @@
 package ru.point.domain.finance.interfaces
 
 import kotlinx.coroutines.flow.Flow
-import ru.point.data.data.vo.FinanceCategoryVO
-import java.time.YearMonth
+import ru.point.data.data.vo.FinanceCategorySubset
+import java.time.LocalDate
 
 interface GetFinancesByFolderUseCase {
-    fun invoke(yearMonth: YearMonth): Flow<Map<FinanceCategoryVO, Int>>
+    fun invoke(date: LocalDate): Flow<List<FinanceCategorySubset>>
 }

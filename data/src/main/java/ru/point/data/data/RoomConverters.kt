@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.room.TypeConverter
 import ru.point.data.data.entities.Category.Discriminator
-import java.time.YearMonth
+import java.time.LocalDate
 
 class RoomConverters {
     @TypeConverter
@@ -26,13 +26,13 @@ class RoomConverters {
     }
 
     @TypeConverter
-    fun fromLocalDateToString(value: YearMonth): String {
+    fun fromLocalDateToString(value: LocalDate): String {
         return value.toString()
     }
 
     @TypeConverter
-    fun fromLocalDateToString(value: String): YearMonth {
-        return YearMonth.parse(value)
+    fun fromLocalDateToString(value: String): LocalDate {
+        return LocalDate.parse(value)
     }
 
     @TypeConverter
