@@ -40,4 +40,8 @@
     <string name="task_description">Описание задачи</string>
     <string name="task_description_hint">Описание</string>
     <string name="date_and_time_of_end">Дата и время окончания</string>
+
+    <!-- Finance -->
+    <string name="finance_expenses">Расходы</string>
+    <string name="finance_income">Доходы</string>
 </resources>

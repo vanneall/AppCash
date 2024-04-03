@@ -16,6 +16,7 @@ val NotesListBackgroundColor = Color(0xFF6199BB)
 val Blue = Color(0xFF0171C2)
 val DarkBlue = Color(0xFF2969FE)
 val LightGray = Color(0xFFF6F7FB)
+val LightGray2 = Color(0xFFDFDFDF)
 val Gray = Color(0xFFADADAD)
 
 val Orange = Color(0xFFFF9900)
@@ -26,6 +27,7 @@ val DarkTurquoise = Color(0xFF51AFBC)
 val ToxicPink = Color(0xFFF100D9)
 val Purple = Color(0xFFB04CFE)
 
+val Dark = Color(0xFF242424)
 
 val IncomeTurquoise = Turquoise
 val IncomeToxicPink = ToxicPink

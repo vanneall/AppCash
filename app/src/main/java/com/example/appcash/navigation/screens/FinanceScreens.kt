@@ -8,18 +8,20 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.example.appcash.navigation.Destinations
+import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.finance.add_folder.components.AddFolderViewModel
 import com.example.appcash.view.finance.add_folder.screen.CreatingFinanceFolderScreen
-import com.example.appcash.view.finance.main_screen.components.components.AddFinanceViewModel
 import com.example.appcash.view.finance.add_screen.screen.FinanceAccountingScreen
-import com.example.appcash.view.finance.main_screen.components.FinanceViewModel
-import com.example.appcash.view.finance.main_screen.screen.MainFinanceScreen
+import com.example.appcash.view.finance.main.components.FinanceViewModel
+import com.example.appcash.view.finance.add_screen.screen.components.AddFinanceViewModel
+import com.example.appcash.view.finance.main.screen.MainFinanceScreen
 
 fun MainFinanceScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
     navHostController: NavHostController,
-    topAppBarState: MutableState<TopAppBarState>
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
 ) {
     navGraphBuilder.composable(
         route = Destinations.MAIN_FINANCE_SCREEN
@@ -28,7 +30,8 @@ fun MainFinanceScreenNavigation(
         MainFinanceScreen(
             viewModel = viewModel,
             navigateTo = navHostController::navigate,
-            topAppBarState = topAppBarState
+            topAppBarState = topAppBarState,
+            fabState = fabState
         )
     }
 }

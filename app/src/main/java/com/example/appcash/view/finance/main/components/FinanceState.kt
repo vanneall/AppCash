@@ -1,4 +1,4 @@
-package com.example.appcash.view.finance.main_screen.components
+package com.example.appcash.view.finance.main.components
 
 import androidx.compose.ui.graphics.Color
 import co.yml.charts.ui.piechart.models.PieChartData

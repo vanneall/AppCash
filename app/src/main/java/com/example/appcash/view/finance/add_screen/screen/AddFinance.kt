@@ -1,8 +1,9 @@
 package com.example.appcash.view.finance.add_screen.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,139 +11,150 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.TabRow
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.appcash.R
-import com.example.appcash.navigation.Destinations.CREATING_FINANCE_FOLDER_SCREEN
 import com.example.appcash.utils.events.Event
-import com.example.appcash.view.finance.main_screen.components.components.AddFinanceEvent
-import com.example.appcash.view.finance.main_screen.components.components.AddFinanceState
-import com.example.appcash.view.general.list.ItemListView
+import com.example.appcash.view.TopAppBarState
+import com.example.appcash.view.finance.add_screen.screen.components.AddFinanceEvent
+import com.example.appcash.view.finance.add_screen.screen.components.AddFinanceState
+import com.example.appcash.view.finance.add_screen.screen.components.AddFinanceViewModel
+import com.example.appcash.view.notes.notefolders.screen.CategoryListItem
+import com.example.appcash.view.ui.theme.LightGray
+import com.example.appcash.view.ui.theme.LightGray2
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AddFinance(
+fun FinanceAccountingScreen(
+    viewModel: AddFinanceViewModel,
+    navigateTo: (String) -> Unit,
+    navigateBack: () -> Unit,
+    topAppBarState: MutableState<TopAppBarState>
+) {
+    topAppBarState.value = TopAppBarState(
+        title = "Учет финансов",
+        navigationIcon = {
+            IconButton(
+                onClick = {
+                    navigateBack()
+                }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null
+                )
+            }
+        }
+    )
+
+    AddFinanceOperation(
+        state = viewModel.state.collectAsState().value,
+        onEvent = viewModel::handle,
+        navigateTo = navigateTo,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+    )
+}
+
+@Composable
+private fun AddFinanceOperation(
     state: AddFinanceState,
     onEvent: (Event) -> Unit,
     navigateTo: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val tabData = listOf(
-        "Расходы",
-        "Доходы"
-    )
-    val pagerState = rememberPagerState(
-        initialPage = 0
+    Column(
+        modifier = modifier
     ) {
-        tabData.size
-    }
-    val tabIndex = remember { mutableIntStateOf(0) }
+        Text(
+            text = "68 000 Р",
+            fontSize = 36.sp,
+            color = Color.Black,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 18.dp)
+        )
 
-    Column {
-        TabRow(
-            selectedTabIndex = tabIndex.intValue,
-            backgroundColor = Color.Transparent,
-            modifier = Modifier.fillMaxWidth()
+
+
+        Spacer(modifier = Modifier.height(40.dp))
+
+        NavigateAddButton(
+            state = state,
+            onEvent = onEvent,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 18.dp)
+        )
+
+        Spacer(modifier = Modifier.height(40.dp))
+
+        TextField(
+            value = state.price,
+            onValueChange = { onEvent(AddFinanceEvent.InputPriceEvent(it)) },
+            maxLines = 1,
+            singleLine = true,
+            textStyle = TextStyle(fontSize = 14.sp),
+            label = { Text(text = "Введите цену") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 18.dp),
+            shape = RoundedCornerShape(15.dp),
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                unfocusedContainerColor = LightGray,
+                focusedContainerColor = LightGray
+            )
+        )
+
+        Spacer(modifier = Modifier.height(40.dp))
+        
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            tabData.forEachIndexed { index, text ->
-                Tab(
-                    selected = tabIndex.intValue == index,
-                    onClick = {
-                        tabIndex.intValue = index
-                    },
-                    text = {
-                        Text(text = text)
-                    }
+            items(
+                items = state.categories
+            ) { folder ->
+                CategoryListItem(
+                    name = folder.name,
+                    countOfInnerItems = "",
+                    icon = painterResource(id = R.drawable.food_cart_folder_icon),
+                    iconBackgroundColor = LightGray2,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onEvent(AddFinanceEvent.CreateTransactionEvent(folder.id)) }
                 )
             }
         }
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier
-                .fillMaxSize()
-        ) { index ->
-            LazyColumn(
-                contentPadding = PaddingValues(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                item {
-                    PriceInput(
-                        price = state.price,
-                        onEvent = onEvent,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 20.dp)
-                    )
-                }
-
-                item {
-                    ItemListView(
-                        name = "Добавьте свою категорию",
-                        icon = painterResource(id = R.drawable.add_task_icon),
-                        backgroundIconColor = Color.Transparent,
-                        iconColor = Color.Black,
-                        onClick = { navigateTo(CREATING_FINANCE_FOLDER_SCREEN) }
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                }
-
-                items(
-                    items = state.categories
-                ) {
-                    ItemListView(
-                        name = it.name,
-                        icon = painterResource(
-                            id = LocalContext.current.resources.getIdentifier(
-                                it.icon,
-                                "drawable",
-                                LocalContext.current.packageName
-                            ),
-                        ),
-                        iconSize = 40.dp,
-                        iconColor = Color.Black,
-                        backgroundIconColor = Color.Transparent,
-                        onClick = {
-                            onEvent(
-                                AddFinanceEvent.CreateTransactionEvent(
-                                    it.id,
-                                    pagerState.currentPage == 0
-                                )
-                            )
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                }
-            }
-        }
-    }
-    LaunchedEffect(tabIndex.intValue) {
-        pagerState.animateScrollToPage(tabIndex.intValue)
-    }
-
-    LaunchedEffect(pagerState.currentPage) {
-        tabIndex.intValue = pagerState.currentPage
     }
 }
 
@@ -176,5 +188,76 @@ fun PriceInput(
             keyboardType = KeyboardType.Decimal
         ),
         modifier = modifier
+    )
+}
+
+@Composable
+private fun NavigateAddButton(
+    state: AddFinanceState,
+    onEvent: (Event) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        OutlinedButton(
+            onClick = { onEvent(AddFinanceEvent.SelectExpenseButton) },
+            shape = RoundedCornerShape(10.dp),
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = if (state.isIncomeButtonSelected) {
+                    Color.White
+                } else {
+                    Color.Black
+                },
+            ),
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = stringResource(id = R.string.finance_expenses),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                textAlign = TextAlign.Center,
+                color = if (!state.isIncomeButtonSelected)
+                    Color.White
+                else Color.Black,
+                modifier = Modifier.padding(vertical = 10.dp)
+            )
+        }
+
+        OutlinedButton(
+            onClick = { onEvent(AddFinanceEvent.SelectIncomeButton) },
+            shape = RoundedCornerShape(10.dp),
+            colors = ButtonDefaults.outlinedButtonColors(
+                if (state.isIncomeButtonSelected)
+                    Color.Black
+                else Color.Transparent
+            ),
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = stringResource(id = R.string.finance_income),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                textAlign = TextAlign.Center,
+                color = if (state.isIncomeButtonSelected)
+                    Color.White
+                else Color.Black,
+                modifier = Modifier.padding(vertical = 10.dp)
+            )
+        }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+private fun NavigateAddButtonPreview() {
+    NavigateAddButton(
+        AddFinanceState(),
+        {}, modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 18.dp, vertical = 10.dp)
     )
 }

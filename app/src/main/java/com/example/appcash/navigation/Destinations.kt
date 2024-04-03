@@ -22,6 +22,8 @@ object Destinations {
     const val FINANCE_ACCOUNTING_SCREEN = "FINANCE_ACCOUNTING_SCREEN"
 
     const val ERROR_SCREEN = "ERROR_SCREEN"
+
+    const val ADD_FINANCE_OPERATION_SCREEN = "ADD_FINANCE_OPERATION_SCREEN"
 }
 
 val screenBottomItems = listOf(

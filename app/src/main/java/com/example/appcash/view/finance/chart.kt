@@ -1,4 +1,4 @@
-package com.example.appcash.view.finance.main_screen.screen
+package com.example.appcash.view.finance
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -25,15 +25,15 @@ import androidx.compose.material.Text
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,18 +43,39 @@ import co.yml.charts.ui.piechart.charts.DonutPieChart
 import co.yml.charts.ui.piechart.models.PieChartConfig
 import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.appcash.R
-import ru.point.data.data.entities.Category
-import ru.point.data.data.entities.Finance
 import com.example.appcash.utils.events.Event
-import com.example.appcash.view.finance.main_screen.components.FinanceEvent
-import com.example.appcash.view.finance.main_screen.components.FinanceState
+import com.example.appcash.view.TopAppBarState
+import com.example.appcash.view.finance.main.components.FinanceEvent
+import com.example.appcash.view.finance.main.components.FinanceState
+import com.example.appcash.view.finance.main.components.FinanceViewModel
+import com.example.appcash.view.general.ErrorScreen
 import com.example.appcash.view.ui.theme.Gray
 import com.example.appcash.view.ui.theme.LightGray
 import com.example.appcash.view.ui.theme.Turquoise
-import java.time.YearMonth
 import java.util.Locale
 
 const val CURRENT_MONTH_INDEX = 11
+
+@Composable
+fun MainFinance(
+    viewModel: FinanceViewModel,
+    navigateTo: (String) -> Unit,
+    topAppBarState: MutableState<TopAppBarState>
+) {
+    topAppBarState.value = TopAppBarState(
+        title = "Финансы",
+    )
+
+    when (viewModel.state.collectAsState().value.isError) {
+        false -> FinanceChart(
+            viewModel.state.collectAsState().value,
+            viewModel::handle,
+            navigateTo
+        )
+
+        true -> ErrorScreen()
+    }
+}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -130,44 +151,6 @@ fun FinanceChart(
 }
 
 @Composable
-fun FinanceRow(
-    icon: Painter,
-    pair: Pair<Finance, Category>,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = icon,
-            tint = Color.Black,
-            contentDescription = null,
-            modifier = Modifier
-                .background(color = LightGray, shape = CircleShape)
-                .size(40.dp)
-                .padding(1.dp)
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Text(
-            text = pair.second.name,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Normal,
-            overflow = TextOverflow.Ellipsis
-        )
-        Text(
-            fontSize = 18.sp,
-            text = pair.first.price.toString(),
-            fontWeight = FontWeight.Normal,
-            textAlign = TextAlign.End,
-            modifier = Modifier.fillMaxWidth(),
-            color = Color.Black
-        )
-    }
-}
-
-@Composable
 private fun ChartCheep(
     name: String,
     price: String,
@@ -217,29 +200,6 @@ private fun ChartCheep(
 fun GridCellPreview() {
     ChartCheep("Одежда", "12 000Р", Turquoise)
 }
-
-@Preview
-@Composable
-fun FinanceRowPreview() {
-    FinanceRow(
-        painterResource(id = R.drawable.car_folder_icon), Pair(
-            Finance(
-                1,
-                1600,
-                YearMonth.now(),
-                folderId = 1
-            ),
-            Category(
-                1,
-                "Категория 1",
-                1,
-                discriminator = Category.Discriminator.FINANCES,
-                icon = "wewew",
-            )
-        )
-    )
-}
-
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

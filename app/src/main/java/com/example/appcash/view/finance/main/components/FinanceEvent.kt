@@ -1,4 +1,4 @@
-package com.example.appcash.view.finance.main_screen.components
+package com.example.appcash.view.finance.main.components
 
 import com.example.appcash.utils.events.Event
 

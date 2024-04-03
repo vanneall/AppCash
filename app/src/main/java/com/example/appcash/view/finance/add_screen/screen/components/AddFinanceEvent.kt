@@ -1,4 +1,4 @@
-package com.example.appcash.view.finance.main_screen.components.components
+package com.example.appcash.view.finance.add_screen.screen.components
 
 import com.example.appcash.utils.events.Event
 
@@ -9,6 +9,8 @@ sealed class AddFinanceEvent: Event {
 
     data class CreateTransactionEvent(
         val id: Long,
-        val isMinus: Boolean
     ) : AddFinanceEvent()
+
+    object SelectIncomeButton: AddFinanceEvent()
+    object SelectExpenseButton: AddFinanceEvent()
 }
