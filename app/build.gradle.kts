@@ -64,7 +64,7 @@ dependencies {
     implementation("co.yml:ycharts:2.1.0")
 
     //Calendar
-    implementation ("com.kizitonwose.calendar:compose:2.4.1")
+    implementation ("com.kizitonwose.calendar:compose:2.5.0")
 
     //BottomNavBar
     implementation("androidx.compose.material:material:1.5.4")
