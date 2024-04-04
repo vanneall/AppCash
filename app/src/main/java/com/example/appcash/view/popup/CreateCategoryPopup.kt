@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -29,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.utils.ParamsStore.colorsList
+import com.example.appcash.utils.ParamsStore.iconsList
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.ui.theme.LightGray
 
@@ -72,6 +76,32 @@ fun CreateCategoryPopup(
                 imeAction = ImeAction.Done
             )
         )
+
+        val icons = iconsList
+
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            itemsIndexed(
+                items = icons
+            ) { index, icon ->
+                Icon(
+                    painter = icon,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(52.dp)
+                        .background(color = LightGray, shape = CircleShape)
+                        .clickable {
+                            onEvent(
+                                CreateCategoryPopupEvent.SelectFolderIcon(index)
+                            )
+                        }
+                        .padding(5.dp)
+                )
+            }
+        }
 
         LazyRow(
             modifier = Modifier.fillMaxWidth(),

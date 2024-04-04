@@ -1,6 +1,7 @@
 package ru.point.domain.notes.implementations
 
 import ru.point.data.data.entities.Category
+import ru.point.data.data.entities.FolderIcon
 import ru.point.data.data.repository_interfaces.CategoriesRepository
 import ru.point.domain.notes.interfaces.InsertFolderUseCase
 import javax.inject.Inject
@@ -12,7 +13,7 @@ class InsertFolderUseCaseImpl @Inject constructor(
         name: String,
         colorIndex: Int,
         discriminator: Category.Discriminator,
-        iconId: String
+        iconId: FolderIcon
     ) {
         val nameTrimmed = name.trim()
 
@@ -23,7 +24,7 @@ class InsertFolderUseCaseImpl @Inject constructor(
                 name = nameTrimmed,
                 color = colorIndex,
                 discriminator = discriminator,
-                icon = "car_folder_icon"
+                icon = iconId
             )
         )
     }

@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.navigation.Destinations.NOTES_LIST_SCREEN
+import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
@@ -50,6 +51,7 @@ import com.example.appcash.view.ui.theme.DarkTurquoise
 import com.example.appcash.view.ui.theme.Gray
 import com.example.appcash.view.ui.theme.LightGray
 import ru.point.data.data.entities.Category
+import ru.point.data.data.entities.FolderIcon
 
 @Composable
 fun MainNotesScreen(
@@ -90,7 +92,6 @@ private fun MainNotes(
         )
 
         Spacer(modifier = Modifier.height(25.dp))
-
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -122,7 +123,7 @@ private fun MainNotes(
                 CategoryListItem(
                     name = item.name,
                     countOfInnerItems = "2",
-                    icon = painterResource(id = R.drawable.note_nav_icon),
+                    icon = FolderIconMapper.mapToIcon(value = item.icon),
                     iconBackgroundColor = Color(item.color),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -143,7 +144,7 @@ private fun MainNotes(
             onDismissRequest = { onEvent(CreateCategoryPopupEvent.HideCreatePopup) },
             containerColor = Color.White,
             modifier = Modifier
-                .height(280.dp)
+                .height(350.dp)
         ) {
             CreateCategoryPopup(
                 state = state.popupState,
@@ -246,13 +247,13 @@ private fun ScreenPreview() {
                     name = "Дом",
                     color = 0,
                     discriminator = Category.Discriminator.NOTES,
-                    icon = "wewe",
+                    icon = FolderIcon.SERVICES,
                 ),
                 Category(
                     name = "Работа",
                     color = 0,
                     discriminator = Category.Discriminator.NOTES,
-                    icon = "wewe",
+                    icon = FolderIcon.SERVICES,
                 )
             )
         ),

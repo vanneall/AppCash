@@ -33,7 +33,7 @@ class FinancesRepositoryImpl @Inject constructor(
         return financeDao.readFinances()
     }
 
-    override fun getFinancesSum(): Flow<Int> {
+    override fun getFinancesSum(): Flow<Int?> {
         return financeDao.readFinancesSum()
     }
 }

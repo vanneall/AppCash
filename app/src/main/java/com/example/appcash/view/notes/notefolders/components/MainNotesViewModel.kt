@@ -2,6 +2,7 @@ package com.example.appcash.view.notes.notefolders.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.view.popup.CreateCategoryPopupEvent
@@ -65,6 +66,10 @@ class MainNotesViewModel @Inject constructor(
                 )
             }
 
+            is CreateCategoryPopupEvent.SelectFolderIcon -> {
+                selectFolderIcon(event.position)
+            }
+
             is CreateCategoryPopupEvent.ShowCreatePopup -> {
                 showBottomSheet()
             }
@@ -85,12 +90,20 @@ class MainNotesViewModel @Inject constructor(
                 name = name,
                 colorIndex = color,
                 discriminator = Discriminator.NOTES,
-                iconId = "technic_folder_icon",
+                iconId = _popupState.value.selectedFolderIcon,
             )
             hideBottomSheet()
         }
     }
 
+
+    private fun selectFolderIcon(position: Int) {
+        _popupState.update { state ->
+            state.copy(
+                selectedFolderIcon = FolderIconMapper.mapToFolderIcon(position = position)
+            )
+        }
+    }
 
     private fun showBottomSheet() {
         _isShowed.update { true }

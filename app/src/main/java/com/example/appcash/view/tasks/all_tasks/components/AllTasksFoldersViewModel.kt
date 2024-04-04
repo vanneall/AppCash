@@ -2,6 +2,7 @@ package com.example.appcash.view.tasks.all_tasks.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.view.popup.CreateCategoryPopupEvent
@@ -65,6 +66,10 @@ class AllTasksFoldersViewModel @Inject constructor(
                 )
             }
 
+            is CreateCategoryPopupEvent.SelectFolderIcon -> {
+                selectFolderIcon(event.position)
+            }
+
             is CreateCategoryPopupEvent.InputName -> {
                 inputFolderName(event.name)
             }
@@ -86,9 +91,17 @@ class AllTasksFoldersViewModel @Inject constructor(
                 name = name,
                 colorIndex = color,
                 discriminator = Discriminator.TASKS,
-                iconId = "game_folder_icon",
+                iconId = _createPopupState.value.selectedFolderIcon,
             )
             updateHide()
+        }
+    }
+
+    private fun selectFolderIcon(position: Int) {
+        _createPopupState.update { state ->
+            state.copy(
+                selectedFolderIcon = FolderIconMapper.mapToFolderIcon(position = position)
+            )
         }
     }
 

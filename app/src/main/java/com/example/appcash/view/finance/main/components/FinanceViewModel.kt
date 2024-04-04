@@ -32,7 +32,7 @@ class FinanceViewModel @Inject constructor(
     ) { finance, sum ->
         FinanceMainState(
             transactionsByYearMonth = finance,
-            sum = sum
+            sum = sum ?: 0
         )
     }
 

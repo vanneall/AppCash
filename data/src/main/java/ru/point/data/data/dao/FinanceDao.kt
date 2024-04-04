@@ -47,5 +47,5 @@ interface FinanceDao {
     fun readFinances(): Flow<List<FinanceSubset>>
 
     @Query("select sum(price) from finance")
-    fun readFinancesSum(): Flow<Int>
+    fun readFinancesSum(): Flow<Int?>
 }

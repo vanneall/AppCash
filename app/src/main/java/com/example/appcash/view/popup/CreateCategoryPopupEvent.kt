@@ -9,11 +9,13 @@ sealed class CreateCategoryPopupEvent() : Event {
         val color: Int
     ) : CreateCategoryPopupEvent()
 
+    data class SelectFolderIcon(val position: Int) : CreateCategoryPopupEvent()
+
     data class InputName(
         val name: String
     ) : CreateCategoryPopupEvent()
 
-     object ShowCreatePopup: CreateCategoryPopupEvent()
+    object ShowCreatePopup : CreateCategoryPopupEvent()
 
     object HideCreatePopup : CreateCategoryPopupEvent()
 }

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.navigation.Destinations
+import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
@@ -102,7 +103,7 @@ private fun AllTasks(
                 title = stringResource(id = R.string.bookmarks),
                 count = "8",
                 textColor = Color.Black,
-                icon = painterResource(id = R.drawable.bookmark),
+                icon = painterResource(id = R.drawable.bookmark_icon),
                 modifier = Modifier
                     .height(height = 124.dp)
                     .background(color = LightGray, shape = RoundedCornerShape(20.dp))
@@ -132,7 +133,7 @@ private fun AllTasks(
                 CategoryListItem(
                     name = item.name,
                     countOfInnerItems = "2",
-                    icon = painterResource(id = R.drawable.task_alt),
+                    icon = FolderIconMapper.mapToIcon(value = item.icon),
                     iconBackgroundColor = Color(item.color),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -153,7 +154,7 @@ private fun AllTasks(
             onDismissRequest = { onEvent(CreateCategoryPopupEvent.HideCreatePopup) },
             containerColor = Color.White,
             modifier = Modifier
-                .height(280.dp)
+                .height(350.dp)
         ) {
             CreateCategoryPopup(
                 state = state.createCategoryPopupState,
@@ -231,7 +232,7 @@ fun InfoCheepPreviewBookmark() {
         title = "Избранное",
         count = "8",
         textColor = Color.Black,
-        icon = painterResource(id = R.drawable.bookmark),
+        icon = painterResource(id = R.drawable.bookmark_icon),
         modifier = Modifier
             .size(174.dp, 124.dp)
             .background(color = LightGray, shape = RoundedCornerShape(20.dp))

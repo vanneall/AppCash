@@ -14,5 +14,5 @@ interface FinancesRepository {
 
     fun insertFinance(value: Finance)
     fun getAllFinances(): Flow<List<FinanceSubset>>
-    fun getFinancesSum(): Flow<Int>
+    fun getFinancesSum(): Flow<Int?>
 }

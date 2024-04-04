@@ -30,7 +30,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
+import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.finance.newfinance.components.AddFinanceEvent
@@ -147,7 +147,7 @@ private fun AddFinanceOperation(
                 CategoryListItem(
                     name = folder.name,
                     countOfInnerItems = "",
-                    icon = painterResource(id = R.drawable.food_cart_folder_icon),
+                    icon = FolderIconMapper.mapToIcon(value = folder.icon),
                     iconBackgroundColor = LightGray2,
                     modifier = Modifier
                         .fillMaxWidth()

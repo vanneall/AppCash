@@ -22,7 +22,7 @@ data class Category(
     val discriminator: Discriminator,
 
     @ColumnInfo(name = "icon")
-    val icon: String
+    val icon: FolderIcon
 ) {
     enum class Discriminator {
         TASKS,

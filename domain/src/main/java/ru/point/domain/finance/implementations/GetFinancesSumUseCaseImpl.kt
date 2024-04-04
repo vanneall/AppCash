@@ -7,7 +7,7 @@ import ru.point.domain.finance.interfaces.GetFinancesSumUseCase
 class GetFinancesSumUseCaseImpl(
     private val repository: FinancesRepository
 ) : GetFinancesSumUseCase {
-    override fun invoke(): Flow<Int> {
+    override fun invoke(): Flow<Int?> {
         return repository.getFinancesSum()
     }
 }
