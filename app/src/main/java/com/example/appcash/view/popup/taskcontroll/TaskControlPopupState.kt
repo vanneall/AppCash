@@ -1,6 +1,6 @@
-package com.example.appcash.view.popup
+package com.example.appcash.view.popup.taskcontroll
 
-data class ConfigPopupState(
+data class TaskControlPopupState(
     val isShowed: Boolean = false,
     val id: Long = 0,
     val name: String = ""

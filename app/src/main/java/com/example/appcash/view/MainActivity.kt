@@ -112,7 +112,7 @@ data class TopAppBarState(
 )
 
 data class FabState(
-    val action: () -> Unit
+    val action: () -> Unit,
 )
 
 @Composable

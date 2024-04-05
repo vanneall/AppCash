@@ -2,6 +2,6 @@ package ru.point.domain.tasks.interfaces
 
 import kotlinx.coroutines.flow.Flow
 
-interface GetPlannedCountUseCase {
+interface GetBookmarksCountUseCase {
     fun invoke(): Flow<Int>
 }

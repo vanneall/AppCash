@@ -7,10 +7,7 @@ import javax.inject.Inject
 class UpdateTaskUseCaseImpl @Inject constructor(
     private val repository: TasksRepository
 ) : UpdateTaskUseCase {
-    override fun invoke(
-        id: Long,
-        isChecked: Boolean,
-    ) {
-        repository.updateTask(id = id, isChecked = isChecked)
+    override fun invoke(id: Long, text: String, description: String) {
+        repository.updateTask(id = id, name = text, description = description)
     }
 }

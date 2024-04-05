@@ -17,10 +17,11 @@ import com.example.appcash.utils.ArgsKeys
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.notes.notefolders.components.FolderOpenMode
-import com.example.appcash.view.tasks.all_tasks.components.AllTasksFoldersViewModel
-import com.example.appcash.view.tasks.all_tasks.screen.AllTasksScreen
-import com.example.appcash.view.tasks.task.components.TasksViewModelFactoryProvider
-import com.example.appcash.view.tasks.task.screen.TaskListScreen
+import com.example.appcash.view.tasks.list.components.TasksSelections
+import com.example.appcash.view.tasks.list.components.TasksViewModelFactoryProvider
+import com.example.appcash.view.tasks.list.screen.TasksListScreen
+import com.example.appcash.view.tasks.main.components.TasksMainViewModel
+import com.example.appcash.view.tasks.main.screen.TasksMainScreen
 import dagger.hilt.android.EntryPointAccessors
 
 fun MainTasksScreenNavigation(
@@ -32,8 +33,8 @@ fun MainTasksScreenNavigation(
     navGraphBuilder.composable(
         route = Destinations.MAIN_TASKS_FOLDER_SCREEN
     ) {
-        val viewModel: AllTasksFoldersViewModel = hiltViewModel()
-        AllTasksScreen(
+        val viewModel: TasksMainViewModel = hiltViewModel()
+        TasksMainScreen(
             viewModel = viewModel,
             navigateTo = navHostController::navigate,
             topAppBarState = topAppBarState,
@@ -65,19 +66,24 @@ fun TasksScreenNavigation(
             entryPoint = TasksViewModelFactoryProvider::class.java
         ).provideTasksViewModelFactory()
 
-        val openModeString = backStackEntry.arguments?.getString(ArgsKeys.OPEN_MODE_KEY)
+        val openModeString = backStackEntry
+            .arguments
+            ?.getString(ArgsKeys.OPEN_MODE_KEY)
             ?: FolderOpenMode.Definition.ERROR_VALUE_STRING
 
-        val openModeEnum = FolderOpenMode.Definition.handle(mode = openModeString)
+        val openModeEnum = TasksSelections.handle(mode = openModeString)
+
+        val folderId = backStackEntry.arguments?.getLong(ArgsKeys.FOLDER_ID_KEY)
 
         val viewModel = viewModel {
             factory.create(
                 openMode = openModeEnum,
-                folderId = backStackEntry.arguments?.getLong(ArgsKeys.FOLDER_ID_KEY) ?: 0
+                folderId = folderId.takeIf { folderId != null && folderId > (0).toLong() }
+
             )
         }
 
-        TaskListScreen(
+        TasksListScreen(
             viewModel = viewModel,
             navigateBack = navHostController::popBackStack,
             topAppBarState = topAppBarState,

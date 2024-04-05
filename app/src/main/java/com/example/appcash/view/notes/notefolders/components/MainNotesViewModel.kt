@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
-import com.example.appcash.view.popup.CreateCategoryPopupEvent
-import com.example.appcash.view.popup.CreateCategoryPopupState
+import com.example.appcash.view.popup.create.CreateCategoryPopupEvent
+import com.example.appcash.view.popup.create.CreateCategoryPopupState
 import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

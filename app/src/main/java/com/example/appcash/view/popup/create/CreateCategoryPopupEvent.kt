@@ -1,4 +1,4 @@
-package com.example.appcash.view.popup
+package com.example.appcash.view.popup.create
 
 import com.example.appcash.utils.events.Event
 
@@ -11,9 +11,7 @@ sealed class CreateCategoryPopupEvent() : Event {
 
     data class SelectFolderIcon(val position: Int) : CreateCategoryPopupEvent()
 
-    data class InputName(
-        val name: String
-    ) : CreateCategoryPopupEvent()
+    data class InputName(val name: String) : CreateCategoryPopupEvent()
 
     object ShowCreatePopup : CreateCategoryPopupEvent()
 

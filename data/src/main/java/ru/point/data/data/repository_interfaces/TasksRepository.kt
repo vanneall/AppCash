@@ -7,9 +7,12 @@ import ru.point.data.data.entities.TaskWithTask
 interface TasksRepository {
     fun createTask(task: Task)
     fun getAllTasksCount(): Flow<Int>
-    fun getPlannedCount(): Flow<Int>
+    fun getBookmarksCount(): Flow<Int>
     fun getTasks(): Flow<List<TaskWithTask>>
     fun getTasks(folderId: Long): Flow<List<TaskWithTask>>
-    fun updateTask(id: Long, isChecked: Boolean)
+    fun updateTaskChecked(id: Long, isChecked: Boolean)
     fun deleteTaskById(id: Long)
+    fun getBookmarkTasks(): Flow<List<TaskWithTask>>
+    fun updateBookmarkTasks(id: Long)
+    fun updateTask(id: Long, name: String, description: String)
 }

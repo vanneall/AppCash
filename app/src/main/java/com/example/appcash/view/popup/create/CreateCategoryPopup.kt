@@ -1,4 +1,4 @@
-package com.example.appcash.view.popup
+package com.example.appcash.view.popup.create
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

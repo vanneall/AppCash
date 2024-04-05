@@ -136,7 +136,7 @@ private fun AddFinanceOperation(
         )
 
         Spacer(modifier = Modifier.height(40.dp))
-        
+
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(20.dp)

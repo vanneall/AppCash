@@ -18,20 +18,26 @@
     <string name="title">Название</string>
     <string name="content">Текст</string>
 
-    <!-- TasksScreen -->
-    <string name="my_tasks_folder">Мои списки</string>
-    <string name="new_tasks">Добавить список</string>
-    <string name="tasks">Задачи</string>
-    <string name="bookmarks">Избранное</string>
+    <!-- Tasks -->
+    <string name="all_tasks">Все задачи</string>
+    <string name="all_bookmarks">Избранное</string>
+    <string name="my_folder_tasks">Мои списки</string>
     <string name="add_new_subtask">Новая подзадача</string>
     
-    <!-- Screens tile -->
+    <!-- Screens title -->
     <string name="calendar_screen">Календарь</string>
+
     <string name="task_screen">Задачи</string>
+    <string name="all_tasks_screen">Все задачи</string>
+    <string name="all_bookmarks_screen">Все закладки</string>
+    <string name="tasks_from_folder_screen">%1$s</string>
+
     <string name="note_screen">Заметки</string>
     <string name="all_notes_screen">Все заметки</string>
     <string name="finance_screen">Финансы</string>
     <string name="settings_screen">Настройки</string>
+
+    <string name="error_title_screen">Ошибка заголовка</string>
     
     <!-- EditPopup -->
     <string name="folder">Папка</string>

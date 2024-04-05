@@ -1,16 +1,15 @@
-package com.example.appcash.view.popup
+package com.example.appcash.view.popup.taskconfigurator
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -29,8 +28,8 @@ import com.example.appcash.view.ui.theme.DarkBlue
 import com.example.appcash.view.ui.theme.LightGray
 
 @Composable
-fun EditPopup(
-    state: EditPopupState,
+fun TaskConfiguratorPopup(
+    state: TaskConfiguratorPopupState,
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -50,14 +49,14 @@ fun EditPopup(
             name = stringResource(id = R.string.task_name),
             hint = stringResource(id = R.string.task_name_hint),
             value = state.name,
-            onEvent = { value -> onEvent(EditPopupEvent.InsertName(value)) }
+            onEvent = { value -> onEvent(TaskConfiguratorPopupEvent.InsertName(value)) }
         )
 
         Option(
             name = stringResource(id = R.string.task_description),
             hint = stringResource(id = R.string.task_description_hint),
             value = state.description,
-            onEvent = { value -> onEvent(EditPopupEvent.InsertDescription(value)) }
+            onEvent = { value -> onEvent(TaskConfiguratorPopupEvent.InsertDescription(value)) }
         )
 
         Option(
@@ -67,11 +66,9 @@ fun EditPopup(
             onEvent = { }
         )
 
-        Button(
-            shape = CircleShape,
-            colors = ButtonDefaults.buttonColors(containerColor = DarkBlue),
-            onClick = { onEvent(EditPopupEvent.CreateTask(state.parentId)) },
-            modifier = Modifier.size(52.dp)
+        IconButton (
+            onClick = { onEvent(TaskConfiguratorPopupEvent.CreateTask(state.parentId)) },
+            modifier = Modifier.background(color = DarkBlue, shape = CircleShape)
         ) {
             Icon(
                 imageVector = Icons.Default.Add,

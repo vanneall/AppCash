@@ -1,4 +1,4 @@
-package com.example.appcash.view.tasks.task.screen
+package com.example.appcash.view.tasks.list.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,7 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
@@ -45,44 +45,62 @@ import com.example.appcash.R
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
-import com.example.appcash.view.popup.ConfigPopup
-import com.example.appcash.view.popup.ConfigPopupEvent
-import com.example.appcash.view.popup.EditPopup
-import com.example.appcash.view.popup.EditPopupEvent
-import com.example.appcash.view.tasks.task.components.TaskEvent
-import com.example.appcash.view.tasks.task.components.TasksState
-import com.example.appcash.view.tasks.task.components.TasksViewModel
+import com.example.appcash.view.popup.taskconfigurator.TaskConfiguratorPopup
+import com.example.appcash.view.popup.taskconfigurator.TaskConfiguratorPopupEvent
+import com.example.appcash.view.popup.taskcontroll.TaskControlPopup
+import com.example.appcash.view.popup.taskcontroll.TaskControlPopupEvent
+import com.example.appcash.view.tasks.list.components.TaskListEvent
+import com.example.appcash.view.tasks.list.components.TasksListState
+import com.example.appcash.view.tasks.list.components.TasksListViewModel
 import com.example.appcash.view.ui.theme.DarkBlue
 import com.example.appcash.view.ui.theme.Gray
+import com.example.appcash.view.ui.theme.LightGray
+import com.example.appcash.view.ui.theme.Orange
 import ru.point.data.data.entities.Task
 import ru.point.data.data.entities.TaskWithTask
 
 @Composable
-fun TaskListScreen(
-    viewModel: TasksViewModel,
+fun TasksListScreen(
+    viewModel: TasksListViewModel,
     navigateBack: () -> Unit,
     topAppBarState: MutableState<TopAppBarState>,
     fabState: MutableState<FabState>
 ) {
+    val state = viewModel.state.collectAsState()
 
-    fabState.value = FabState { viewModel.handle(EditPopupEvent.ShowPopup()) }
+    val screenTitle = when (state.value.screenTitle) {
+        TasksListViewModel.ALL -> stringResource(id = R.string.all_tasks_screen)
+        TasksListViewModel.BOOKMARKS -> stringResource(id = R.string.all_bookmarks_screen)
+        TasksListViewModel.ERROR -> stringResource(id = R.string.error_title_screen)
+        "" -> stringResource(id = R.string.task_screen)
+        else -> state.value.screenTitle
+    }
+
     topAppBarState.value = TopAppBarState(
-        title = "Задачи",
+        title = screenTitle,
         navigationIcon = {
             IconButton(
                 onClick = {
                     navigateBack()
-                }) {
+                },
+                modifier = Modifier
+                    .size(36.dp)
+                    .background(color = LightGray, shape = CircleShape)
+                    .padding(4.dp)
+            ) {
                 androidx.compose.material.Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = null
+                    imageVector = Icons.Default.ArrowBackIosNew,
+                    contentDescription = null,
+                    modifier = Modifier
                 )
             }
         }
     )
 
-    TaskList(
-        state = viewModel.state.collectAsState().value,
+    fabState.value = FabState { viewModel.handle(TaskConfiguratorPopupEvent.ShowPopup()) }
+
+    TasksList(
+        state = state.value,
         onEvent = viewModel::handle,
         modifier = Modifier
             .padding(horizontal = 20.dp)
@@ -92,8 +110,8 @@ fun TaskListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TaskList(
-    state: TasksState,
+private fun TasksList(
+    state: TasksListState,
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -102,7 +120,7 @@ private fun TaskList(
         verticalArrangement = Arrangement.spacedBy(40.dp)
     ) {
         items(
-            items = state.values,
+            items = state.tasks,
             key = { task -> task.id }
         ) { task ->
             TaskBlockListItem(
@@ -113,15 +131,15 @@ private fun TaskList(
         }
     }
 
-    if (state.configPopupState.isShowed) {
+    if (state.taskControlPopupState.isShowed) {
         ModalBottomSheet(
-            onDismissRequest = { onEvent(ConfigPopupEvent.HidePopup) },
+            onDismissRequest = { onEvent(TaskControlPopupEvent.HidePopup) },
             containerColor = Color.White,
             modifier = Modifier
                 .height(height = 240.dp)
         ) {
-            ConfigPopup(
-                state = state.configPopupState,
+            TaskControlPopup(
+                state = state.taskControlPopupState,
                 onEvent = onEvent,
                 modifier = Modifier
                     .fillMaxSize()
@@ -130,15 +148,15 @@ private fun TaskList(
         }
     }
 
-    if (state.editPopupState.isShowed) {
+    if (state.taskConfiguratorPopupState.isShowed) {
         ModalBottomSheet(
-            onDismissRequest = { onEvent(EditPopupEvent.HidePopup) },
+            onDismissRequest = { onEvent(TaskConfiguratorPopupEvent.HidePopup) },
             containerColor = Color.White,
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            EditPopup(
-                state = state.editPopupState,
+            TaskConfiguratorPopup(
+                state = state.taskConfiguratorPopupState,
                 onEvent = onEvent,
                 modifier = Modifier
                     .fillMaxSize()
@@ -154,6 +172,7 @@ fun TaskListItem(
     text: String,
     textFontSize: Int,
     checkboxSize: Int,
+    isBookmarked: Boolean?,
     subtext: String?,
     date: String?,
     options: Boolean?,
@@ -167,7 +186,7 @@ fun TaskListItem(
     ) {
         Checkbox(
             checked = isCompleted,
-            onCheckedChange = { onEvent(TaskEvent.UpdateCompletedState(id, it)) },
+            onCheckedChange = { onEvent(TaskListEvent.UpdateCompletedState(id, it)) },
             colors = CheckboxDefaults.colors(
                 checkedColor = Color.White,
                 uncheckedColor = Color.White,
@@ -223,7 +242,23 @@ fun TaskListItem(
             )
         }
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(8.dp))
+
+
+        isBookmarked?.let {
+            Icon(
+                painter = painterResource(id = R.drawable.bookmark_icon),
+                contentDescription = null,
+                tint = if (isBookmarked) Orange else Color.Black,
+                modifier = Modifier
+                    .size(10.dp)
+                    .clickable { onEvent(TaskListEvent.UpdateBookmarked(id)) }
+            )
+        }
+
+
+
+        Spacer(modifier = Modifier.width(8.dp))
 
         options?.let {
             Icon(
@@ -231,7 +266,7 @@ fun TaskListItem(
                 contentDescription = "Иконка больше",
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable { onEvent(ConfigPopupEvent.ShowPopup(id, text)) }
+                    .clickable { onEvent(TaskControlPopupEvent.ShowPopup(id, text)) }
             )
         }
     }
@@ -250,13 +285,13 @@ fun TaskBlockListItem(
             id = task.id,
             text = task.text,
             textFontSize = 16,
-            //TODO добавить в заметки поле описания
-            subtext = "Описание",
+            subtext = task.description.takeIf { text -> text.isNotEmpty() },
             checkboxSize = 24,
             isCompleted = task.isCompleted,
             date = "2024/01/02",
             onEvent = onEvent,
             options = true,
+            isBookmarked = task.isBookmarked
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -272,6 +307,7 @@ fun TaskBlockListItem(
                 date = null,
                 options = null,
                 onEvent = onEvent,
+                isBookmarked = null,
                 modifier = Modifier.padding(start = 24.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -292,7 +328,7 @@ fun NewSubtaskListItem(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.clickable { onEvent(EditPopupEvent.ShowPopup(parentId = parentId)) },
+        modifier = modifier.clickable { onEvent(TaskConfiguratorPopupEvent.ShowPopup(parentId = parentId)) },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -320,6 +356,8 @@ fun TaskBlockListItemPreview() {
             1,
             "Название задачи 1",
             isCompleted = false,
+            isBookmarked = false,
+            description = "weww",
             subtasks = listOf(
                 Task(2, "Подзадача 1", isCompleted = false),
                 Task(2, "Подзадача 2", isCompleted = false),
@@ -344,6 +382,7 @@ fun TaskListItemPreview() {
         options = true,
         id = 1,
         onEvent = {},
+        isBookmarked = false,
         modifier = Modifier
             .height(100.dp)
             .background(Color.White)

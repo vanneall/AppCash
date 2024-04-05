@@ -23,7 +23,7 @@ class TasksRepositoryImpl @Inject constructor(
         return taskDao.readByFolderId(id = folderId)
     }
 
-    override fun updateTask(id: Long, isChecked: Boolean) {
+    override fun updateTaskChecked(id: Long, isChecked: Boolean) {
         taskDao.update(id = id, isChecked = isChecked)
     }
 
@@ -31,11 +31,23 @@ class TasksRepositoryImpl @Inject constructor(
         return taskDao.getAllTasksCount()
     }
 
-    override fun getPlannedCount(): Flow<Int> {
-        return taskDao.getPlannedCount()
+    override fun getBookmarksCount(): Flow<Int> {
+        return taskDao.getBookmarksCount()
     }
 
     override fun deleteTaskById(id: Long) {
         taskDao.deleteById(id = id)
+    }
+
+    override fun getBookmarkTasks(): Flow<List<TaskWithTask>> {
+        return taskDao.getBookmarksTasks()
+    }
+
+    override fun updateBookmarkTasks(id: Long) {
+        taskDao.updateBookmark(id = id)
+    }
+
+    override fun updateTask(id: Long, name: String, description: String) {
+        taskDao.updateTask(id = id, name = name, description = description)
     }
 }

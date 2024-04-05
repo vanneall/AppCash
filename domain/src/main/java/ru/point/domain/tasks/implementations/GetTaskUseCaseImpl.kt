@@ -6,7 +6,7 @@ import ru.point.data.data.repository_interfaces.TasksRepository
 import ru.point.domain.tasks.interfaces.GetTasksUseCase
 import javax.inject.Inject
 
-class GetTaskUseCase @Inject constructor(
+class GetTaskUseCaseImpl @Inject constructor(
     private val repository: TasksRepository
 ) : GetTasksUseCase {
     override fun invoke(

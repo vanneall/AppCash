@@ -1,4 +1,4 @@
-package com.example.appcash.view.popup
+package com.example.appcash.view.popup.taskcontroll
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
@@ -28,11 +27,10 @@ import androidx.compose.ui.unit.sp
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.ui.theme.DarkBlue
 import com.example.appcash.view.ui.theme.DarkRed
-import com.example.appcash.view.ui.theme.Orange
 
 @Composable
-fun ConfigPopup(
-    state: ConfigPopupState,
+fun TaskControlPopup(
+    state: TaskControlPopupState,
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -59,19 +57,8 @@ fun ConfigPopup(
                 tint = Color.White,
                 modifier = Modifier
                     .size(size = 40.dp)
-                    .clickable { onEvent(ConfigPopupEvent.DeleteTask(state.id)) }
+                    .clickable { onEvent(TaskControlPopupEvent.DeleteTask(state.id)) }
                     .background(color = DarkRed, shape = CircleShape)
-                    .padding(5.dp)
-            )
-
-            Icon(
-                imageVector = Icons.Default.Bookmark,
-                contentDescription = "Добавить в закладки",
-                tint = Color.White,
-                modifier = Modifier
-                    .size(size = 40.dp)
-                    .clickable { onEvent(ConfigPopupEvent.BookmarkTask(state.id)) }
-                    .background(color = Orange, shape = CircleShape)
                     .padding(5.dp)
             )
 
@@ -81,7 +68,7 @@ fun ConfigPopup(
                 tint = Color.White,
                 modifier = Modifier
                     .size(size = 40.dp)
-                    .clickable { onEvent(ConfigPopupEvent.EditTask(state.id)) }
+                    .clickable { onEvent(TaskControlPopupEvent.EditTask(state.id)) }
                     .background(color = DarkBlue, shape = CircleShape)
                     .padding(5.dp)
             )
@@ -93,8 +80,8 @@ fun ConfigPopup(
 @Preview
 @Composable
 fun ConfigPopupPreview() {
-    ConfigPopup(
-        state = ConfigPopupState(),
+    TaskControlPopup(
+        state = TaskControlPopupState(),
         onEvent = {},
         modifier = Modifier.size(width = 390.dp, height = 240.dp)
     )

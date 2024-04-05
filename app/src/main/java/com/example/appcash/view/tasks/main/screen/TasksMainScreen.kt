@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.appcash.view.tasks.all_tasks.screen
+package com.example.appcash.view.tasks.main.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,18 +40,18 @@ import com.example.appcash.utils.events.Event
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.general.list.Header
-import com.example.appcash.view.notes.notefolders.components.FolderOpenMode
 import com.example.appcash.view.notes.notefolders.screen.CategoryListItem
-import com.example.appcash.view.popup.CreateCategoryPopup
-import com.example.appcash.view.popup.CreateCategoryPopupEvent
-import com.example.appcash.view.tasks.all_tasks.components.AllTasksFoldersViewModel
-import com.example.appcash.view.tasks.all_tasks.components.AllTasksState
+import com.example.appcash.view.popup.create.CreateCategoryPopup
+import com.example.appcash.view.popup.create.CreateCategoryPopupEvent
+import com.example.appcash.view.tasks.list.components.TasksSelections
+import com.example.appcash.view.tasks.main.components.TasksMainState
+import com.example.appcash.view.tasks.main.components.TasksMainViewModel
 import com.example.appcash.view.ui.theme.DarkBlue
 import com.example.appcash.view.ui.theme.LightGray
 
 @Composable
-fun AllTasksScreen(
-    viewModel: AllTasksFoldersViewModel,
+fun TasksMainScreen(
+    viewModel: TasksMainViewModel,
     navigateTo: (String) -> Unit,
     topAppBarState: MutableState<TopAppBarState>,
     fabState: MutableState<FabState>
@@ -62,7 +62,7 @@ fun AllTasksScreen(
 
     fabState.value = FabState { viewModel.handle(CreateCategoryPopupEvent.ShowCreatePopup) }
 
-    AllTasks(
+    TasksMain(
         state = viewModel.state.collectAsState().value,
         onEvent = viewModel::handle,
         navigate = navigateTo,
@@ -72,8 +72,8 @@ fun AllTasksScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AllTasks(
-    state: AllTasksState,
+private fun TasksMain(
+    state: TasksMainState,
     navigate: (String) -> Unit,
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
@@ -88,25 +88,31 @@ private fun AllTasks(
                 .fillMaxWidth()
         ) {
             InfoCheep(
-                title = stringResource(id = R.string.tasks),
-                count = state.plannedTasks,
+                title = stringResource(id = R.string.all_tasks),
+                count = state.allTasksCount,
                 textColor = Color.White,
                 icon = painterResource(id = R.drawable.task_alt),
                 modifier = Modifier
                     .height(height = 124.dp)
                     .background(color = DarkBlue, shape = RoundedCornerShape(20.dp))
+                    .clickable {
+                        navigate("${Destinations.TASKS_SCREEN}/${TasksSelections.ALL.name}/0")
+                    }
                     .padding(16.dp)
                     .weight(1f)
             )
 
             InfoCheep(
-                title = stringResource(id = R.string.bookmarks),
-                count = "8",
+                title = stringResource(id = R.string.all_bookmarks),
+                count = state.bookmarkTasksCount,
                 textColor = Color.Black,
                 icon = painterResource(id = R.drawable.bookmark_icon),
                 modifier = Modifier
                     .height(height = 124.dp)
                     .background(color = LightGray, shape = RoundedCornerShape(20.dp))
+                    .clickable {
+                        navigate("${Destinations.TASKS_SCREEN}/${TasksSelections.ONLY_BOOKMARKS.name}/0")
+                    }
                     .padding(16.dp)
                     .weight(1f)
             )
@@ -132,18 +138,20 @@ private fun AllTasks(
             ) { item ->
                 CategoryListItem(
                     name = item.name,
-                    countOfInnerItems = "2",
+                    countOfInnerItems = "недоступно",
                     icon = FolderIconMapper.mapToIcon(value = item.icon),
                     iconBackgroundColor = Color(item.color),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(64.dp)
+                        .clickable {
+                            navigate("${Destinations.TASKS_SCREEN}/${TasksSelections.ONLY_FOLDER.name}/${item.id}")
+                        }
                         .background(
                             color = LightGray,
                             shape = RoundedCornerShape(20.dp)
                         )
                         .padding(horizontal = 12.dp)
-                        .clickable { navigate("${Destinations.TASKS_SCREEN}/${FolderOpenMode.DEFINED.name}/${item.id}") }
                 )
             }
         }
@@ -168,7 +176,7 @@ private fun AllTasks(
 }
 
 @Composable
-fun InfoCheep(
+private fun InfoCheep(
     title: String,
     count: String,
     textColor: Color,
@@ -212,7 +220,7 @@ fun InfoCheep(
 
 @Preview(showBackground = true)
 @Composable
-fun InfoCheepPreview() {
+private fun InfoCheepPreview() {
     InfoCheep(
         title = "Задачи",
         count = "21",
@@ -227,7 +235,7 @@ fun InfoCheepPreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun InfoCheepPreviewBookmark() {
+private fun InfoCheepPreviewBookmark() {
     InfoCheep(
         title = "Избранное",
         count = "8",

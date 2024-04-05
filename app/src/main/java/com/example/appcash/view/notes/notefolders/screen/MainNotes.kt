@@ -32,11 +32,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
-import com.example.appcash.navigation.Destinations.NOTES_LIST_SCREEN
+import com.example.appcash.navigation.Destinations
 import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.FabState
@@ -44,8 +45,8 @@ import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.notes.notefolders.components.MainNotesState
 import com.example.appcash.view.notes.notefolders.components.MainNotesViewModel
-import com.example.appcash.view.popup.CreateCategoryPopup
-import com.example.appcash.view.popup.CreateCategoryPopupEvent
+import com.example.appcash.view.popup.create.CreateCategoryPopup
+import com.example.appcash.view.popup.create.CreateCategoryPopupEvent
 import com.example.appcash.view.ui.theme.Blue
 import com.example.appcash.view.ui.theme.DarkTurquoise
 import com.example.appcash.view.ui.theme.Gray
@@ -110,7 +111,6 @@ private fun MainNotes(
                             shape = RoundedCornerShape(20.dp)
                         )
                         .padding(horizontal = 12.dp)
-                        .clickable { navigateTo("$NOTES_LIST_SCREEN/0") }
                 )
             }
 
@@ -128,12 +128,14 @@ private fun MainNotes(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(64.dp)
+                        .clickable {
+                            navigateTo("${Destinations.NOTES_LIST_SCREEN}/${item.id}")
+                        }
                         .background(
                             color = LightGray,
                             shape = RoundedCornerShape(20.dp)
                         )
                         .padding(horizontal = 12.dp)
-                        .clickable { navigateTo("$NOTES_LIST_SCREEN/${item.id}") }
                 )
             }
         }
@@ -188,6 +190,8 @@ fun CategoryListItem(
             text = name,
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
             modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .weight(weight = 1f)
@@ -197,6 +201,8 @@ fun CategoryListItem(
             text = countOfInnerItems,
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
             color = Gray,
             modifier = Modifier.height(18.dp)
         )

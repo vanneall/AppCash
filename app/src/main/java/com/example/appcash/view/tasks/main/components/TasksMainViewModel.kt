@@ -1,12 +1,12 @@
-package com.example.appcash.view.tasks.all_tasks.components
+package com.example.appcash.view.tasks.main.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
-import com.example.appcash.view.popup.CreateCategoryPopupEvent
-import com.example.appcash.view.popup.CreateCategoryPopupState
+import com.example.appcash.view.popup.create.CreateCategoryPopupEvent
+import com.example.appcash.view.popup.create.CreateCategoryPopupState
 import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,42 +20,44 @@ import ru.point.data.data.entities.Category.Discriminator
 import ru.point.domain.notes.interfaces.GetCategoryByTypeUseCase
 import ru.point.domain.notes.interfaces.InsertFolderUseCase
 import ru.point.domain.tasks.interfaces.GetAllTasksCountUseCase
-import ru.point.domain.tasks.interfaces.GetPlannedCountUseCase
+import ru.point.domain.tasks.interfaces.GetBookmarksCountUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class AllTasksFoldersViewModel @Inject constructor(
+class TasksMainViewModel @Inject constructor(
     getCategoryByTypeUseCase: GetCategoryByTypeUseCase,
-    getPlannedCountUseCase: GetPlannedCountUseCase,
+    getBookmarksCountUseCase: GetBookmarksCountUseCase,
     getAllTasksCountUseCase: GetAllTasksCountUseCase,
     private val insertFolderUseCase: Lazy<InsertFolderUseCase>,
 ) : ViewModel(), EventHandler {
 
     private val _createPopupState = MutableStateFlow(CreateCategoryPopupState())
 
-    private val _foldersList =
-        getCategoryByTypeUseCase.invoke(type = Discriminator.TASKS)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    private val _categories = getCategoryByTypeUseCase
+        .invoke(type = Discriminator.TASKS)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
-    private val _plannedCount = getPlannedCountUseCase.invoke()
+    private val _bookmarkTasksCount = getBookmarksCountUseCase
+        .invoke()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
-    private val _completedCount = getAllTasksCountUseCase.invoke()
+    private val _allTasksCount = getAllTasksCountUseCase
+        .invoke()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
     val state = combine(
-        _foldersList,
+        _categories,
         _createPopupState,
-        _plannedCount,
-        _completedCount,
-    ) { list, popupState, planned, completed ->
-        AllTasksState(
+        _allTasksCount,
+        _bookmarkTasksCount
+    ) { list, popupState, allTasks, bookMarksTask ->
+        TasksMainState(
             categories = list,
             createCategoryPopupState = popupState,
-            plannedTasks = planned.toString(),
-            bookmarkTasks = completed,
+            allTasksCount = allTasks.toString(),
+            bookmarkTasksCount = bookMarksTask.toString(),
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), AllTasksState())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TasksMainState())
 
     override fun handle(event: Event) {
         when (event) {
@@ -83,7 +85,6 @@ class AllTasksFoldersViewModel @Inject constructor(
             }
         }
     }
-
 
     private fun insertFolder(name: String, color: Int) {
         viewModelScope.launch(context = Dispatchers.IO) {

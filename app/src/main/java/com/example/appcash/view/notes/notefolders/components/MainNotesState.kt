@@ -1,6 +1,6 @@
 package com.example.appcash.view.notes.notefolders.components
 
-import com.example.appcash.view.popup.CreateCategoryPopupState
+import com.example.appcash.view.popup.create.CreateCategoryPopupState
 import ru.point.data.data.entities.Category
 
 data class MainNotesState(

@@ -1,9 +1,8 @@
 package ru.point.domain.tasks.interfaces
 
-interface UpdateTaskUseCase {
+interface UpdateTaskCheckedUseCase {
     fun invoke(
         id: Long,
-        text: String,
-        description: String
+        isChecked: Boolean,
     )
 }
