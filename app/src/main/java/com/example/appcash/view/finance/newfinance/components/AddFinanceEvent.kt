@@ -13,6 +13,10 @@ sealed class AddFinanceEvent: Event {
         val id: Long,
     ) : AddFinanceEvent()
 
+    data class SortCategoryEvent(
+        val text: String,
+    ) : AddFinanceEvent()
+
     object SelectIncomeButton: AddFinanceEvent()
     object SelectExpenseButton: AddFinanceEvent()
 }

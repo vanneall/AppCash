@@ -38,6 +38,8 @@ class AddFinanceViewModel @Inject constructor(
 
     private val _price = MutableStateFlow("")
 
+    private val _search = MutableStateFlow("")
+
     private val _isIncomeButtonSelected = MutableStateFlow(false)
 
     private val _createPopupState = MutableStateFlow(CreateCategoryPopupState())
@@ -47,12 +49,14 @@ class AddFinanceViewModel @Inject constructor(
     val state = combine(
         _list,
         _price,
+        _search,
         _isIncomeButtonSelected,
         _createPopupState,
-    ) { list, price, isIncome, popupState ->
+    ) { list, price, search, isIncome, popupState ->
         AddFinanceState(
             price = price,
-            categories = list,
+            search = search,
+            categories = list.filter { it.name.contains(search) },
             isIncomeButtonSelected = isIncome,
             createCategoryPopupState = popupState
         )
@@ -96,6 +100,10 @@ class AddFinanceViewModel @Inject constructor(
                 _selectedId.update { event.id }
             }
 
+            is AddFinanceEvent.SortCategoryEvent -> {
+                updateSearch(event.text)
+            }
+
             is AddFinanceEvent.SelectExpenseButton -> {
                 selectExpense()
             }
@@ -118,6 +126,9 @@ class AddFinanceViewModel @Inject constructor(
         }
     }
 
+    private fun updateSearch(text: String) {
+        _search.update { text }
+    }
 
     private fun selectFolderIcon(position: Int) {
         _createPopupState.update { state ->
@@ -162,10 +173,12 @@ class AddFinanceViewModel @Inject constructor(
 
     private fun createFinance(id: Long?) {
         CoroutineScope(Dispatchers.IO).launch {
-            if (id == null) return@launch
+            if (id == null || _price.value.isEmpty()) return@launch
+            var price = _price.value.toInt()
+            price *= if (!_isIncomeButtonSelected.value) -1 else 1
             insertFinanceUseCase.get().invoke(
                 value = Finance(
-                    price = _price.value.toInt(),
+                    price = price,
                     folderId = id,
                     date = LocalDate.now()
                 )

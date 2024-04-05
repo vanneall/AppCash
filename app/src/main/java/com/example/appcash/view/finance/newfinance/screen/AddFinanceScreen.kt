@@ -3,6 +3,7 @@ package com.example.appcash.view.finance.newfinance.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
@@ -39,6 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,6 +58,7 @@ import com.example.appcash.view.finance.newfinance.components.AddFinanceViewMode
 import com.example.appcash.view.notes.notefolders.screen.CategoryListItem
 import com.example.appcash.view.popup.create.CreateCategoryPopup
 import com.example.appcash.view.popup.create.CreateCategoryPopupEvent
+import com.example.appcash.view.ui.theme.DarkBlue
 import com.example.appcash.view.ui.theme.Gray
 import com.example.appcash.view.ui.theme.LightGray
 import com.example.appcash.view.ui.theme.LightGray2
@@ -111,14 +115,37 @@ private fun AddFinance(
     Column(
         modifier = modifier
     ) {
-        Text(
-            text = "68 000 Р",
-            fontSize = 36.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier.fillMaxWidth()
-        )
 
+        Box(
+            contentAlignment = Alignment.CenterStart,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 18.dp)
+        ) {
+            BasicTextField(
+                value = state.price,
+                onValueChange = { onEvent(AddFinanceEvent.InputPriceEvent(it)) },
+                textStyle = TextStyle(
+                    fontSize = 36.sp,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Medium,
+                ),
+                maxLines = 1,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Decimal
+                )
+            )
+            if (state.price.isEmpty()) {
+                Text(
+                    text = "Введите цену",
+                    fontSize = 36.sp,
+                    color = Gray,
+                    fontWeight = FontWeight.Normal,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
 
 
         Spacer(modifier = Modifier.height(40.dp))
@@ -126,26 +153,35 @@ private fun AddFinance(
         NavigateAddButton(
             state = state,
             onEvent = onEvent,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 18.dp)
         )
 
         Spacer(modifier = Modifier.height(40.dp))
 
         TextField(
-            value = state.price,
-            onValueChange = { onEvent(AddFinanceEvent.InputPriceEvent(it)) },
+            value = state.search,
+            onValueChange = { onEvent(AddFinanceEvent.SortCategoryEvent(it)) },
             maxLines = 1,
             singleLine = true,
-            textStyle = TextStyle(fontSize = 14.sp),
-            label = { Text(text = "Введите цену") },
-            modifier = Modifier.fillMaxWidth(),
+            textStyle = TextStyle(fontSize = 14.sp, color = Color.Black),
+            label = { Text(text = "Название", color = Gray) },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                capitalization = KeyboardCapitalization.Sentences
+            ),
             shape = RoundedCornerShape(15.dp),
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 unfocusedContainerColor = LightGray,
-                focusedContainerColor = LightGray
-            )
+                focusedContainerColor = LightGray,
+                focusedLabelColor = DarkBlue
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 18.dp)
         )
 
         Spacer(modifier = Modifier.height(40.dp))
@@ -157,10 +193,13 @@ private fun AddFinance(
 
             item {
                 CategoryListItem(
-                    name = stringResource(id = R.string.add_new_category),
-                    countOfInnerItems = "",
+                    text = stringResource(id = R.string.add_new_category),
+                    count = "",
                     icon = painterResource(id = R.drawable.add_task_icon),
                     iconColor = Gray,
+                    color = Gray,
+                    isArrowVisible = false,
+                    iconShape = CircleShape,
                     iconBackgroundColor = LightGray2,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -172,10 +211,12 @@ private fun AddFinance(
                 items = state.categories
             ) { folder ->
                 CategoryListItem(
-                    name = folder.name,
-                    countOfInnerItems = "",
+                    text = folder.name,
+                    count = "",
                     icon = FolderIconMapper.mapToIcon(value = folder.icon),
                     iconColor = Color.Black,
+                    iconShape = CircleShape,
+                    isArrowVisible = false,
                     iconBackgroundColor = LightGray2,
                     modifier = Modifier
                         .fillMaxWidth()

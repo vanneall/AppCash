@@ -5,6 +5,7 @@ import ru.point.data.data.entities.Category
 
 data class AddFinanceState(
     val price: String = "",
+    val search: String = "",
     val selectedCategoryId: Long? = null,
     val isIncomeButtonSelected: Boolean = false,
     val createCategoryPopupState: CreateCategoryPopupState = CreateCategoryPopupState(),

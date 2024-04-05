@@ -28,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -99,8 +100,8 @@ private fun MainNotes(
         ) {
             item {
                 CategoryListItem(
-                    name = stringResource(id = R.string.all_notes),
-                    countOfInnerItems = state.notesCount,
+                    text = stringResource(id = R.string.all_notes),
+                    count = state.notesCount,
                     icon = painterResource(id = R.drawable.note_nav_icon),
                     iconBackgroundColor = DarkTurquoise,
                     modifier = Modifier
@@ -124,8 +125,8 @@ private fun MainNotes(
                 key = { item -> item.id }
             ) { item ->
                 CategoryListItem(
-                    name = item.name,
-                    countOfInnerItems = "недоступно",
+                    text = item.name,
+                    count = "недоступно",
                     icon = FolderIconMapper.mapToIcon(value = item.icon),
                     iconBackgroundColor = Color(item.color),
                     modifier = Modifier
@@ -164,12 +165,15 @@ private fun MainNotes(
 
 @Composable
 fun CategoryListItem(
-    name: String,
-    countOfInnerItems: String,
+    text: String,
     icon: Painter,
     iconBackgroundColor: Color,
+    count: String,
     modifier: Modifier = Modifier,
+    isArrowVisible: Boolean = true,
+    iconShape: Shape = RoundedCornerShape(10.dp),
     iconColor: Color = Color.White,
+    color: Color = Color.Black
 ) {
     Row(
         modifier = modifier,
@@ -183,7 +187,7 @@ fun CategoryListItem(
                 .size(size = 40.dp)
                 .background(
                     color = iconBackgroundColor,
-                    shape = RoundedCornerShape(10.dp)
+                    shape = iconShape
                 )
                 .padding(all = 8.dp)
         )
@@ -191,10 +195,11 @@ fun CategoryListItem(
         Spacer(modifier = Modifier.width(16.dp))
 
         Text(
-            text = name,
+            text = text,
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium,
             overflow = TextOverflow.Ellipsis,
+            color = color,
             maxLines = 1,
             modifier = Modifier
                 .align(Alignment.CenterVertically)
@@ -202,7 +207,7 @@ fun CategoryListItem(
         )
 
         Text(
-            text = countOfInnerItems,
+            text = count,
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
             overflow = TextOverflow.Ellipsis,
@@ -213,12 +218,14 @@ fun CategoryListItem(
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        Icon(
-            imageVector = Icons.Default.ArrowForwardIos,
-            contentDescription = "Иконка продолжения",
-            modifier = Modifier.size(size = 18.dp),
-            tint = Gray
-        )
+        if (isArrowVisible) {
+            Icon(
+                imageVector = Icons.Default.ArrowForwardIos,
+                contentDescription = "Иконка продолжения",
+                modifier = Modifier.size(size = 18.dp),
+                tint = Gray
+            )
+        }
     }
 }
 
@@ -229,8 +236,8 @@ fun CategoryListItem(
 @Composable
 private fun CategoryListItemPreview() {
     CategoryListItem(
-        name = "Дом",
-        countOfInnerItems = "2",
+        text = "Дом",
+        count = "2",
         icon = painterResource(id = R.drawable.task_alt),
         iconBackgroundColor = Blue,
         modifier = Modifier

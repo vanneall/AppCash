@@ -137,8 +137,8 @@ private fun TasksMain(
                 key = { item -> item.id }
             ) { item ->
                 CategoryListItem(
-                    name = item.name,
-                    countOfInnerItems = "недоступно",
+                    text = item.name,
+                    count = "недоступно",
                     icon = FolderIconMapper.mapToIcon(value = item.icon),
                     iconBackgroundColor = Color(item.color),
                     modifier = Modifier
