@@ -169,6 +169,7 @@ fun CategoryListItem(
     icon: Painter,
     iconBackgroundColor: Color,
     modifier: Modifier = Modifier,
+    iconColor: Color = Color.White,
 ) {
     Row(
         modifier = modifier,
@@ -176,7 +177,7 @@ fun CategoryListItem(
     ) {
         Icon(
             painter = icon,
-            tint = Color.White,
+            tint = iconColor,
             contentDescription = "Иконка фолдера",
             modifier = Modifier
                 .size(size = 40.dp)

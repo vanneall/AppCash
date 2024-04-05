@@ -7,7 +7,6 @@ import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.view.finance.main.components.FinanceEvent
-import com.example.appcash.view.ui.theme.DarkBlue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +17,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.point.data.data.vo.FinanceCategorySubset
 import ru.point.data.data.vo.FinanceSubset
-import ru.point.domain.finance.interfaces.GetFinancesByFolderUseCase
+import ru.point.domain.finance.interfaces.GetFinancesByMonthUseCase
 import ru.point.domain.finance.interfaces.GetFinancesByYearMonthUseCase
 import java.time.LocalDate
 import javax.inject.Inject
@@ -27,7 +26,7 @@ import kotlin.math.abs
 @HiltViewModel
 class ChartScreenViewModel @Inject constructor(
     private val getFinancesByYearMonthUseCase: GetFinancesByYearMonthUseCase,
-    private val getFinancesByFolderUseCase: GetFinancesByFolderUseCase
+    private val getFinancesByMonthUseCase: GetFinancesByMonthUseCase
 ) : ViewModel(), EventHandler {
 
     private var _todayDate = LocalDate.now()
@@ -41,7 +40,7 @@ class ChartScreenViewModel @Inject constructor(
     init {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                getFinancesByFolderUseCase.invoke(_todayDate).collect {
+                getFinancesByMonthUseCase.invoke(_todayDate).collect {
                     _categories.value = it
                 }
             }
@@ -63,7 +62,7 @@ class ChartScreenViewModel @Inject constructor(
         ChartState(
             transactionsByYearMonth = transaction,
             categories = categories,
-            categoriesForChart = categories.map { mapFinanceCategoryVO(it) }
+            categoriesForChart = categories.map { mapFinanceCategorySubset(it) }
                 .takeIf { it.isNotEmpty() } ?: listOf(
                 PieChartData.Slice(
                     label = "",
@@ -77,11 +76,11 @@ class ChartScreenViewModel @Inject constructor(
         ChartState()
     )
 
-    private fun mapFinanceCategoryVO(vo: FinanceCategorySubset): PieChartData.Slice {
+    private fun mapFinanceCategorySubset(vo: FinanceCategorySubset): PieChartData.Slice {
         return PieChartData.Slice(
             label = vo.name ?: "",
             value = vo.sum?.toFloat() ?: 0f,
-            color = DarkBlue
+            color = Color(vo.color ?: 0x00000)
         )
     }
 
@@ -125,7 +124,7 @@ class ChartScreenViewModel @Inject constructor(
 
     private fun actualizeTransactions() {
         viewModelScope.launch(Dispatchers.IO) {
-            getFinancesByFolderUseCase.invoke(_todayDate).collect {
+            getFinancesByMonthUseCase.invoke(_todayDate).collect {
                 _categories.value = it
             }
         }

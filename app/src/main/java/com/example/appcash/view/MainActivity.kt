@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
                                 state = topAppBarState.value,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(bottom = 20.dp)
+                                    .padding(bottom = 20.dp, start = 16.dp)
                             )
                         },
                         bottomBar = {
@@ -109,7 +109,7 @@ class MainActivity : ComponentActivity() {
 }
 
 data class TopAppBarState(
-    val title: String = "Задачник",
+    val title: String = "",
     val navigationIcon: (@Composable () -> Unit)? = null,
     val actions: (@Composable RowScope.() -> Unit)? = null
 )

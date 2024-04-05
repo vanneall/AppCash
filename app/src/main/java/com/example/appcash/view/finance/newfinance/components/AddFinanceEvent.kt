@@ -7,7 +7,9 @@ sealed class AddFinanceEvent: Event {
         val price: String
     ): AddFinanceEvent()
 
-    data class CreateTransactionEvent(
+    object CreateTransactionEvent: AddFinanceEvent()
+
+    data class SelectCategoryEvent(
         val id: Long,
     ) : AddFinanceEvent()
 

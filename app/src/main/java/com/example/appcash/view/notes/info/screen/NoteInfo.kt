@@ -1,6 +1,7 @@
 package com.example.appcash.view.notes.info.screen
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,14 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -33,6 +34,7 @@ import com.example.appcash.view.general.ErrorScreen
 import com.example.appcash.view.notes.info.components.NoteInfoEvent
 import com.example.appcash.view.notes.info.components.NoteInfoState
 import com.example.appcash.view.notes.info.components.NoteInfoViewModel
+import com.example.appcash.view.ui.theme.LightGray
 
 @Composable
 fun NoteInfoScreen(
@@ -46,25 +48,16 @@ fun NoteInfoScreen(
             IconButton(
                 onClick = {
                     navigateBack()
-                    viewModel.handle(NoteInfoEvent.SaveNoteEvent)
-                }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = null
-                )
-            }
-        },
-        actions = {
-            IconButton(
-                onClick = {
-                    navigateBack()
-                    viewModel.handle(NoteInfoEvent.DeleteNoteEvent)
-
-                }
+                },
+                modifier = Modifier
+                    .size(36.dp)
+                    .background(color = LightGray, shape = CircleShape)
+                    .padding(4.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = null
+                androidx.compose.material.Icon(
+                    imageVector = Icons.Default.ArrowBackIosNew,
+                    contentDescription = null,
+                    modifier = Modifier
                 )
             }
         }

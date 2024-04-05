@@ -7,15 +7,15 @@ import ru.point.data.data.vo.FinanceSubset
 import java.time.LocalDate
 
 data class ChartState(
-    val yearMonth: LocalDate = LocalDate.now(),
+    val localDate: LocalDate = LocalDate.now(),
     val categories: List<FinanceCategorySubset> = emptyList(),
+    val transactionsByYearMonth: List<FinanceSubset> = emptyList(),
+    val isError: Boolean = false,
     val categoriesForChart: List<PieChartData.Slice> = listOf(
         PieChartData.Slice(
             label = "",
             value = 1f,
-            color = Color.Gray
+            color = Color.Transparent
         )
     ),
-    val transactionsByYearMonth: List<FinanceSubset> = emptyList(),
-    val isError: Boolean = false
 )

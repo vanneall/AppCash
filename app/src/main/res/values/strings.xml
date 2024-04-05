@@ -50,4 +50,5 @@
     <!-- Finance -->
     <string name="finance_expenses">Расходы</string>
     <string name="finance_income">Доходы</string>
+    <string name="add_new_category">Добавьте свою категорию</string>
 </resources>

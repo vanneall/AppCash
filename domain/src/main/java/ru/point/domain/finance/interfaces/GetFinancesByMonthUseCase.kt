@@ -4,6 +4,6 @@ import kotlinx.coroutines.flow.Flow
 import ru.point.data.data.vo.FinanceCategorySubset
 import java.time.LocalDate
 
-interface GetFinancesByFolderUseCase {
+interface GetFinancesByMonthUseCase {
     fun invoke(date: LocalDate): Flow<List<FinanceCategorySubset>>
 }

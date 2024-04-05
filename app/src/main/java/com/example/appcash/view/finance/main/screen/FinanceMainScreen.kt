@@ -18,7 +18,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -28,12 +27,14 @@ import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.navigation.Destinations
 import com.example.appcash.navigation.Destinations.FINANCE_ACCOUNTING_SCREEN
+import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.finance.general.FinanceRow
 import com.example.appcash.view.finance.main.components.FinanceMainState
 import com.example.appcash.view.finance.main.components.FinanceViewModel
+import ru.point.data.data.entities.FolderIcon
 
 @Composable
 fun MainFinanceScreen(
@@ -43,7 +44,7 @@ fun MainFinanceScreen(
     fabState: MutableState<FabState>
 ) {
     topAppBarState.value = TopAppBarState(
-        title = "Финансы",
+        title = stringResource(id = R.string.finance_screen),
     )
 
     fabState.value = FabState { navigateTo(FINANCE_ACCOUNTING_SCREEN) }
@@ -100,7 +101,7 @@ fun MainMorda(
             items = state.transactionsByYearMonth
         ) { financeSubset ->
             FinanceRow(
-                icon = painterResource(id = R.drawable.task_alt),
+                icon = FolderIconMapper.mapToIcon(value = financeSubset.icon ?: FolderIcon.UNKNOWN),
                 financeSubset = financeSubset
             )
             Spacer(modifier = Modifier.height(24.dp))

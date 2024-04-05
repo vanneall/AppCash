@@ -1,5 +1,6 @@
 package com.example.appcash.view.finance.newfinance.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,16 +10,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -30,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,37 +47,50 @@ import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
+import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.finance.newfinance.components.AddFinanceEvent
 import com.example.appcash.view.finance.newfinance.components.AddFinanceState
 import com.example.appcash.view.finance.newfinance.components.AddFinanceViewModel
 import com.example.appcash.view.notes.notefolders.screen.CategoryListItem
+import com.example.appcash.view.popup.create.CreateCategoryPopup
+import com.example.appcash.view.popup.create.CreateCategoryPopupEvent
+import com.example.appcash.view.ui.theme.Gray
 import com.example.appcash.view.ui.theme.LightGray
 import com.example.appcash.view.ui.theme.LightGray2
 
 @Composable
-fun FinanceAccountingScreen(
+fun AddFinanceScreen(
     viewModel: AddFinanceViewModel,
     navigateTo: (String) -> Unit,
     navigateBack: () -> Unit,
-    topAppBarState: MutableState<TopAppBarState>
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
 ) {
     topAppBarState.value = TopAppBarState(
-        title = "Учет финансов",
+        title = stringResource(id = R.string.finance_screen),
         navigationIcon = {
             IconButton(
                 onClick = {
                     navigateBack()
-                }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = null
+                },
+                modifier = Modifier
+                    .size(36.dp)
+                    .background(color = LightGray, shape = CircleShape)
+                    .padding(4.dp)
+            ) {
+                androidx.compose.material.Icon(
+                    imageVector = Icons.Default.ArrowBackIosNew,
+                    contentDescription = null,
+                    modifier = Modifier
                 )
             }
         }
     )
 
-    AddFinanceOperation(
+    fabState.value = FabState { viewModel.handle(AddFinanceEvent.CreateTransactionEvent) }
+
+    AddFinance(
         state = viewModel.state.collectAsState().value,
         onEvent = viewModel::handle,
         navigateTo = navigateTo,
@@ -82,8 +100,9 @@ fun FinanceAccountingScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AddFinanceOperation(
+private fun AddFinance(
     state: AddFinanceState,
     onEvent: (Event) -> Unit,
     navigateTo: (String) -> Unit,
@@ -97,9 +116,7 @@ private fun AddFinanceOperation(
             fontSize = 36.sp,
             color = Color.Black,
             fontWeight = FontWeight.Medium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp)
+            modifier = Modifier.fillMaxWidth()
         )
 
 
@@ -109,9 +126,7 @@ private fun AddFinanceOperation(
         NavigateAddButton(
             state = state,
             onEvent = onEvent,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp)
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(40.dp))
@@ -123,9 +138,7 @@ private fun AddFinanceOperation(
             singleLine = true,
             textStyle = TextStyle(fontSize = 14.sp),
             label = { Text(text = "Введите цену") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp),
+            modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(15.dp),
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
@@ -141,6 +154,20 @@ private fun AddFinanceOperation(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+
+            item {
+                CategoryListItem(
+                    name = stringResource(id = R.string.add_new_category),
+                    countOfInnerItems = "",
+                    icon = painterResource(id = R.drawable.add_task_icon),
+                    iconColor = Gray,
+                    iconBackgroundColor = LightGray2,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onEvent(CreateCategoryPopupEvent.ShowCreatePopup) }
+                )
+            }
+
             items(
                 items = state.categories
             ) { folder ->
@@ -148,12 +175,29 @@ private fun AddFinanceOperation(
                     name = folder.name,
                     countOfInnerItems = "",
                     icon = FolderIconMapper.mapToIcon(value = folder.icon),
+                    iconColor = Color.Black,
                     iconBackgroundColor = LightGray2,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { onEvent(AddFinanceEvent.CreateTransactionEvent(folder.id)) }
+                        .clickable { onEvent(AddFinanceEvent.SelectCategoryEvent(folder.id)) }
                 )
             }
+        }
+    }
+    if (state.createCategoryPopupState.isShowed) {
+        ModalBottomSheet(
+            onDismissRequest = { onEvent(CreateCategoryPopupEvent.HideCreatePopup) },
+            containerColor = Color.White,
+            modifier = Modifier
+                .height(350.dp)
+        ) {
+            CreateCategoryPopup(
+                state = state.createCategoryPopupState,
+                onEvent = onEvent,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp)
+            )
         }
     }
 }

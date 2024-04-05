@@ -26,11 +26,12 @@ interface FinanceDao {
     fun readByMonthId(startDate: String, endDate: String): Flow<List<FinanceSubset>>
 
     @Query(
-        " SELECT cat.name as name, cat.color as color, SUM(fin.price) as sum " +
+        " SELECT cat.name as name, cat.color as color, cat.icon as icon, SUM(fin.price) as sum " +
                 "FROM category cat " +
                 "JOIN finance fin " +
                 "ON cat.id = fin.category_id " +
-                "WHERE fin.date between :startDate and :endDate "
+                "WHERE fin.date between :startDate and :endDate " +
+                "GROUP BY name "
     )
     fun readByFolder(startDate: String, endDate: String): Flow<List<FinanceCategorySubset>>
 

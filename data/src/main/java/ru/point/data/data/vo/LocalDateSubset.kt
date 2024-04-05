@@ -6,4 +6,8 @@ import java.time.LocalDate
 data class LocalDateSubset(
     @ColumnInfo("date")
     val date: LocalDate? = null
-)
+) {
+    fun isValuesNull(): Boolean {
+        return date == null
+    }
+}

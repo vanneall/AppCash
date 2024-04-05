@@ -81,7 +81,8 @@ fun AppCashNavHost(
         FinanceAccountingScreenNavigation(
             navGraphBuilder = this,
             navHostController = navHostController,
-            topAppBarState = topAppBarState
+            topAppBarState = topAppBarState,
+            fabState = fabState
         )
         CreatingFinanceFolderScreenNavigation(
             navGraphBuilder = this,

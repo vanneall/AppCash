@@ -15,7 +15,7 @@ import com.example.appcash.view.finance.chart.screen.CreatingFinanceFolderScreen
 import com.example.appcash.view.finance.main.components.FinanceViewModel
 import com.example.appcash.view.finance.main.screen.MainFinanceScreen
 import com.example.appcash.view.finance.newfinance.components.AddFinanceViewModel
-import com.example.appcash.view.finance.newfinance.screen.FinanceAccountingScreen
+import com.example.appcash.view.finance.newfinance.screen.AddFinanceScreen
 
 fun MainFinanceScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
@@ -39,17 +39,19 @@ fun MainFinanceScreenNavigation(
 fun FinanceAccountingScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
     navHostController: NavHostController,
-    topAppBarState: MutableState<TopAppBarState>
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
 ) {
     navGraphBuilder.composable(
         route = Destinations.FINANCE_ACCOUNTING_SCREEN
     ) {
         val viewModel: AddFinanceViewModel = hiltViewModel()
-        FinanceAccountingScreen(
+        AddFinanceScreen(
             viewModel = viewModel,
             navigateTo = navHostController::navigate,
             navigateBack = navHostController::popBackStack,
-            topAppBarState = topAppBarState
+            topAppBarState = topAppBarState,
+            fabState = fabState,
         )
     }
 }

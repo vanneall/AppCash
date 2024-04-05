@@ -27,11 +27,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.appcash.R
 import com.example.appcash.view.TopAppBarState
+import com.example.appcash.view.ui.theme.DarkBlue
 import com.example.appcash.view.ui.theme.Gray
 import com.example.appcash.view.ui.theme.LightGray
 import com.kizitonwose.calendar.compose.HorizontalCalendar
@@ -51,7 +54,7 @@ fun CalendarScreen(
     topAppBarState: MutableState<TopAppBarState>
 ) {
     topAppBarState.value = TopAppBarState(
-        title = "Календарь"
+        title = stringResource(id = R.string.calendar_screen)
     )
 
     MainScreen()
@@ -169,9 +172,9 @@ fun Day(day: CalendarDay) {
     Box(
         modifier = Modifier
             .aspectRatio(1f)
-            .padding(5.dp)
+            .padding(10.dp)
             .background(
-                color = if (day.date == LocalDate.now()) Color(0xFF615FC5) else Color.Transparent,
+                color = if (day.date == LocalDate.now()) DarkBlue else Color.Transparent,
                 shape = CircleShape
             ),
         contentAlignment = Alignment.Center

@@ -52,7 +52,8 @@ class RoomConverters {
     }
 
     @TypeConverter
-    fun fromStringToFolderIcon(value: String): FolderIcon {
+    fun fromStringToFolderIcon(value: String?): FolderIcon? {
+        if (value == null) return null
         return when (value) {
             FolderIcon.CAR.name -> FolderIcon.CAR
             FolderIcon.ENTERTAINMENTS.name -> FolderIcon.ENTERTAINMENTS
