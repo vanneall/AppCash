@@ -101,7 +101,7 @@ class TasksListViewModel @AssistedInject constructor(
 
             is TaskConfiguratorPopupEvent.ShowPopup -> {
                 showEditPopup(
-                    id = 0,
+                    id = null,
                     parentId = event.parentId,
                     name = event.name,
                     description = event.description,

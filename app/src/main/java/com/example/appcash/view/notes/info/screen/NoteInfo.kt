@@ -48,6 +48,7 @@ fun NoteInfoScreen(
             IconButton(
                 onClick = {
                     navigateBack()
+                    viewModel.handle(NoteInfoEvent.SaveNoteEvent)
                 },
                 modifier = Modifier
                     .size(36.dp)
@@ -94,7 +95,9 @@ private fun NoteInfo(
         TitleTextField(
             state = state,
             onEvent = onEvent,
-            modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 20.dp)
         )
 
         ContentTextField(
