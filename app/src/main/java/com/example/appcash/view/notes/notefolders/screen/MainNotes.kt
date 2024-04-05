@@ -106,6 +106,9 @@ private fun MainNotes(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(64.dp)
+                        .clickable {
+                            navigateTo("${Destinations.NOTES_LIST_SCREEN}/0")
+                        }
                         .background(
                             color = LightGray,
                             shape = RoundedCornerShape(20.dp)
@@ -122,7 +125,7 @@ private fun MainNotes(
             ) { item ->
                 CategoryListItem(
                     name = item.name,
-                    countOfInnerItems = "2",
+                    countOfInnerItems = "недоступно",
                     icon = FolderIconMapper.mapToIcon(value = item.icon),
                     iconBackgroundColor = Color(item.color),
                     modifier = Modifier

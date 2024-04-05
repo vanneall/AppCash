@@ -59,7 +59,10 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         topBar = {
                             AppCashTopAppBar(
-                                state = topAppBarState.value
+                                state = topAppBarState.value,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 20.dp)
                             )
                         },
                         bottomBar = {
@@ -117,7 +120,8 @@ data class FabState(
 
 @Composable
 private fun AppCashTopAppBar(
-    state: TopAppBarState
+    state: TopAppBarState,
+    modifier: Modifier = Modifier
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -130,6 +134,7 @@ private fun AppCashTopAppBar(
         },
         navigationIcon = state.navigationIcon ?: {},
         actions = state.actions ?: {},
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White),
+        modifier = modifier
     )
 }

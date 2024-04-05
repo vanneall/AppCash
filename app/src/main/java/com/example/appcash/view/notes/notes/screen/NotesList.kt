@@ -14,10 +14,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -57,10 +58,16 @@ fun NotesListScreen(
             IconButton(
                 onClick = {
                     navigateBack()
-                }) {
+                },
+                modifier = Modifier
+                    .size(36.dp)
+                    .background(color = LightGray, shape = CircleShape)
+                    .padding(4.dp)
+            ) {
                 androidx.compose.material.Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = null
+                    imageVector = Icons.Default.ArrowBackIosNew,
+                    contentDescription = null,
+                    modifier = Modifier
                 )
             }
         },
@@ -128,15 +135,17 @@ private fun NoteListItem(
                 overflow = TextOverflow.Ellipsis
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = content,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                color = Gray,
-                overflow = TextOverflow.Ellipsis
-            )
+            if (content.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = content,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Gray,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
 
         Spacer(modifier = Modifier.width(16.dp))
