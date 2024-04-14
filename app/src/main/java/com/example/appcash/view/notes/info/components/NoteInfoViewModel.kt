@@ -2,7 +2,7 @@ package com.example.appcash.view.notes.info.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
+import com.example.appcash.utils.ArgsKeys.CATEGORY_ID_KEY
 import com.example.appcash.utils.ArgsKeys.ID_KEY
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.Event.ErrorEvent
@@ -29,7 +29,7 @@ import ru.point.domain.notes.implementations.UpsertNoteUseCaseImpl
 class NoteInfoViewModel @AssistedInject constructor(
     @Assisted(ID_KEY)
     private val noteId: Long?,
-    @Assisted(FOLDER_ID_KEY)
+    @Assisted(CATEGORY_ID_KEY)
     private val folderId: Long?,
     private val getNoteByIdUseCaseImpl: GetNoteByIdUseCaseImpl,
     private val upsertNoteUseCaseImpl: UpsertNoteUseCaseImpl,

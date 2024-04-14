@@ -20,7 +20,7 @@
 
     <!-- Tasks -->
     <string name="all_tasks">Все задачи</string>
-    <string name="all_bookmarks">Избранное</string>
+    <string name="all_bookmarks">Закладки</string>
     <string name="my_folder_tasks">Мои списки</string>
     <string name="add_new_subtask">Новая подзадача</string>
     

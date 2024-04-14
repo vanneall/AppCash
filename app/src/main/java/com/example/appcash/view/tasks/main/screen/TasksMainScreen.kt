@@ -43,7 +43,7 @@ import com.example.appcash.view.general.list.Header
 import com.example.appcash.view.notes.notefolders.screen.CategoryListItem
 import com.example.appcash.view.popup.create.CreateCategoryPopup
 import com.example.appcash.view.popup.create.CreateCategoryPopupEvent
-import com.example.appcash.view.tasks.list.components.TasksSelections
+import com.example.appcash.view.tasks.list.components.TasksSelection
 import com.example.appcash.view.tasks.main.components.TasksMainState
 import com.example.appcash.view.tasks.main.components.TasksMainViewModel
 import com.example.appcash.view.ui.theme.DarkBlue
@@ -96,7 +96,7 @@ private fun TasksMain(
                     .height(height = 124.dp)
                     .background(color = DarkBlue, shape = RoundedCornerShape(20.dp))
                     .clickable {
-                        navigate("${Destinations.TASKS_SCREEN}/${TasksSelections.ALL.name}/0")
+                        navigate("${Destinations.TASKS_LIST_SCREEN}/${TasksSelection.ALL.name}/0")
                     }
                     .padding(16.dp)
                     .weight(1f)
@@ -111,7 +111,7 @@ private fun TasksMain(
                     .height(height = 124.dp)
                     .background(color = LightGray, shape = RoundedCornerShape(20.dp))
                     .clickable {
-                        navigate("${Destinations.TASKS_SCREEN}/${TasksSelections.ONLY_BOOKMARKS.name}/0")
+                        navigate("${Destinations.TASKS_LIST_SCREEN}/${TasksSelection.ONLY_BOOKMARKS.name}/0")
                     }
                     .padding(16.dp)
                     .weight(1f)
@@ -145,7 +145,7 @@ private fun TasksMain(
                         .fillMaxWidth()
                         .height(64.dp)
                         .clickable {
-                            navigate("${Destinations.TASKS_SCREEN}/${TasksSelections.ONLY_FOLDER.name}/${item.id}")
+                            navigate("${Destinations.TASKS_LIST_SCREEN}/${TasksSelection.ONLY_CATEGORY.name}/${item.id}")
                         }
                         .background(
                             color = LightGray,

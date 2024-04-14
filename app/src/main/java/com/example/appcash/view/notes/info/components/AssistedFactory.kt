@@ -11,7 +11,7 @@ import dagger.hilt.android.components.ActivityComponent
 interface NoteInfoViewModelFactory {
     fun create(
         @Assisted(ArgsKeys.ID_KEY) noteId: Long?,
-        @Assisted(ArgsKeys.FOLDER_ID_KEY) folderId: Long?
+        @Assisted(ArgsKeys.CATEGORY_ID_KEY) categoryId: Long?
     ): NoteInfoViewModel
 }
 

@@ -35,10 +35,10 @@ import ru.point.domain.tasks.implementations.UpdateTaskUseCaseImpl
 import java.time.LocalDate
 
 class TasksListViewModel @AssistedInject constructor(
-    @Assisted(ArgsKeys.FOLDER_ID_KEY)
+    @Assisted(ArgsKeys.CATEGORY_ID_KEY)
     private val folderId: Long?,
     @Assisted(ArgsKeys.OPEN_MODE_KEY)
-    private val mode: TasksSelections,
+    private val mode: TasksSelection,
     private val getCategoryNameByIdUseCaseImpl: Lazy<GetCategoryNameByIdUseCaseImpl>,
     private val deleteTaskByIdUseCaseImpl: Lazy<DeleteTaskByIdUseCaseImpl>,
     private val getTaskUseCaseImpl: Lazy<GetTaskUseCaseImpl>,
@@ -321,15 +321,15 @@ class TasksListViewModel @AssistedInject constructor(
 
     private fun initializeTasksList(): Flow<List<TaskWithTask>> {
         return when (mode) {
-            TasksSelections.ALL -> getTaskUseCaseImpl
+            TasksSelection.ALL -> getTaskUseCaseImpl
                 .get()
                 .invoke(folderId = null)
 
-            TasksSelections.ONLY_FOLDER -> getTaskUseCaseImpl
+            TasksSelection.ONLY_CATEGORY -> getTaskUseCaseImpl
                 .get()
                 .invoke(folderId = folderId)
 
-            TasksSelections.ONLY_BOOKMARKS -> getBookmarksTaskUseCaseImpl
+            TasksSelection.ONLY_BOOKMARKS -> getBookmarksTaskUseCaseImpl
                 .get()
                 .invoke()
 
@@ -347,16 +347,16 @@ class TasksListViewModel @AssistedInject constructor(
 
     private fun initializeScreenTitle(): Flow<String> {
         return when (mode) {
-            TasksSelections.ALL -> {
+            TasksSelection.ALL -> {
                 flowOf(ALL)
             }
 
-            TasksSelections.ONLY_FOLDER -> {
+            TasksSelection.ONLY_CATEGORY -> {
                 if (folderId != null) getCategoryNameByIdUseCaseImpl.get().invoke(id = folderId)
                 else flowOf(ERROR)
             }
 
-            TasksSelections.ONLY_BOOKMARKS -> {
+            TasksSelection.ONLY_BOOKMARKS -> {
                 flowOf(BOOKMARKS)
             }
 

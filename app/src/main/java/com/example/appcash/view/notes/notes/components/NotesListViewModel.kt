@@ -2,7 +2,7 @@ package com.example.appcash.view.notes.notes.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appcash.utils.ArgsKeys.FOLDER_ID_KEY
+import com.example.appcash.utils.ArgsKeys.CATEGORY_ID_KEY
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import dagger.assisted.Assisted
@@ -18,7 +18,7 @@ import ru.point.domain.notes.implementations.GetNotesUseCaseImpl
 
 
 class NotesListViewModel @AssistedInject constructor(
-    @Assisted(FOLDER_ID_KEY)
+    @Assisted(CATEGORY_ID_KEY)
     private val folderId: Long?,
     private val getFolderNameByIdUseCase: GetCategoryNameByIdUseCaseImpl,
     private val getAllNotesUseCase: GetNotesUseCaseImpl,
