@@ -65,7 +65,7 @@ import ru.point.data.data.entities.FolderIcon
 const val CURRENT_MONTH_INDEX = 11
 
 @Composable
-fun CreatingFinanceFolderScreen(
+fun FinanceChartScreen(
     viewModel: ChartScreenViewModel,
     navigateBack: () -> Unit,
     topAppBarState: MutableState<TopAppBarState>

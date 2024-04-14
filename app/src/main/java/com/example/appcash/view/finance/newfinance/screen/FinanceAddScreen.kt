@@ -64,7 +64,7 @@ import com.example.appcash.view.ui.theme.LightGray
 import com.example.appcash.view.ui.theme.LightGray2
 
 @Composable
-fun AddFinanceScreen(
+fun FinanceAddScreen(
     viewModel: AddFinanceViewModel,
     navigateTo: (String) -> Unit,
     navigateBack: () -> Unit,
@@ -94,7 +94,7 @@ fun AddFinanceScreen(
 
     fabState.value = FabState { viewModel.handle(AddFinanceEvent.CreateTransactionEvent) }
 
-    AddFinance(
+    FinanceAdd(
         state = viewModel.state.collectAsState().value,
         onEvent = viewModel::handle,
         navigateTo = navigateTo,
@@ -106,7 +106,7 @@ fun AddFinanceScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AddFinance(
+private fun FinanceAdd(
     state: AddFinanceState,
     onEvent: (Event) -> Unit,
     navigateTo: (String) -> Unit,

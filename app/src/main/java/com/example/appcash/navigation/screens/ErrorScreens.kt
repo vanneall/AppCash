@@ -14,7 +14,6 @@ fun ErrorScreenNavigation(
 ) {
     navGraphBuilder.composable(
         route = ERROR_SCREEN
-
     ) {
         ErrorScreen()
     }

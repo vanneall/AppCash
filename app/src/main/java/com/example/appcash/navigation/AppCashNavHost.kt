@@ -6,16 +6,16 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.example.appcash.navigation.Destinations.MAIN_CALENDAR_SCREEN
-import com.example.appcash.navigation.screens.CreatingFinanceFolderScreenNavigation
+import com.example.appcash.navigation.screens.FinanceChartScreenNavigation
 import com.example.appcash.navigation.screens.ErrorScreenNavigation
-import com.example.appcash.navigation.screens.FinanceAccountingScreenNavigation
+import com.example.appcash.navigation.screens.FinanceAddScreenNavigation
 import com.example.appcash.navigation.screens.MainCalendarScreenNavigation
 import com.example.appcash.navigation.screens.MainFinanceScreenNavigation
 import com.example.appcash.navigation.screens.MainNotesScreenNavigation
 import com.example.appcash.navigation.screens.MainTasksScreenNavigation
-import com.example.appcash.navigation.screens.NoteScreenNavigation
+import com.example.appcash.navigation.screens.NoteInfoScreenNavigation
 import com.example.appcash.navigation.screens.NotesListScreenNavigation
-import com.example.appcash.navigation.screens.TasksScreenNavigation
+import com.example.appcash.navigation.screens.TasksListScreenNavigation
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 
@@ -44,7 +44,7 @@ fun AppCashNavHost(
             topAppBarState = topAppBarState,
             fabState = fabState
         )
-        NoteScreenNavigation(
+        NoteInfoScreenNavigation(
             navGraphBuilder = this,
             navHostController = navHostController,
             topAppBarState = topAppBarState
@@ -57,7 +57,7 @@ fun AppCashNavHost(
             topAppBarState = topAppBarState,
             fabState = fabState
         )
-        TasksScreenNavigation(
+        TasksListScreenNavigation(
             navGraphBuilder = this,
             navHostController = navHostController,
             topAppBarState = topAppBarState,
@@ -78,13 +78,13 @@ fun AppCashNavHost(
             topAppBarState = topAppBarState,
             fabState = fabState
         )
-        FinanceAccountingScreenNavigation(
+        FinanceAddScreenNavigation(
             navGraphBuilder = this,
             navHostController = navHostController,
             topAppBarState = topAppBarState,
             fabState = fabState
         )
-        CreatingFinanceFolderScreenNavigation(
+        FinanceChartScreenNavigation(
             navGraphBuilder = this,
             navHostController = navHostController,
             topAppBarState = topAppBarState

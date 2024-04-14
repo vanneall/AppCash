@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.navigation.Destinations
-import com.example.appcash.navigation.Destinations.FINANCE_ACCOUNTING_SCREEN
+import com.example.appcash.navigation.Destinations.FINANCE_ADD_SCREEN
 import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.FabState
@@ -47,7 +47,7 @@ fun MainFinanceScreen(
         title = stringResource(id = R.string.finance_screen),
     )
 
-    fabState.value = FabState { navigateTo(FINANCE_ACCOUNTING_SCREEN) }
+    fabState.value = FabState { navigateTo(FINANCE_ADD_SCREEN) }
 
     MainMorda(
         viewModel.state.collectAsState(FinanceMainState()).value, viewModel::handle, navigateTo,
@@ -87,7 +87,7 @@ fun MainMorda(
         item {
             NavigateAddButton(
                 onNavigate = {
-                    navigate(Destinations.CREATING_FINANCE_FOLDER_SCREEN)
+                    navigate(Destinations.FINANCE_CHART_SCREEN)
                 }, modifier = Modifier
                     .fillMaxWidth()
             )

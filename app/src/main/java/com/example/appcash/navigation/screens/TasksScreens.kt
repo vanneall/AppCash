@@ -16,8 +16,8 @@ import com.example.appcash.navigation.Destinations
 import com.example.appcash.utils.ArgsKeys
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
-import com.example.appcash.view.notes.notefolders.components.FolderOpenMode
-import com.example.appcash.view.tasks.list.components.TasksSelections
+import com.example.appcash.view.tasks.list.components.TasksListViewModel
+import com.example.appcash.view.tasks.list.components.TasksSelection
 import com.example.appcash.view.tasks.list.components.TasksViewModelFactoryProvider
 import com.example.appcash.view.tasks.list.screen.TasksListScreen
 import com.example.appcash.view.tasks.main.components.TasksMainViewModel
@@ -31,9 +31,10 @@ fun MainTasksScreenNavigation(
     fabState: MutableState<FabState>
 ) {
     navGraphBuilder.composable(
-        route = Destinations.MAIN_TASKS_FOLDER_SCREEN
+        route = Destinations.MAIN_TASKS_SCREEN
     ) {
         val viewModel: TasksMainViewModel = hiltViewModel()
+
         TasksMainScreen(
             viewModel = viewModel,
             navigateTo = navHostController::navigate,
@@ -43,44 +44,44 @@ fun MainTasksScreenNavigation(
     }
 }
 
-fun TasksScreenNavigation(
+fun TasksListScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
     navHostController: NavHostController,
     topAppBarState: MutableState<TopAppBarState>,
     fabState: MutableState<FabState>
 ) {
     navGraphBuilder.composable(
-        route = "${Destinations.TASKS_SCREEN}/{${ArgsKeys.OPEN_MODE_KEY}}/{${ArgsKeys.FOLDER_ID_KEY}}",
+        route = "${Destinations.TASKS_LIST_SCREEN}/{${ArgsKeys.OPEN_MODE_KEY}}/{${ArgsKeys.CATEGORY_ID_KEY}}",
 
         arguments = listOf(
             navArgument(name = ArgsKeys.OPEN_MODE_KEY) {
                 type = NavType.StringType
             },
-            navArgument(name = ArgsKeys.FOLDER_ID_KEY) {
+            navArgument(name = ArgsKeys.CATEGORY_ID_KEY) {
                 type = NavType.LongType
             }
         )
     ) { backStackEntry ->
-        val factory = EntryPointAccessors.fromActivity(
+        val assistedFactory = EntryPointAccessors.fromActivity(
             activity = LocalContext.current as Activity,
             entryPoint = TasksViewModelFactoryProvider::class.java
         ).provideTasksViewModelFactory()
 
-        val openModeString = backStackEntry
-            .arguments
-            ?.getString(ArgsKeys.OPEN_MODE_KEY)
-            ?: FolderOpenMode.Definition.ERROR_VALUE_STRING
+        val folderIdArg: Long?
+        val openModeHandledArg: TasksSelection
+        with(backStackEntry) {
+            folderIdArg = arguments?.getLong(ArgsKeys.CATEGORY_ID_KEY).takeIf { id -> id != 0L }
+            val openModeArg = arguments?.getString(ArgsKeys.OPEN_MODE_KEY)
+            openModeHandledArg = TasksSelection.handle(mode = openModeArg)
+        }
 
-        val openModeEnum = TasksSelections.handle(mode = openModeString)
+        TasksSelection.checkIfScreenRulePassed(id = folderIdArg, selections = openModeHandledArg)
 
-        val folderId = backStackEntry.arguments?.getLong(ArgsKeys.FOLDER_ID_KEY)
-            .takeIf { it != null && it > (0).toLong() }
 
-        val viewModel = viewModel {
-            factory.create(
-                openMode = openModeEnum,
-                folderId = folderId
-
+        val viewModel: TasksListViewModel = viewModel {
+            assistedFactory.create(
+                folderId = folderIdArg,
+                openMode = openModeHandledArg,
             )
         }
 

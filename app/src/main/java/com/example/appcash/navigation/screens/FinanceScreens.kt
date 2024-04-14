@@ -11,11 +11,11 @@ import com.example.appcash.navigation.Destinations
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.finance.chart.components.ChartScreenViewModel
-import com.example.appcash.view.finance.chart.screen.CreatingFinanceFolderScreen
+import com.example.appcash.view.finance.chart.screen.FinanceChartScreen
 import com.example.appcash.view.finance.main.components.FinanceViewModel
 import com.example.appcash.view.finance.main.screen.MainFinanceScreen
 import com.example.appcash.view.finance.newfinance.components.AddFinanceViewModel
-import com.example.appcash.view.finance.newfinance.screen.AddFinanceScreen
+import com.example.appcash.view.finance.newfinance.screen.FinanceAddScreen
 
 fun MainFinanceScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
@@ -27,6 +27,7 @@ fun MainFinanceScreenNavigation(
         route = Destinations.MAIN_FINANCE_SCREEN
     ) {
         val viewModel: FinanceViewModel = hiltViewModel()
+
         MainFinanceScreen(
             viewModel = viewModel,
             navigateTo = navHostController::navigate,
@@ -36,17 +37,18 @@ fun MainFinanceScreenNavigation(
     }
 }
 
-fun FinanceAccountingScreenNavigation(
+fun FinanceAddScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
     navHostController: NavHostController,
     topAppBarState: MutableState<TopAppBarState>,
     fabState: MutableState<FabState>
 ) {
     navGraphBuilder.composable(
-        route = Destinations.FINANCE_ACCOUNTING_SCREEN
+        route = Destinations.FINANCE_ADD_SCREEN
     ) {
         val viewModel: AddFinanceViewModel = hiltViewModel()
-        AddFinanceScreen(
+
+        FinanceAddScreen(
             viewModel = viewModel,
             navigateTo = navHostController::navigate,
             navigateBack = navHostController::popBackStack,
@@ -56,16 +58,17 @@ fun FinanceAccountingScreenNavigation(
     }
 }
 
-fun CreatingFinanceFolderScreenNavigation(
+fun FinanceChartScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
     navHostController: NavHostController,
     topAppBarState: MutableState<TopAppBarState>
 ) {
     navGraphBuilder.composable(
-        route = Destinations.CREATING_FINANCE_FOLDER_SCREEN
+        route = Destinations.FINANCE_CHART_SCREEN
     ) {
         val viewModel: ChartScreenViewModel = hiltViewModel()
-        CreatingFinanceFolderScreen(
+
+        FinanceChartScreen(
             viewModel = viewModel,
             navigateBack = navHostController::popBackStack,
             topAppBarState = topAppBarState,
