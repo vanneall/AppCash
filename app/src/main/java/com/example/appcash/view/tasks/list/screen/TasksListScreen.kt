@@ -58,6 +58,7 @@ import com.example.appcash.view.ui.theme.LightGray
 import com.example.appcash.view.ui.theme.Orange
 import ru.point.data.data.entities.Task
 import ru.point.data.data.entities.TaskWithTask
+import java.time.LocalDate
 
 @Composable
 fun TasksListScreen(
@@ -266,7 +267,16 @@ fun TaskListItem(
                 contentDescription = "Иконка больше",
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable { onEvent(TaskControlPopupEvent.ShowPopup(id, text)) }
+                    .clickable {
+                        onEvent(
+                            TaskControlPopupEvent.ShowPopup(
+                                id = id,
+                                name = text,
+                                description = subtext,
+                                localDate = LocalDate.parse(date)
+                            )
+                        )
+                    }
             )
         }
     }
@@ -288,7 +298,7 @@ fun TaskBlockListItem(
             subtext = task.description.takeIf { text -> text.isNotEmpty() },
             checkboxSize = 24,
             isCompleted = task.isCompleted,
-            date = "2024/01/02",
+            date = task.date?.toString(),
             onEvent = onEvent,
             options = true,
             isBookmarked = task.isBookmarked

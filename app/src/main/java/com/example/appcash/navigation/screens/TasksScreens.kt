@@ -74,11 +74,12 @@ fun TasksScreenNavigation(
         val openModeEnum = TasksSelections.handle(mode = openModeString)
 
         val folderId = backStackEntry.arguments?.getLong(ArgsKeys.FOLDER_ID_KEY)
+            .takeIf { it != null && it > (0).toLong() }
 
         val viewModel = viewModel {
             factory.create(
                 openMode = openModeEnum,
-                folderId = folderId.takeIf { folderId != null && folderId > (0).toLong() }
+                folderId = folderId
 
             )
         }

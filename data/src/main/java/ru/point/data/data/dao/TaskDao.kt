@@ -8,6 +8,7 @@ import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 import ru.point.data.data.entities.Task
 import ru.point.data.data.entities.TaskWithTask
+import java.time.LocalDate
 
 @Dao
 interface TaskDao {
@@ -15,15 +16,15 @@ interface TaskDao {
     fun create(task: Task): Long
 
     @Transaction
-    @Query("SELECT id, text, isCompleted, is_bookmark, description from task where parent_id is null ")
+    @Query("SELECT id, text, isCompleted, is_bookmark, description, date from task where parent_id is null ")
     fun readAll(): Flow<List<TaskWithTask>>
 
     @Transaction
-    @Query("SELECT id, text, isCompleted, is_bookmark, description from task where parent_id is null and category_id = :id ")
+    @Query("SELECT id, text, isCompleted, is_bookmark, description, date from task where parent_id is null and category_id = :id ")
     fun readByFolderId(id: Long): Flow<List<TaskWithTask>>
 
     @Transaction
-    @Query("SELECT id, text, isCompleted, is_bookmark, description FROM task WHERE :id = id")
+    @Query("SELECT id, text, isCompleted, is_bookmark, description, date FROM task WHERE :id = id")
     fun readById(id: Long): Flow<List<TaskWithTask>>
 
     @Query("UPDATE task SET isCompleted = :isChecked WHERE id = :id")
@@ -42,9 +43,9 @@ interface TaskDao {
     fun updateBookmark(id: Long)
 
     @Transaction
-    @Query("SELECT id, text, isCompleted, is_bookmark, description from task where parent_id is null and is_bookmark = 1 ")
+    @Query("SELECT id, text, isCompleted, is_bookmark, description, date from task where parent_id is null and is_bookmark = 1 ")
     fun getBookmarksTasks(): Flow<List<TaskWithTask>>
 
-    @Query("UPDATE task set text = :name, description = :description where id = :id ")
-    fun updateTask(id: Long, name: String, description: String)
+    @Query("UPDATE task set text = :name, description = :description, date = :date where id = :id ")
+    fun updateTask(id: Long, name: String, description: String, date: LocalDate)
 }

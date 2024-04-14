@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.LocalDate
 
 //Используется вместе с TaskWithTask, потому как у каждой Task может быть своя Task
 @Entity(
@@ -37,6 +38,9 @@ data class Task(
 
     @ColumnInfo("parent_id")
     val parentId: Long? = null,
+
+    @ColumnInfo("date")
+    val date: LocalDate? = null,
 
     @ColumnInfo("category_id")
     val folderId: Long? = null,

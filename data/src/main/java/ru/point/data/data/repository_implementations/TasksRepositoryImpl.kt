@@ -5,6 +5,7 @@ import ru.point.data.data.dao.TaskDao
 import ru.point.data.data.entities.Task
 import ru.point.data.data.entities.TaskWithTask
 import ru.point.data.data.repository_interfaces.TasksRepository
+import java.time.LocalDate
 import javax.inject.Inject
 
 class TasksRepositoryImpl @Inject constructor(
@@ -47,7 +48,7 @@ class TasksRepositoryImpl @Inject constructor(
         taskDao.updateBookmark(id = id)
     }
 
-    override fun updateTask(id: Long, name: String, description: String) {
-        taskDao.updateTask(id = id, name = name, description = description)
+    override fun updateTask(id: Long, name: String, description: String, date: LocalDate) {
+        taskDao.updateTask(id = id, name = name, description = description, date = date)
     }
 }

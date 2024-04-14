@@ -32,6 +32,7 @@ import ru.point.domain.tasks.implementations.InsertTaskUseCaseImpl
 import ru.point.domain.tasks.implementations.UpdateTaskBookmarkedUseCaseImpl
 import ru.point.domain.tasks.implementations.UpdateTaskCheckedUseCaseImpl
 import ru.point.domain.tasks.implementations.UpdateTaskUseCaseImpl
+import java.time.LocalDate
 
 class TasksListViewModel @AssistedInject constructor(
     @Assisted(ArgsKeys.FOLDER_ID_KEY)
@@ -90,13 +91,16 @@ class TasksListViewModel @AssistedInject constructor(
     private fun handleEditPopupEvent(event: TaskConfiguratorPopupEvent) {
         when (event) {
             is TaskConfiguratorPopupEvent.CreateTask -> {
-                upsertTask(
-                    id = _editPopupState.value.id,
-                    text = _editPopupState.value.name,
-                    description = _editPopupState.value.description,
-                    parentId = event.parentTaskId,
-                    folderId = folderId
-                )
+                with(_editPopupState.value) {
+                    upsertTask(
+                        id = id,
+                        text = name,
+                        description = description,
+                        parentId = event.parentTaskId,
+                        folderId = this@TasksListViewModel.folderId,
+                        date = date
+                    )
+                }
             }
 
             is TaskConfiguratorPopupEvent.ShowPopup -> {
@@ -121,14 +125,29 @@ class TasksListViewModel @AssistedInject constructor(
                 inputDescriptionPopup(event.description)
             }
 
-            else -> {}
+            is TaskConfiguratorPopupEvent.ShowDatePickerDialog -> {
+                showDatePickerDialog()
+            }
+
+            is TaskConfiguratorPopupEvent.HideDatePickerDialog -> {
+                hideDatePickerDialog()
+            }
+
+            is TaskConfiguratorPopupEvent.SelectDate -> {
+                updateSelectedDate(newDate = event.localDate)
+            }
         }
     }
 
     private fun handleConfigPopupEvent(event: TaskControlPopupEvent) {
         when (event) {
             is TaskControlPopupEvent.ShowPopup -> {
-                showConfigPopup(id = event.id, name = event.name)
+                showConfigPopup(
+                    id = event.id,
+                    name = event.name,
+                    description = event.description,
+                    localDate = event.localDate
+                )
             }
 
             is TaskControlPopupEvent.HidePopup -> {
@@ -149,11 +168,19 @@ class TasksListViewModel @AssistedInject constructor(
                             parentId = null,
                             name = task.text,
                             description = null,
-                            date = null
+                            date = LocalDate.now()
                         )
                     }
                 }
             }
+        }
+    }
+
+    private fun updateSelectedDate(newDate: LocalDate) {
+        _editPopupState.update { state ->
+            state.copy(
+                date = newDate
+            )
         }
     }
 
@@ -169,6 +196,7 @@ class TasksListViewModel @AssistedInject constructor(
         description: String,
         parentId: Long?,
         folderId: Long?,
+        date: LocalDate?,
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             if (id == null) {
@@ -176,15 +204,21 @@ class TasksListViewModel @AssistedInject constructor(
                     text = text,
                     description = description,
                     parentId = parentId,
-                    folderId = folderId
+                    folderId = folderId,
+                    date = date
                 )
 
                 insertTaskUseCaseImpl.get().invoke(task = task)
             } else {
-                updateTaskUseCaseImpl.get().invoke(id = id, text = text, description = description)
+                updateTaskUseCaseImpl.get().invoke(
+                    id = id,
+                    text = text,
+                    description = description,
+                    date = date ?: LocalDate.now()
+                )
             }
 
-            hideConfigPopup()
+            hideEditPopup()
         }
     }
 
@@ -193,7 +227,7 @@ class TasksListViewModel @AssistedInject constructor(
         parentId: Long?,
         name: String?,
         description: String?,
-        date: String?
+        date: LocalDate
     ) {
         _editPopupState.update { state ->
             state.copy(
@@ -202,8 +236,20 @@ class TasksListViewModel @AssistedInject constructor(
                 name = name ?: "",
                 description = description ?: "",
                 isShowed = true,
-                date = date ?: ""
+                date = date
             )
+        }
+    }
+
+    private fun showDatePickerDialog() {
+        _editPopupState.update { state ->
+            state.copy(isDatePickerShowed = true)
+        }
+    }
+
+    private fun hideDatePickerDialog() {
+        _editPopupState.update { state ->
+            state.copy(isDatePickerShowed = false)
         }
     }
 
@@ -231,7 +277,6 @@ class TasksListViewModel @AssistedInject constructor(
                 isShowed = false,
                 id = 0,
                 name = "",
-
             )
         }
     }
@@ -239,12 +284,16 @@ class TasksListViewModel @AssistedInject constructor(
     private fun showConfigPopup(
         id: Long,
         name: String,
+        description: String?,
+        localDate: LocalDate?
     ) {
         _configPopupState.update { state ->
             state.copy(
                 isShowed = true,
                 id = id,
-                name = name
+                name = name,
+                description = description,
+                localDate = localDate
             )
         }
     }

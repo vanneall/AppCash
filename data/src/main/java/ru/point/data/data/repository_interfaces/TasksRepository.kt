@@ -3,6 +3,7 @@ package ru.point.data.data.repository_interfaces
 import kotlinx.coroutines.flow.Flow
 import ru.point.data.data.entities.Task
 import ru.point.data.data.entities.TaskWithTask
+import java.time.LocalDate
 
 interface TasksRepository {
     fun createTask(task: Task)
@@ -14,5 +15,5 @@ interface TasksRepository {
     fun deleteTaskById(id: Long)
     fun getBookmarkTasks(): Flow<List<TaskWithTask>>
     fun updateBookmarkTasks(id: Long)
-    fun updateTask(id: Long, name: String, description: String)
+    fun updateTask(id: Long, name: String, description: String, date: LocalDate)
 }
