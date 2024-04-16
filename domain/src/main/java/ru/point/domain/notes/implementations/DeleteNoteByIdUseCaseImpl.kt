@@ -3,7 +3,7 @@ package ru.point.domain.notes.implementations
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.point.data.data.repository_interfaces.NotesRepository
+import ru.point.data.data.datasource.repository.interfaces.NotesRepository
 import ru.point.domain.notes.interfaces.DeleteNoteByIdUseCase
 import javax.inject.Inject
 

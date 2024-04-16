@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.point.data.data.entities.Category
-import ru.point.data.data.entities.Finance
+import ru.point.data.data.entity.entities.Category
+import ru.point.data.data.entity.entities.Finance
 import ru.point.domain.finance.interfaces.InsertFinanceUseCase
 import ru.point.domain.category.interfaces.CreateCategoryUseCase
 import ru.point.domain.category.interfaces.GetCategoryByTypeUseCase

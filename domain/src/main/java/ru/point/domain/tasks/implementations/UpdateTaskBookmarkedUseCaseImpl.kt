@@ -3,7 +3,7 @@ package ru.point.domain.tasks.implementations
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.point.data.data.repository_interfaces.TasksRepository
+import ru.point.data.data.datasource.repository.interfaces.TasksRepository
 import ru.point.domain.tasks.interfaces.UpdateTasksBookmarkedUseCase
 import javax.inject.Inject
 

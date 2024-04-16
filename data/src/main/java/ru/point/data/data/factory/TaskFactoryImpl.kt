@@ -1,6 +1,6 @@
 package ru.point.data.data.factory
 
-import ru.point.data.data.entities.Task
+import ru.point.data.data.entity.entities.Task
 import java.time.LocalDate
 
 class TaskFactoryImpl : TaskFactory {

@@ -1,9 +1,9 @@
-package ru.point.data.data.repository_interfaces
+package ru.point.data.data.datasource.repository.interfaces
 
 import kotlinx.coroutines.flow.Flow
-import ru.point.data.data.entities.Finance
-import ru.point.data.data.vo.FinanceCategorySubset
-import ru.point.data.data.vo.FinanceSubset
+import ru.point.data.data.entity.entities.Finance
+import ru.point.data.data.entity.subset.FinanceCategorySubset
+import ru.point.data.data.entity.subset.FinanceSubset
 
 interface FinancesRepository {
     fun getFinancesByMonthId(startDate: String, endDate: String): Flow<List<FinanceSubset>>

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.view.ui.theme.Dark
 import com.example.appcash.view.ui.theme.LightGray2
-import ru.point.data.data.vo.FinanceSubset
+import ru.point.data.data.entity.subset.FinanceSubset
 
 @Composable
 fun FinanceRow(

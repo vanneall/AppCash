@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.point.data.data.entities.TaskWithTask
+import ru.point.data.data.entity.entities.TaskWithTask
 import ru.point.domain.category.implementations.GetCategoryNameByIdUseCaseImpl
 import ru.point.domain.tasks.implementations.DeleteTaskByIdUseCaseImpl
 import ru.point.domain.tasks.implementations.GetBookmarksTasksUseCaseImpl

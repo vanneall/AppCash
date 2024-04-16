@@ -1,14 +1,14 @@
-package ru.point.data.data.dao
+package ru.point.data.data.datasource.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
-import ru.point.data.data.entities.Finance
-import ru.point.data.data.vo.FinanceCategorySubset
-import ru.point.data.data.vo.FinanceSubset
-import ru.point.data.data.vo.LocalDateSubset
+import ru.point.data.data.entity.entities.Finance
+import ru.point.data.data.entity.subset.FinanceCategorySubset
+import ru.point.data.data.entity.subset.FinanceSubset
+import ru.point.data.data.entity.subset.LocalDateSubset
 
 @Dao
 interface FinanceDao {

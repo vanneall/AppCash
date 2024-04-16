@@ -1,10 +1,10 @@
-package ru.point.data.data.dao
+package ru.point.data.data.datasource.local.dao
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
-import ru.point.data.data.entities.Note
+import ru.point.data.data.entity.entities.Note
 
 @Dao
 interface NoteDao {

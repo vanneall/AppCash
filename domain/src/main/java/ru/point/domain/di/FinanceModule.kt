@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import ru.point.data.data.repository_interfaces.FinancesRepository
+import ru.point.data.data.datasource.repository.interfaces.FinancesRepository
 import ru.point.domain.finance.implementations.GetAllFinancesUseCaseImpl
 import ru.point.domain.finance.implementations.GetFinancesByMonthUseCaseImpl
 import ru.point.domain.finance.implementations.GetFinancesByYearMonthUseCaseImpl

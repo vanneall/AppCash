@@ -1,4 +1,4 @@
-package ru.point.data.data.entities
+package ru.point.data.data.entity.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Relation

@@ -6,7 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import ru.point.data.data.factory.TaskFactory
-import ru.point.data.data.repository_interfaces.TasksRepository
+import ru.point.data.data.datasource.repository.interfaces.TasksRepository
 import ru.point.domain.tasks.implementations.DeleteTaskByIdUseCaseImpl
 import ru.point.domain.tasks.implementations.GetAllTasksCountUseCaseImpl
 import ru.point.domain.tasks.implementations.GetBookmarksCountUseCaseImpl

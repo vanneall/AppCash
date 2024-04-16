@@ -1,6 +1,6 @@
 package ru.point.data.data.factory
 
-import ru.point.data.data.entities.Note
+import ru.point.data.data.entity.entities.Note
 
 class NoteFactoryImpl : NoteFactory {
     override fun create(

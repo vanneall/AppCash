@@ -1,7 +1,7 @@
 package com.example.appcash.view.finance.newfinance.components
 
 import com.example.appcash.view.popup.create.CreateCategoryPopupState
-import ru.point.data.data.entities.Category
+import ru.point.data.data.entity.entities.Category
 
 data class AddFinanceState(
     val price: String = "",

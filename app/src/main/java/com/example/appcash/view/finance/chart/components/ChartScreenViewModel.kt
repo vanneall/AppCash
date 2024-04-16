@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.point.data.data.vo.FinanceCategorySubset
-import ru.point.data.data.vo.FinanceSubset
+import ru.point.data.data.entity.subset.FinanceCategorySubset
+import ru.point.data.data.entity.subset.FinanceSubset
 import ru.point.domain.finance.interfaces.GetFinancesByMonthUseCase
 import ru.point.domain.finance.interfaces.GetFinancesByYearMonthUseCase
 import java.time.LocalDate

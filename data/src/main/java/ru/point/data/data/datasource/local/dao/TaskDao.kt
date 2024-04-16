@@ -1,4 +1,4 @@
-package ru.point.data.data.dao
+package ru.point.data.data.datasource.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -6,8 +6,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
-import ru.point.data.data.entities.Task
-import ru.point.data.data.entities.TaskWithTask
+import ru.point.data.data.entity.entities.Task
+import ru.point.data.data.entity.entities.TaskWithTask
 import java.time.LocalDate
 
 @Dao

@@ -1,12 +1,12 @@
-package ru.point.data.data.repository_implementations
+package ru.point.data.data.datasource.repository.implementations
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
-import ru.point.data.data.dao.TaskDao
-import ru.point.data.data.entities.Task
-import ru.point.data.data.entities.TaskWithTask
-import ru.point.data.data.repository_interfaces.TasksRepository
+import ru.point.data.data.datasource.local.dao.TaskDao
+import ru.point.data.data.entity.entities.Task
+import ru.point.data.data.entity.entities.TaskWithTask
+import ru.point.data.data.datasource.repository.interfaces.TasksRepository
 import java.time.LocalDate
 import javax.inject.Inject
 

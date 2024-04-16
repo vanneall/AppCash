@@ -1,4 +1,4 @@
-package ru.point.data.data.entities
+package ru.point.data.data.entity.entities
 
 enum class FolderIcon {
     CAR,

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
-import ru.point.data.data.entities.Note
+import ru.point.data.data.entity.entities.Note
 import ru.point.domain.category.implementations.GetCategoryNameByIdUseCaseImpl
 import ru.point.domain.notes.implementations.GetNotesUseCaseImpl
 

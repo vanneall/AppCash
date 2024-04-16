@@ -1,17 +1,17 @@
-package ru.point.data.data.database
+package ru.point.data.data.datasource.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ru.point.data.data.RoomConverters
-import ru.point.data.data.dao.CategoryDao
-import ru.point.data.data.dao.FinanceDao
-import ru.point.data.data.dao.NoteDao
-import ru.point.data.data.dao.TaskDao
-import ru.point.data.data.entities.Category
-import ru.point.data.data.entities.Finance
-import ru.point.data.data.entities.Note
-import ru.point.data.data.entities.Task
+import ru.point.data.data.datasource.local.dao.CategoryDao
+import ru.point.data.data.datasource.local.dao.FinanceDao
+import ru.point.data.data.datasource.local.dao.NoteDao
+import ru.point.data.data.datasource.local.dao.TaskDao
+import ru.point.data.data.entity.entities.Category
+import ru.point.data.data.entity.entities.Finance
+import ru.point.data.data.entity.entities.Note
+import ru.point.data.data.entity.entities.Task
 
 @Database(
     version = 1,

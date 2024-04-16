@@ -3,8 +3,8 @@ package ru.point.data.data
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.room.TypeConverter
-import ru.point.data.data.entities.Category.Discriminator
-import ru.point.data.data.entities.FolderIcon
+import ru.point.data.data.entity.entities.Category.Discriminator
+import ru.point.data.data.entity.entities.FolderIcon
 import java.time.LocalDate
 
 class RoomConverters {

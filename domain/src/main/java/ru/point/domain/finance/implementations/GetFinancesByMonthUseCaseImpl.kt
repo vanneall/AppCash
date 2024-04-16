@@ -1,8 +1,8 @@
 package ru.point.domain.finance.implementations
 
 import kotlinx.coroutines.flow.Flow
-import ru.point.data.data.repository_interfaces.FinancesRepository
-import ru.point.data.data.vo.FinanceCategorySubset
+import ru.point.data.data.datasource.repository.interfaces.FinancesRepository
+import ru.point.data.data.entity.subset.FinanceCategorySubset
 import ru.point.domain.finance.interfaces.GetFinancesByMonthUseCase
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters

@@ -1,6 +1,6 @@
 package ru.point.data
 
-import ru.point.data.data.entities.Category
+import ru.point.data.data.entity.entities.Category
 
 object CategoryFactoryTest {
     private var id: Long = 1

@@ -1,13 +1,13 @@
-package ru.point.data.data.repository_implementations
+package ru.point.data.data.datasource.repository.implementations
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import ru.point.data.data.dao.CategoryDao
-import ru.point.data.data.entities.Category
-import ru.point.data.data.entities.Category.Discriminator
-import ru.point.data.data.repository_interfaces.CategoriesRepository
+import ru.point.data.data.datasource.local.dao.CategoryDao
+import ru.point.data.data.entity.entities.Category
+import ru.point.data.data.entity.entities.Category.Discriminator
+import ru.point.data.data.datasource.repository.interfaces.CategoriesRepository
 import javax.inject.Inject
 
 class CategoriesRepositoryImpl @Inject constructor(

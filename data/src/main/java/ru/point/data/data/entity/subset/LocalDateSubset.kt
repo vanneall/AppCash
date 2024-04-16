@@ -1,4 +1,4 @@
-package ru.point.data.data.vo
+package ru.point.data.data.entity.subset
 
 import androidx.room.ColumnInfo
 import java.time.LocalDate

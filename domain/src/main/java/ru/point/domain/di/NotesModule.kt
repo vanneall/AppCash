@@ -6,7 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import ru.point.data.data.factory.NoteFactory
-import ru.point.data.data.repository_interfaces.NotesRepository
+import ru.point.data.data.datasource.repository.interfaces.NotesRepository
 import ru.point.domain.notes.implementations.DeleteNoteByIdUseCaseImpl
 import ru.point.domain.notes.implementations.GetAllNotesCountUseCaseImpl
 import ru.point.domain.notes.implementations.GetNoteByIdUseCaseImpl

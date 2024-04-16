@@ -1,7 +1,7 @@
 package ru.point.data.data.factory
 
-import ru.point.data.data.entities.Category
-import ru.point.data.data.entities.FolderIcon
+import ru.point.data.data.entity.entities.Category
+import ru.point.data.data.entity.entities.FolderIcon
 
 class CategoryFactoryImpl : CategoryFactory {
     override fun create(

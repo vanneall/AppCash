@@ -1,7 +1,7 @@
-package ru.point.data.data.vo
+package ru.point.data.data.entity.subset
 
 import androidx.room.ColumnInfo
-import ru.point.data.data.entities.FolderIcon
+import ru.point.data.data.entity.entities.FolderIcon
 
 data class FinanceCategorySubset(
     @ColumnInfo("name")

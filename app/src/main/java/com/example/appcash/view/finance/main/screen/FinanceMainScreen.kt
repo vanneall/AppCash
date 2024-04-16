@@ -34,7 +34,7 @@ import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.finance.general.FinanceRow
 import com.example.appcash.view.finance.main.components.FinanceMainState
 import com.example.appcash.view.finance.main.components.FinanceViewModel
-import ru.point.data.data.entities.FolderIcon
+import ru.point.data.data.entity.entities.FolderIcon
 
 @Composable
 fun MainFinanceScreen(

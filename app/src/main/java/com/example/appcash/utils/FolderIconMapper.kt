@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import com.example.appcash.R
-import ru.point.data.data.entities.FolderIcon
+import ru.point.data.data.entity.entities.FolderIcon
 
 object FolderIconMapper {
 

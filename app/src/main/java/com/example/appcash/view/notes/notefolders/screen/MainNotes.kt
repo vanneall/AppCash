@@ -51,8 +51,8 @@ import com.example.appcash.view.ui.theme.Blue
 import com.example.appcash.view.ui.theme.DarkTurquoise
 import com.example.appcash.view.ui.theme.Gray
 import com.example.appcash.view.ui.theme.LightGray
-import ru.point.data.data.entities.Category
-import ru.point.data.data.entities.FolderIcon
+import ru.point.data.data.entity.entities.Category
+import ru.point.data.data.entity.entities.FolderIcon
 
 @Composable
 fun MainNotesScreen(

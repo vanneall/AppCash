@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.point.data.data.factory.NoteFactory
-import ru.point.data.data.repository_interfaces.NotesRepository
+import ru.point.data.data.datasource.repository.interfaces.NotesRepository
 import ru.point.domain.notes.interfaces.UpsertNoteUseCase
 import javax.inject.Inject
 

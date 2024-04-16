@@ -7,7 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.point.data.data.database.AppCashDatabase
+import ru.point.data.data.datasource.local.database.AppCashDatabase
 import javax.inject.Singleton
 
 @Module

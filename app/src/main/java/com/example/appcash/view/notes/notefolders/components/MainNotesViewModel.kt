@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import ru.point.data.data.entities.Category
-import ru.point.data.data.entities.Category.Discriminator
+import ru.point.data.data.entity.entities.Category
+import ru.point.data.data.entity.entities.Category.Discriminator
 import ru.point.domain.category.interfaces.CreateCategoryUseCase
 import ru.point.domain.notes.interfaces.GetAllNotesCountUseCase
 import ru.point.domain.category.interfaces.GetCategoryByTypeUseCase

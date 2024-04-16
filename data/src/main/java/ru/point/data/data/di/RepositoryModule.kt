@@ -4,15 +4,15 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ru.point.data.data.database.AppCashDatabase
-import ru.point.data.data.repository_implementations.CategoriesRepositoryImpl
-import ru.point.data.data.repository_implementations.FinancesRepositoryImpl
-import ru.point.data.data.repository_implementations.NotesRepositoryImpl
-import ru.point.data.data.repository_implementations.TasksRepositoryImpl
-import ru.point.data.data.repository_interfaces.CategoriesRepository
-import ru.point.data.data.repository_interfaces.FinancesRepository
-import ru.point.data.data.repository_interfaces.NotesRepository
-import ru.point.data.data.repository_interfaces.TasksRepository
+import ru.point.data.data.datasource.local.database.AppCashDatabase
+import ru.point.data.data.datasource.repository.implementations.CategoriesRepositoryImpl
+import ru.point.data.data.datasource.repository.implementations.FinancesRepositoryImpl
+import ru.point.data.data.datasource.repository.implementations.NotesRepositoryImpl
+import ru.point.data.data.datasource.repository.implementations.TasksRepositoryImpl
+import ru.point.data.data.datasource.repository.interfaces.CategoriesRepository
+import ru.point.data.data.datasource.repository.interfaces.FinancesRepository
+import ru.point.data.data.datasource.repository.interfaces.NotesRepository
+import ru.point.data.data.datasource.repository.interfaces.TasksRepository
 import javax.inject.Singleton
 
 @Module
