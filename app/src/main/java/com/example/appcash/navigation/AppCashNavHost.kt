@@ -6,9 +6,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.example.appcash.navigation.Destinations.MAIN_CALENDAR_SCREEN
-import com.example.appcash.navigation.screens.FinanceChartScreenNavigation
 import com.example.appcash.navigation.screens.ErrorScreenNavigation
 import com.example.appcash.navigation.screens.FinanceAddScreenNavigation
+import com.example.appcash.navigation.screens.FinanceChartScreenNavigation
 import com.example.appcash.navigation.screens.MainCalendarScreenNavigation
 import com.example.appcash.navigation.screens.MainFinanceScreenNavigation
 import com.example.appcash.navigation.screens.MainNotesScreenNavigation
@@ -47,7 +47,8 @@ fun AppCashNavHost(
         NoteInfoScreenNavigation(
             navGraphBuilder = this,
             navHostController = navHostController,
-            topAppBarState = topAppBarState
+            topAppBarState = topAppBarState,
+            fabState = fabState
         )
 
 
@@ -68,7 +69,8 @@ fun AppCashNavHost(
         MainCalendarScreenNavigation(
             navGraphBuilder = this,
             navHostController = navHostController,
-            topAppBarState = topAppBarState
+            topAppBarState = topAppBarState,
+            fabState = fabState
         )
 
 
@@ -87,7 +89,8 @@ fun AppCashNavHost(
         FinanceChartScreenNavigation(
             navGraphBuilder = this,
             navHostController = navHostController,
-            topAppBarState = topAppBarState
+            topAppBarState = topAppBarState,
+            fabState = fabState
         )
 
         ErrorScreenNavigation(

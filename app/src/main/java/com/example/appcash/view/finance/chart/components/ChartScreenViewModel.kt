@@ -8,57 +8,39 @@ import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.view.finance.main.components.FinanceEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import ru.point.data.data.entity.subset.FinanceCategorySubset
-import ru.point.data.data.entity.subset.FinanceSubset
+import ru.point.domain.finance.implementations.FinanceSeparatorDto
 import ru.point.domain.finance.interfaces.GetFinancesByMonthUseCase
 import ru.point.domain.finance.interfaces.GetFinancesByYearMonthUseCase
 import java.time.LocalDate
 import javax.inject.Inject
-import kotlin.math.abs
 
 @HiltViewModel
 class ChartScreenViewModel @Inject constructor(
     private val getFinancesByYearMonthUseCase: GetFinancesByYearMonthUseCase,
-    private val getFinancesByMonthUseCase: GetFinancesByMonthUseCase
+    private val getCategoryFinancesByMonthUseCase: GetFinancesByMonthUseCase
 ) : ViewModel(), EventHandler {
 
-    private var _todayDate = LocalDate.now()
+    private var _date = MutableStateFlow(LocalDate.now())
 
-    private val _transactions = MutableStateFlow<List<FinanceSubset>>(emptyList())
+    private val _transactions = initializeFinancesByMonth()
 
-    private val _categories = MutableStateFlow<List<FinanceCategorySubset>>(emptyList())
+    private val _categories = initializeCategoryFinancesByMonth()
 
     private val _error = MutableStateFlow(false)
-
-    init {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                getFinancesByMonthUseCase.invoke(_todayDate).collect {
-                    _categories.value = it
-                }
-            }
-            viewModelScope.launch(Dispatchers.IO) {
-                getFinancesByYearMonthUseCase.invoke(_todayDate).collect {
-                    _transactions.value = it
-                }
-            }
-        } catch (exception: Exception) {
-            updateError()
-        }
-    }
 
     val state = combine(
         _transactions,
         _categories,
-        _error
-    ) { transaction, categories, isError ->
+        _error,
+        _date,
+    ) { transaction, categories, isError, date ->
         ChartState(
             transactionsByYearMonth = transaction,
             categories = categories,
@@ -70,9 +52,11 @@ class ChartScreenViewModel @Inject constructor(
                     color = Color.Gray
                 )
             ),
+            selectedDate = date,
             isError = isError
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),
+    }.stateIn(
+        viewModelScope, SharingStarted.WhileSubscribed(),
         ChartState()
     )
 
@@ -85,60 +69,35 @@ class ChartScreenViewModel @Inject constructor(
     }
 
     override fun handle(event: Event) {
-        try {
-            when (event) {
-                is FinanceEvent.SwitchEvent -> {
-                    switchMonth(event.newMonthIndex.toLong())
-                }
-            }
-        } catch (exception: Exception) {
-            updateError()
-        }
-    }
-
-    private fun switchMonth(newMonthIndex: Long) {
-        when (newMonthIndex) {
-            (0).toLong() -> {
-                _todayDate = LocalDate.now()
-                actualizeTransactions()
-                actualizeCategories()
-            }
-
-            in 1..6 -> {
-                _todayDate =
-                    LocalDate.now().minusMonths(abs(newMonthIndex))
-                actualizeTransactions()
-                actualizeCategories()
-
-            }
-
-            else -> viewModelScope.launch(Dispatchers.IO) {
-                _todayDate =
-                    LocalDate.now().plusMonths(abs(newMonthIndex))
-                actualizeTransactions()
-                actualizeCategories()
-
+        when (event) {
+            is FinanceEvent.SwitchEvent -> {
+                updateDate(event.newMonthIndex.toLong())
             }
         }
     }
 
-    private fun actualizeTransactions() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getFinancesByMonthUseCase.invoke(_todayDate).collect {
-                _categories.value = it
+    private fun updateDate(monthsSwitched: Long) {
+        _date.update { date ->
+            if (monthsSwitched > 0L) {
+                date.minusMonths(monthsSwitched)
+            } else {
+                date.plusDays(monthsSwitched)
             }
+
         }
     }
 
-    private fun actualizeCategories() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getFinancesByYearMonthUseCase.invoke(_todayDate).collect {
-                _transactions.value = it
-            }
-        }
+    private fun initializeFinancesByMonth(
+        date: LocalDate = _date.value
+    ): Flow<List<FinanceSeparatorDto>> {
+        return getFinancesByYearMonthUseCase
+            .invoke(date)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
-    private fun updateError() {
-        _error.update { true }
+    private fun initializeCategoryFinancesByMonth(): Flow<List<FinanceCategorySubset>> {
+        return getCategoryFinancesByMonthUseCase
+            .invoke(_date.value)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 }

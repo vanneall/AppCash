@@ -61,7 +61,8 @@ fun FinanceAddScreenNavigation(
 fun FinanceChartScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
     navHostController: NavHostController,
-    topAppBarState: MutableState<TopAppBarState>
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
 ) {
     navGraphBuilder.composable(
         route = Destinations.FINANCE_CHART_SCREEN
@@ -72,6 +73,7 @@ fun FinanceChartScreenNavigation(
             viewModel = viewModel,
             navigateBack = navHostController::popBackStack,
             topAppBarState = topAppBarState,
+            fabState = fabState
         )
     }
 }

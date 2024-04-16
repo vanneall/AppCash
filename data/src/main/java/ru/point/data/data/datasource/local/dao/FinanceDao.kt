@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import ru.point.data.data.entity.entities.Finance
 import ru.point.data.data.entity.subset.FinanceCategorySubset
 import ru.point.data.data.entity.subset.FinanceSubset
-import ru.point.data.data.entity.subset.LocalDateSubset
+import java.time.LocalDate
 
 @Dao
 interface FinanceDao {
@@ -17,7 +17,7 @@ interface FinanceDao {
     fun create(finance: Finance): Long
 
     @Query(
-        "SELECT fin.id as id, fol.name as name, fin.price as price, fol.icon as icon " +
+        "SELECT fin.id as id, fol.name as name, fin.price as price, fol.icon as icon, fin.date as date " +
                 "FROM finance fin " +
                 "JOIN category fol " +
                 "ON fol.id = fin.category_id " +
@@ -35,11 +35,8 @@ interface FinanceDao {
     )
     fun readByFolder(startDate: String, endDate: String): Flow<List<FinanceCategorySubset>>
 
-    @Query("select * from finance order by date asc limit 1")
-    fun readTheOldestMonth(): Flow<LocalDateSubset>
-
     @Query(
-        "SELECT fin.id as id, fol.name as name, fin.price as price, fol.icon as icon " +
+        "SELECT fin.id as id, fol.name as name, fin.price as price, fol.icon as icon, fin.date as date " +
                 "FROM finance fin " +
                 "JOIN category fol " +
                 "ON fol.id = fin.category_id " +
@@ -49,4 +46,7 @@ interface FinanceDao {
 
     @Query("select sum(price) from finance")
     fun readFinancesSum(): Flow<Int?>
+
+    @Query("select min(date) from finance")
+    fun readMinDate(): Flow<LocalDate>
 }

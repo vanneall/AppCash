@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.utils.events.Event
+import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.notes.info.components.NoteInfoEvent
 import com.example.appcash.view.notes.info.components.NoteInfoState
@@ -38,7 +39,8 @@ import com.example.appcash.view.ui.theme.LightGray
 fun NoteInfoScreen(
     viewModel: NoteInfoViewModel,
     navigateBack: () -> Unit,
-    topAppBarState: MutableState<TopAppBarState>
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
 ) {
     topAppBarState.value = TopAppBarState(
         title = "",
@@ -61,6 +63,8 @@ fun NoteInfoScreen(
             }
         }
     )
+
+    fabState.value = FabState { }
 
     NoteInfo(
         state = viewModel.state.collectAsState().value,

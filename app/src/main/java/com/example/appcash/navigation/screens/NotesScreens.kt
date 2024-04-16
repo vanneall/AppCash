@@ -92,7 +92,8 @@ fun NotesListScreenNavigation(
 fun NoteInfoScreenNavigation(
     navGraphBuilder: NavGraphBuilder,
     navHostController: NavHostController,
-    topAppBarState: MutableState<TopAppBarState>
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
 ) {
     navGraphBuilder.composable(
         route = "${Destinations.NOTE_SCREEN}/{$CATEGORY_ID_KEY}/{$ID_KEY}",
@@ -129,7 +130,8 @@ fun NoteInfoScreenNavigation(
         NoteInfoScreen(
             viewModel = viewModel,
             navigateBack = navHostController::popBackStack,
-            topAppBarState = topAppBarState
+            topAppBarState = topAppBarState,
+            fabState = fabState
         )
     }
 }

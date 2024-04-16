@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -51,6 +52,7 @@ import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.appcash.R
 import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
+import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.finance.chart.components.ChartScreenViewModel
 import com.example.appcash.view.finance.chart.components.ChartState
@@ -64,11 +66,20 @@ import ru.point.data.data.entity.entities.FolderIcon
 
 const val CURRENT_MONTH_INDEX = 11
 
+val financesDaysSeparatorStringResource: List<String>
+    @Composable
+    get() = listOf(
+        stringResource(id = R.string.today),
+        stringResource(id = R.string.yesterday),
+        stringResource(id = R.string.previosly_in_month),
+    )
+
 @Composable
 fun FinanceChartScreen(
     viewModel: ChartScreenViewModel,
     navigateBack: () -> Unit,
-    topAppBarState: MutableState<TopAppBarState>
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
 ) {
     topAppBarState.value = TopAppBarState(
         title = stringResource(id = R.string.finance_screen),
@@ -91,10 +102,14 @@ fun FinanceChartScreen(
         }
     )
 
+    fabState.value = FabState {  }
+
     FinanceChart(
         state = viewModel.state.collectAsState().value,
         onEvent = viewModel::handle,
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     )
 }
 
@@ -116,37 +131,41 @@ private fun FinanceChart(
     LazyVerticalGrid(
         columns = GridCells.Adaptive(100.dp),
         state = gridState,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier
     ) {
         item(
             span = { GridItemSpan(maxCurrentLineSpan) }
-        ) { 
-            Column(modifier = Modifier.fillMaxWidth()) {
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 Text(
-                    text = state.categories.fastSumBy { item -> item.sum ?: 0 }.toString(),
+                    text = state.categories.fastSumBy { item -> item.sum ?: 0 }.toString() + " ₽",
                     fontWeight = FontWeight.Medium,
                     fontSize = 30.sp
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
-
                 Text(
-                    text = "Расходы/доходы за ${state.localDate.yearMonth}",
+                    text = "Расходы за ${state.selectedDate.yearMonth}",
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp
                 )
             }
         }
-        
+
         item(span = { GridItemSpan(maxCurrentLineSpan) }) {
             HorizontalPager(
                 state = pagerState,
+                modifier = Modifier
+                    .background(color = Color.Transparent)
             ) {
                 Chart(
                     list = state.categoriesForChart,
                     modifier = Modifier
+                        .background(Color.White)
                         .size(250.dp)
                         .padding(20.dp),
                 )
@@ -178,16 +197,31 @@ private fun FinanceChart(
             Spacer(modifier = Modifier.height(40.dp))
         }
 
-        items(
-            span = { GridItemSpan(maxCurrentLineSpan) },
-            items = state.transactionsByYearMonth.toList()
-        ) { financeSubset ->
-            FinanceRow(
-                icon = FolderIconMapper.mapToIcon(value = financeSubset.icon ?: FolderIcon.UNKNOWN),
-                financeSubset = financeSubset
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+        state.transactionsByYearMonth.forEach { dto ->
+            item(
+                span = { GridItemSpan(maxCurrentLineSpan) }
+            ) {
+                Text(
+                    text = dto.separator.name,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 24.sp
+                )
+            }
+
+            items(
+                span = { GridItemSpan(maxCurrentLineSpan) },
+                items = dto.list
+            ) { financeSubset ->
+                FinanceRow(
+                    financeSubset = financeSubset,
+                    icon = FolderIconMapper.mapToIcon(
+                        value = financeSubset.icon ?: FolderIcon.UNKNOWN
+                    )
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
+
     }
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.collect { monthIndex ->
@@ -268,20 +302,30 @@ private fun Chart(
     )
 
     val donutChartConfig = PieChartConfig(
+
         strokeWidth = 80f,
         activeSliceAlpha = 1f,
-        isAnimationEnable = true,
+        isAnimationEnable = false,
         isClickOnSliceEnabled = false
-        )
+    )
 
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
         DonutPieChart(
-            modifier = modifier.background(color = Color.White),
+            modifier = modifier.background(color = Color.Transparent),
             donutChartData,
             donutChartConfig
         )
     }
+}
+
+
+@Composable
+@Preview(showBackground = false)
+private fun ChartPreview() {
+    Chart(
+        listOf(PieChartData.Slice("label", 1f, Color.Gray))
+    )
 }

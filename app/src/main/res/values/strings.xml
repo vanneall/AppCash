@@ -51,4 +51,7 @@
     <string name="finance_expenses">Расходы</string>
     <string name="finance_income">Доходы</string>
     <string name="add_new_category">Добавьте свою категорию</string>
+    <string name="today">Сегодня</string>
+    <string name="yesterday">Вчера</string>
+    <string name="previosly_in_month">Ранее в этом месяце</string>
 </resources>

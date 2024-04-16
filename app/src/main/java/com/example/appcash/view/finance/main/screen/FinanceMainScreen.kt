@@ -70,7 +70,7 @@ fun MainMorda(
 
         item {
             Text(
-                text = state.sum.toString(),
+                text = state.sum.toString() + " ₽",
                 fontSize = 36.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Medium,

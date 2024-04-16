@@ -123,8 +123,8 @@ private fun FinanceAdd(
                 .padding(horizontal = 18.dp)
         ) {
             BasicTextField(
-                value = state.price,
-                onValueChange = { onEvent(AddFinanceEvent.InputPriceEvent(it)) },
+                value = state.price + if (state.price.isNotEmpty()) " ₽" else "",
+                onValueChange = { onEvent(AddFinanceEvent.InputPriceEvent(it.substringBefore(' '))) },
                 textStyle = TextStyle(
                     fontSize = 36.sp,
                     color = Color.Black,

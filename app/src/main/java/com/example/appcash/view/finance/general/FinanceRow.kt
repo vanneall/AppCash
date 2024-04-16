@@ -55,7 +55,7 @@ fun FinanceRow(
         )
         Text(
             fontSize = 18.sp,
-            text = financeSubset.price.toString(),
+            text = financeSubset.price.toString() + " ₽",
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.End,
             modifier = Modifier.fillMaxWidth(),

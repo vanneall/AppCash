@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
+import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.ui.theme.DarkBlue
 import com.example.appcash.view.ui.theme.Gray
@@ -51,11 +52,14 @@ import java.util.Locale
 
 @Composable
 fun CalendarScreen(
-    topAppBarState: MutableState<TopAppBarState>
+    topAppBarState: MutableState<TopAppBarState>,
+    fabState: MutableState<FabState>
 ) {
     topAppBarState.value = TopAppBarState(
         title = stringResource(id = R.string.calendar_screen)
     )
+
+    fabState.value = FabState { }
 
     MainScreen()
 }

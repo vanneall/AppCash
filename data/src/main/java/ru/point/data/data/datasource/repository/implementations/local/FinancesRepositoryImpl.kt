@@ -3,10 +3,11 @@ package ru.point.data.data.datasource.repository.implementations.local
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.point.data.data.datasource.local.dao.FinanceDao
-import ru.point.data.data.entity.entities.Finance
 import ru.point.data.data.datasource.repository.interfaces.FinancesRepository
+import ru.point.data.data.entity.entities.Finance
 import ru.point.data.data.entity.subset.FinanceCategorySubset
 import ru.point.data.data.entity.subset.FinanceSubset
+import java.time.LocalDate
 import javax.inject.Inject
 
 class FinancesRepositoryImpl @Inject constructor(
@@ -36,5 +37,9 @@ class FinancesRepositoryImpl @Inject constructor(
 
     override fun getFinancesSum(): Flow<Int?> {
         return financeDao.readFinancesSum()
+    }
+
+    override fun getMinDate(): Flow<LocalDate> {
+        return financeDao.readMinDate()
     }
 }
