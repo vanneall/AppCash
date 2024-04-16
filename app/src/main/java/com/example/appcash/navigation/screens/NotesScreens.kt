@@ -66,7 +66,7 @@ fun NotesListScreenNavigation(
         val assistedFactory = EntryPointAccessors.fromActivity(
             activity = LocalContext.current as Activity,
             entryPoint = NoteListViewModelFactoryProvider::class.java
-        ).provideNoteListViewModelFactory()
+        ).provideNoteListViewModelAssistedFactory()
 
         val categoryIdArg: Long?
         with(backStackEntry) {
@@ -110,7 +110,7 @@ fun NoteInfoScreenNavigation(
         val assistedFactory = EntryPointAccessors.fromActivity(
             activity = LocalContext.current as Activity,
             entryPoint = NoteInfoViewModelFactoryProvider::class.java
-        ).provideNoteInfoViewModelFactory()
+        ).provideNoteInfoViewModelAssistedFactory()
 
         val noteIdArg: Long?
         val categoryIdArg: Long?

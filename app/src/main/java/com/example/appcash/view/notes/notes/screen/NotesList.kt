@@ -35,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.navigation.Destinations.NOTE_SCREEN
-import com.example.appcash.utils.events.Event
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.notes.notes.components.NotesListState
@@ -52,13 +51,12 @@ fun NotesListScreen(
     fabState: MutableState<FabState>
 ) {
     val state = viewModel.state.collectAsState().value
+
     topAppBarState.value = TopAppBarState(
-        title = state.folderName,
+        title = state.categoryName,
         navigationIcon = {
             IconButton(
-                onClick = {
-                    navigateBack()
-                },
+                onClick = { navigateBack() },
                 modifier = Modifier
                     .size(36.dp)
                     .background(color = LightGray, shape = CircleShape)
@@ -70,15 +68,12 @@ fun NotesListScreen(
                     modifier = Modifier
                 )
             }
-        },
-        actions = {
         }
     )
-    fabState.value = FabState { navigateTo("$NOTE_SCREEN/${state.folderId ?: 0}/0") }
+    fabState.value = FabState { navigateTo("$NOTE_SCREEN/${state.categoryId ?: 0}/0") }
 
     NotesList(
         state = state,
-        onEvent = viewModel::handle,
         navigateTo = navigateTo,
         modifier = Modifier.padding(horizontal = 20.dp)
     )
@@ -87,7 +82,6 @@ fun NotesListScreen(
 @Composable
 private fun NotesList(
     state: NotesListState,
-    onEvent: (Event) -> Unit,
     navigateTo: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -104,11 +98,15 @@ private fun NotesList(
                 content = item.content,
                 modifier = Modifier
                     .size(width = 358.dp, height = 64.dp)
+                    .clickable { navigateTo("$NOTE_SCREEN/${state.categoryId ?: 0}/${item.id}") }
                     .background(
-                        color = LightGray, shape = RoundedCornerShape(20.dp)
+                        color = LightGray,
+                        shape = RoundedCornerShape(20.dp)
                     )
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .clickable { navigateTo("$NOTE_SCREEN/${state.folderId ?: 0}/${item.id}") }
+                    .padding(
+                        horizontal = 16.dp,
+                        vertical = 8.dp
+                    )
             )
         }
     }
@@ -122,7 +120,8 @@ private fun NoteListItem(
 ) {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Column(
             modifier = Modifier.width(286.dp)
@@ -134,7 +133,6 @@ private fun NoteListItem(
                 color = Color.Black,
                 overflow = TextOverflow.Ellipsis
             )
-
 
             if (content.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(8.dp))
@@ -148,13 +146,10 @@ private fun NoteListItem(
             }
         }
 
-        Spacer(modifier = Modifier.width(16.dp))
-
         Icon(
             imageVector = Icons.Default.MoreVert,
-            contentDescription = "Иконка больше",
-            modifier = Modifier
-                .size(24.dp)
+            contentDescription = null,
+            modifier = Modifier.size(24.dp)
         )
     }
 }

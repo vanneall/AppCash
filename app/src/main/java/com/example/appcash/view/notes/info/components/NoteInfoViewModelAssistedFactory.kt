@@ -8,7 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 
 @AssistedFactory
-interface NoteInfoViewModelFactory {
+interface NoteInfoViewModelAssistedFactory {
     fun create(
         @Assisted(ArgsKeys.ID_KEY) noteId: Long?,
         @Assisted(ArgsKeys.CATEGORY_ID_KEY) categoryId: Long?
@@ -18,6 +18,6 @@ interface NoteInfoViewModelFactory {
 @EntryPoint
 @InstallIn(ActivityComponent::class)
 interface NoteInfoViewModelFactoryProvider {
-    fun provideNoteInfoViewModelFactory(): NoteInfoViewModelFactory
+    fun provideNoteInfoViewModelAssistedFactory(): NoteInfoViewModelAssistedFactory
 }
 

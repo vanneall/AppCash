@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
+import ru.point.data.data.factory.NoteFactory
 import ru.point.data.data.repository_interfaces.NotesRepository
 import ru.point.domain.notes.implementations.DeleteNoteByIdUseCaseImpl
 import ru.point.domain.notes.implementations.GetAllNotesCountUseCaseImpl
@@ -28,8 +29,8 @@ class NotesModule {
 
     @Provides
     @ViewModelScoped
-    fun provideInsertNoteUseCase(repository: NotesRepository): UpsertNoteUseCase {
-        return UpsertNoteUseCaseImpl(repository = repository)
+    fun provideInsertNoteUseCase(noteFactory: NoteFactory, repository: NotesRepository): UpsertNoteUseCase {
+        return UpsertNoteUseCaseImpl(noteFactory = noteFactory, repository = repository)
     }
 
     @Provides

@@ -5,24 +5,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.appcash.utils.ArgsKeys.CATEGORY_ID_KEY
 import com.example.appcash.utils.ArgsKeys.ID_KEY
 import com.example.appcash.utils.events.Event
-import com.example.appcash.utils.events.Event.ErrorEvent
 import com.example.appcash.utils.events.EventHandler
 import dagger.Lazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.point.data.data.entities.Note
-import ru.point.domain.notes.implementations.DeleteNoteByIdUseCaseImpl
 import ru.point.domain.notes.implementations.GetNoteByIdUseCaseImpl
 import ru.point.domain.notes.implementations.UpsertNoteUseCaseImpl
 
@@ -31,134 +25,77 @@ class NoteInfoViewModel @AssistedInject constructor(
     private val noteId: Long?,
     @Assisted(CATEGORY_ID_KEY)
     private val folderId: Long?,
-    private val getNoteByIdUseCaseImpl: GetNoteByIdUseCaseImpl,
-    private val upsertNoteUseCaseImpl: UpsertNoteUseCaseImpl,
-    private val deleteNoteByIdUseCaseImpl: Lazy<DeleteNoteByIdUseCaseImpl>
+    private val getNoteByIdUseCaseImpl: Lazy<GetNoteByIdUseCaseImpl>,
+    private val upsertNoteUseCaseImpl: Lazy<UpsertNoteUseCaseImpl>,
 ) : ViewModel(), EventHandler {
 
-    private val _title = MutableStateFlow<String?>(null)
+    private val _title = MutableStateFlow("")
+    private val _content = MutableStateFlow("")
 
-    private val _content = MutableStateFlow<String?>(null)
-
-    private val _note = initializePrivateState()
-
-    private val _error = MutableStateFlow(false)
+    init {
+        if (noteId != null) initializeTitleAndContent(id = noteId)
+    }
 
     val state = combine(
-        _note,
         _title,
         _content,
-        _error
-    ) { state, title, content, error ->
+    ) { title, content ->
         NoteInfoState(
-            title = title ?: state.title,
-            content = content ?: state.content,
-            folderId = folderId,
-            isError = error
+            title = title,
+            content = content
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), NoteInfoState())
 
     override fun handle(event: Event) {
         when (event) {
             is NoteInfoEvent.InputTitleEvent -> {
-                inputTitle(title = event.title)
+                updateTitle(title = event.title)
             }
 
             is NoteInfoEvent.InputContentEvent -> {
-                inputContent(content = event.content)
+                updateContent(content = event.content)
             }
 
             is NoteInfoEvent.SaveNoteEvent -> {
-                saveNote(
-                    title = state.value.title,
-                    content = state.value.content
-                )
-            }
-
-            is NoteInfoEvent.DeleteNoteEvent -> {
-                deleteNote()
-            }
-
-            is ErrorEvent -> {
-                updateIsError()
+                saveNote()
             }
         }
     }
 
-    private fun inputTitle(title: String) {
+    private fun updateTitle(title: String) {
         _title.update { title }
     }
 
-    private fun inputContent(content: String) {
+    private fun updateContent(content: String) {
         _content.update { content }
     }
 
-    private fun saveNote(title: String, content: String) {
+    private fun saveNote() {
         CoroutineScope(Dispatchers.IO).launch {
-            upsertNote(title = title, content = content)
+            with(state.value) {
+                upsertNote(title = title, content = content)
+            }
         }
     }
 
-    private fun updateIsError() {
-        _error.update { true }
-    }
-
-    private fun deleteNote() {
-        CoroutineScope(Dispatchers.IO).launch {
-            if (noteId == null) return@launch
-            delay(1000L)
-            deleteNoteByIdUseCaseImpl.get().invoke(
-                id = noteId
-            )
-        }
-
-    }
-
-    private fun initializePrivateState(): Flow<Note> {
-        return when (noteId) {
-            null -> {
-                flowOf(
-                    value = Note(
-                        title = "",
-                        content = ""
-                    )
-                )
-            }
-
-            else -> {
-                getNoteByIdUseCaseImpl.invoke(
-                    id = noteId,
-                ).stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(),
-                    initialValue = Note(
-                        title = "",
-                        content = ""
-                    )
-                )
-            }
+    private fun initializeTitleAndContent(id: Long) {
+        viewModelScope.launch {
+            getNoteByIdUseCaseImpl
+                .get()
+                .invoke(id = id)
+                .collect { note ->
+                    updateTitle(note.title)
+                    updateContent(note.content)
+                }
         }
     }
 
     private fun upsertNote(title: String, content: String) {
-        val handledTitle = title.trim()
-        val handledContent = content.trim()
-
-        if (handledTitle.isEmpty()) return
-
-        if (noteId == null) {
-            upsertNoteUseCaseImpl.invoke(
-                title = title,
-                content = handledContent,
-                folderId = folderId,
-            )
-        } else {
-            upsertNoteUseCaseImpl.invoke(
-                id = noteId,
-                title = title,
-                content = handledContent,
-                folderId = folderId,
-            )
-        }
+        upsertNoteUseCaseImpl.get().invoke(
+            id = noteId,
+            title = title,
+            content = content,
+            categoryId = folderId,
+        )
     }
 }

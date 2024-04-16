@@ -9,13 +9,16 @@ import com.example.appcash.view.popup.create.CreateCategoryPopupEvent
 import com.example.appcash.view.popup.create.CreateCategoryPopupState
 import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.point.data.data.entities.Category
 import ru.point.data.data.entities.Category.Discriminator
 import ru.point.domain.notes.interfaces.GetAllNotesCountUseCase
 import ru.point.domain.notes.interfaces.GetCategoryByTypeUseCase
@@ -24,36 +27,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainNotesViewModel @Inject constructor(
-    getCategoryByTypeUseCase: GetCategoryByTypeUseCase,
-    getAllNotesCountUseCase: GetAllNotesCountUseCase,
+    private val getCategoryByTypeUseCase: GetCategoryByTypeUseCase,
+    private val getAllNotesCountUseCase: GetAllNotesCountUseCase,
     private val insertFolderUseCase: Lazy<InsertFolderUseCase>,
+) : ViewModel(), EventHandler {
 
-    ) : ViewModel(), EventHandler {
+    private val _allNotesCount = initializeAllNoteCount()
 
-    private val _notesCount = getAllNotesCountUseCase.invoke()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
-
+    private val _categoriesList = initializeCategoriesList()
 
     private val _popupState = MutableStateFlow(CreateCategoryPopupState())
 
-    private val _isShowed = MutableStateFlow(false)
-
-    private val _foldersDtoList = getCategoryByTypeUseCase
-        .invoke(
-            type = Discriminator.NOTES
-        ).stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
-
     val state = combine(
-        _foldersDtoList,
-        _notesCount,
+        _categoriesList,
+        _allNotesCount,
         _popupState,
-        _isShowed
-    ) { list, notesCount, popupState, isShowed ->
+    ) { list, notesCount, popupState ->
         MainNotesState(
-            foldersList = list,
+            categoryList = list,
             notesCount = notesCount.toString(),
             popupState = popupState,
-            isCreatePopupShowed = isShowed
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), MainNotesState())
 
@@ -67,7 +60,7 @@ class MainNotesViewModel @Inject constructor(
             }
 
             is CreateCategoryPopupEvent.SelectFolderIcon -> {
-                selectFolderIcon(event.position)
+                selectFolderIcon(position = event.position)
             }
 
             is CreateCategoryPopupEvent.ShowCreatePopup -> {
@@ -79,13 +72,31 @@ class MainNotesViewModel @Inject constructor(
             }
 
             is CreateCategoryPopupEvent.InputName -> {
-                inputFolderName(event.name)
+                inputFolderName(name = event.name)
             }
         }
     }
 
+    private fun initializeCategoriesList(): Flow<List<Category>> {
+        return getCategoryByTypeUseCase
+            .invoke(type = Discriminator.NOTES)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    }
+
+    private fun initializeAllNoteCount(): Flow<Int> {
+        return getAllNotesCountUseCase
+            .invoke()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
+    }
+
+    private fun inputFolderName(name: String) {
+        _popupState.update { state ->
+            state.copy(name = name)
+        }
+    }
+
     private fun insertFolder(name: String, color: Int) {
-        viewModelScope.launch(context = Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             insertFolderUseCase.get().invoke(
                 name = name,
                 colorIndex = color,
@@ -96,7 +107,6 @@ class MainNotesViewModel @Inject constructor(
         }
     }
 
-
     private fun selectFolderIcon(position: Int) {
         _popupState.update { state ->
             state.copy(
@@ -106,19 +116,14 @@ class MainNotesViewModel @Inject constructor(
     }
 
     private fun showBottomSheet() {
-        _isShowed.update { true }
-    }
-
-    private fun inputFolderName(name: String) {
         _popupState.update { state ->
-            state.copy(
-                name = name
-            )
+            state.copy(isShowed = true)
         }
     }
 
     private fun hideBottomSheet() {
-        _isShowed.update { false }
-        _popupState.update { CreateCategoryPopupState() }
+        _popupState.update {
+            CreateCategoryPopupState()
+        }
     }
 }

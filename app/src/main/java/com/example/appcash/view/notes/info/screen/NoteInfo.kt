@@ -4,16 +4,15 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -30,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import com.example.appcash.R
 import com.example.appcash.utils.events.Event
 import com.example.appcash.view.TopAppBarState
-import com.example.appcash.view.general.ErrorScreen
 import com.example.appcash.view.notes.info.components.NoteInfoEvent
 import com.example.appcash.view.notes.info.components.NoteInfoState
 import com.example.appcash.view.notes.info.components.NoteInfoViewModel
@@ -47,15 +45,15 @@ fun NoteInfoScreen(
         navigationIcon = {
             IconButton(
                 onClick = {
-                    navigateBack()
                     viewModel.handle(NoteInfoEvent.SaveNoteEvent)
+                    navigateBack()
                 },
                 modifier = Modifier
                     .size(36.dp)
                     .background(color = LightGray, shape = CircleShape)
                     .padding(4.dp)
             ) {
-                androidx.compose.material.Icon(
+                Icon(
                     imageVector = Icons.Default.ArrowBackIosNew,
                     contentDescription = null,
                     modifier = Modifier
@@ -64,17 +62,12 @@ fun NoteInfoScreen(
         }
     )
 
-    when (viewModel.state.collectAsState().value.isError) {
-        false -> NoteInfo(
-            state = viewModel.state.collectAsState().value,
-            onEvent = viewModel::handle,
-            onNavigateBack = navigateBack,
-            modifier = Modifier.padding(horizontal = 20.dp)
-        )
-
-        true -> ErrorScreen()
-    }
-
+    NoteInfo(
+        state = viewModel.state.collectAsState().value,
+        onEvent = viewModel::handle,
+        onNavigateBack = navigateBack,
+        modifier = Modifier.padding(horizontal = 20.dp)
+    )
 }
 
 @Composable
@@ -85,13 +78,12 @@ private fun NoteInfo(
     modifier: Modifier = Modifier,
 ) {
     val scrollableState = rememberScrollState()
+
     Column(
         modifier = modifier
             .fillMaxWidth()
             .verticalScroll(scrollableState),
     ) {
-        Spacer(modifier = Modifier.height(30.dp))
-
         TitleTextField(
             state = state,
             onEvent = onEvent,
@@ -106,10 +98,9 @@ private fun NoteInfo(
             modifier = Modifier.fillMaxSize()
         )
     }
+
     BackHandler {
-        onEvent(
-            NoteInfoEvent.SaveNoteEvent
-        )
+        onEvent(NoteInfoEvent.SaveNoteEvent)
         onNavigateBack()
     }
 }
@@ -120,17 +111,9 @@ private fun TitleTextField(
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box {
-        BasicTextField(
-            value = state.title,
-            onValueChange = {
-                onEvent(
-                    NoteInfoEvent.InputTitleEvent(it)
-                )
-            },
-            textStyle = TextStyle(fontSize = 22.sp),
-            modifier = modifier
-        )
+    Box(
+        modifier = modifier
+    ) {
         if (state.title.isEmpty()) {
             Text(
                 text = stringResource(id = R.string.title),
@@ -138,6 +121,14 @@ private fun TitleTextField(
                 color = Color.Gray
             )
         }
+
+        BasicTextField(
+            value = state.title,
+            onValueChange = { value ->
+                onEvent(NoteInfoEvent.InputTitleEvent(value))
+            },
+            textStyle = TextStyle(fontSize = 22.sp)
+        )
     }
 }
 
@@ -147,23 +138,23 @@ private fun ContentTextField(
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box {
+    Box(
+        modifier = modifier
+    ) {
+        if (state.content.isEmpty()) {
+            Text(
+                text = stringResource(id = R.string.content),
+                fontSize = 16.sp,
+                color = Color.Gray
+            )
+        }
+
         BasicTextField(
             value = state.content,
-            onValueChange = {
-                onEvent(
-                    NoteInfoEvent.InputContentEvent(it)
-                )
+            onValueChange = { value ->
+                onEvent(NoteInfoEvent.InputContentEvent(value))
             },
-            textStyle = TextStyle(
-                fontSize = 17.sp
-            ),
-            modifier = modifier
-        )
-        if (state.content.isEmpty()) Text(
-            text = stringResource(id = R.string.content),
-            fontSize = 17.sp,
-            color = Color.Gray
+            textStyle = TextStyle(fontSize = 16.sp)
         )
     }
 }

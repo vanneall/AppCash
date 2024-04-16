@@ -19,45 +19,41 @@ import ru.point.domain.notes.implementations.GetNotesUseCaseImpl
 
 class NotesListViewModel @AssistedInject constructor(
     @Assisted(CATEGORY_ID_KEY)
-    private val folderId: Long?,
-    private val getFolderNameByIdUseCase: GetCategoryNameByIdUseCaseImpl,
+    private val categoryId: Long?,
+    private val getCategoryNameByIdUseCase: GetCategoryNameByIdUseCaseImpl,
     private val getAllNotesUseCase: GetNotesUseCaseImpl,
 ) : ViewModel(), EventHandler {
 
-    private val _notes = initializePrivateState()
-
-    private val _folderName = initializePrivateFolderName()
+    private val _notesList = initializeNotesList()
+    private val _categoryName = initializeCategoryName()
 
     val state = combine(
-        _folderName,
-        _notes,
-    ) { folderName, notes ->
+        _categoryName,
+        _notesList,
+    ) { categoryName, notes ->
         NotesListState(
-            folderId = folderId,
-            folderName = folderName,
+            categoryId = categoryId,
+            categoryName = categoryName,
             notesList = notes,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), NotesListState())
 
-    override fun handle(event: Event) {
+    override fun handle(event: Event) {}
 
-    }
-
-
-    private fun initializePrivateState(): Flow<List<Note>> {
+    private fun initializeNotesList(): Flow<List<Note>> {
         return getAllNotesUseCase
-            .invoke(folderId = folderId)
+            .invoke(folderId = categoryId)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
-    private fun initializePrivateFolderName(): Flow<String> {
-        return when (folderId) {
+    private fun initializeCategoryName(): Flow<String> {
+        return when (categoryId) {
             null -> {
                 flowOf("Все заметки")
             }
 
             else -> {
-                getFolderNameByIdUseCase(folderId)
+                getCategoryNameByIdUseCase(categoryId)
             }
         }
     }

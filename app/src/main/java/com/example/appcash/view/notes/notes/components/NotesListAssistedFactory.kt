@@ -8,14 +8,12 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 
 @AssistedFactory
-interface MyFactory {
-    fun create(
-        @Assisted(CATEGORY_ID_KEY) categoryId: Long?
-    ): NotesListViewModel
+interface NotesListAssistedFactory {
+    fun create(@Assisted(CATEGORY_ID_KEY) categoryId: Long?): NotesListViewModel
 }
 
 @EntryPoint
 @InstallIn(ActivityComponent::class)
 interface NoteListViewModelFactoryProvider {
-    fun provideNoteListViewModelFactory(): MyFactory
+    fun provideNoteListViewModelAssistedFactory(): NotesListAssistedFactory
 }

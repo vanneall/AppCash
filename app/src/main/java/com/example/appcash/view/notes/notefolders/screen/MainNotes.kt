@@ -1,6 +1,5 @@
 package com.example.appcash.view.notes.notefolders.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -68,7 +67,6 @@ fun MainNotesScreen(
 
     fabState.value = FabState {
         viewModel.handle(CreateCategoryPopupEvent.ShowCreatePopup)
-        Log.d("FabState", "Fab action setted")
     }
 
     MainNotes(
@@ -121,7 +119,7 @@ private fun MainNotes(
 
 
             items(
-                items = state.foldersList,
+                items = state.categoryList,
                 key = { item -> item.id }
             ) { item ->
                 CategoryListItem(
@@ -145,7 +143,7 @@ private fun MainNotes(
         }
     }
 
-    if (state.isCreatePopupShowed) {
+    if (state.popupState.isShowed) {
         ModalBottomSheet(
             onDismissRequest = { onEvent(CreateCategoryPopupEvent.HideCreatePopup) },
             containerColor = Color.White,
@@ -259,7 +257,7 @@ private fun CategoryListItemPreview() {
 private fun ScreenPreview() {
     MainNotes(
         state = MainNotesState(
-            foldersList = listOf(
+            categoryList = listOf(
                 Category(
                     name = "Дом",
                     color = 0,
