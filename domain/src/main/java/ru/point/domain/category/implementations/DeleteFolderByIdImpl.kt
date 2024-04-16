@@ -1,13 +1,18 @@
-package ru.point.domain.notes.implementations
+package ru.point.domain.category.implementations
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.point.data.data.repository_interfaces.CategoriesRepository
 import ru.point.domain.notes.interfaces.DeleteByIdFolderUseCase
 import javax.inject.Inject
 
 class DeleteFolderByIdImpl @Inject constructor(
     private val repository: CategoriesRepository
-): DeleteByIdFolderUseCase {
+) : DeleteByIdFolderUseCase {
     override fun invoke(id: Long) {
-        repository.deleteCategoryById(id = id)
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.deleteCategoryById(id = id)
+        }
     }
 }

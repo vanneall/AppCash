@@ -1,5 +1,8 @@
 package ru.point.domain.tasks.implementations
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.point.data.data.repository_interfaces.TasksRepository
 import ru.point.domain.tasks.interfaces.UpdateTaskUseCase
 import java.time.LocalDate
@@ -9,6 +12,8 @@ class UpdateTaskUseCaseImpl @Inject constructor(
     private val repository: TasksRepository
 ) : UpdateTaskUseCase {
     override fun invoke(id: Long, text: String, description: String, date: LocalDate) {
-        repository.updateTask(id = id, name = text, description = description, date = date)
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.updateTask(id = id, name = text, description = description, date = date)
+        }
     }
 }

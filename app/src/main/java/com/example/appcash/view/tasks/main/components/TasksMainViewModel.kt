@@ -9,41 +9,35 @@ import com.example.appcash.view.popup.create.CreateCategoryPopupEvent
 import com.example.appcash.view.popup.create.CreateCategoryPopupState
 import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import ru.point.data.data.entities.Category
 import ru.point.data.data.entities.Category.Discriminator
-import ru.point.domain.notes.interfaces.GetCategoryByTypeUseCase
-import ru.point.domain.notes.interfaces.InsertFolderUseCase
+import ru.point.domain.category.interfaces.CreateCategoryUseCase
+import ru.point.domain.category.interfaces.GetCategoryByTypeUseCase
 import ru.point.domain.tasks.interfaces.GetAllTasksCountUseCase
 import ru.point.domain.tasks.interfaces.GetBookmarksCountUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class TasksMainViewModel @Inject constructor(
-    getCategoryByTypeUseCase: GetCategoryByTypeUseCase,
-    getBookmarksCountUseCase: GetBookmarksCountUseCase,
-    getAllTasksCountUseCase: GetAllTasksCountUseCase,
-    private val insertFolderUseCase: Lazy<InsertFolderUseCase>,
+    private val getCategoryByTypeUseCase: GetCategoryByTypeUseCase,
+    private val getBookmarksCountUseCase: GetBookmarksCountUseCase,
+    private val getAllTasksCountUseCase: GetAllTasksCountUseCase,
+    private val createCategoryUseCase: Lazy<CreateCategoryUseCase>,
 ) : ViewModel(), EventHandler {
 
     private val _createPopupState = MutableStateFlow(CreateCategoryPopupState())
 
-    private val _categories = getCategoryByTypeUseCase
-        .invoke(type = Discriminator.TASKS)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    private val _categories = initializeCategoriesList()
 
-    private val _bookmarkTasksCount = getBookmarksCountUseCase
-        .invoke()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
+    private val _bookmarkTasksCount = initializeBookmarksCountList()
 
-    private val _allTasksCount = getAllTasksCountUseCase
-        .invoke()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
+    private val _allTasksCount = initializeAllTasksCountList()
 
     val state = combine(
         _categories,
@@ -61,44 +55,60 @@ class TasksMainViewModel @Inject constructor(
 
     override fun handle(event: Event) {
         when (event) {
-            is CreateCategoryPopupEvent.InsertFolder -> {
-                insertFolder(
+            is CreateCategoryPopupEvent.CreateCategory -> {
+                createCategory(
                     name = event.name,
                     color = event.color
                 )
             }
 
-            is CreateCategoryPopupEvent.SelectFolderIcon -> {
-                selectFolderIcon(event.position)
+            is CreateCategoryPopupEvent.SelectCategoryIcon -> {
+                updateFolderIcon(event.position)
             }
 
             is CreateCategoryPopupEvent.InputName -> {
-                inputFolderName(event.name)
+                updateCategoryName(event.name)
             }
 
             is CreateCategoryPopupEvent.ShowCreatePopup -> {
-                updateShow()
+                showCreatePopup()
             }
 
             is CreateCategoryPopupEvent.HideCreatePopup -> {
-                updateHide()
+                hideCategoryPopup()
             }
         }
     }
 
-    private fun insertFolder(name: String, color: Int) {
-        viewModelScope.launch(context = Dispatchers.IO) {
-            insertFolderUseCase.get().invoke(
-                name = name,
-                colorIndex = color,
-                discriminator = Discriminator.TASKS,
-                iconId = _createPopupState.value.selectedFolderIcon,
-            )
-            updateHide()
-        }
+    private fun initializeCategoriesList(): Flow<List<Category>> {
+        return getCategoryByTypeUseCase
+            .invoke(type = Discriminator.Task)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
-    private fun selectFolderIcon(position: Int) {
+    private fun initializeBookmarksCountList(): Flow<Int> {
+        return getBookmarksCountUseCase
+            .invoke()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
+    }
+
+    private fun initializeAllTasksCountList(): Flow<Int> {
+        return getAllTasksCountUseCase
+            .invoke()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
+    }
+
+    private fun createCategory(name: String, color: Int) {
+        createCategoryUseCase.get().invoke(
+            name = name,
+            colorIndex = color,
+            discriminator = Discriminator.Task,
+            iconId = _createPopupState.value.selectedFolderIcon,
+        )
+        hideCategoryPopup()
+    }
+
+    private fun updateFolderIcon(position: Int) {
         _createPopupState.update { state ->
             state.copy(
                 selectedFolderIcon = FolderIconMapper.mapToFolderIcon(position = position)
@@ -106,28 +116,19 @@ class TasksMainViewModel @Inject constructor(
         }
     }
 
-    private fun updateShow() {
+    private fun showCreatePopup() {
         _createPopupState.update { state ->
-            state.copy(
-                isShowed = true
-            )
+            state.copy(isShowed = true)
         }
     }
 
-    private fun inputFolderName(name: String) {
+    private fun updateCategoryName(name: String) {
         _createPopupState.update { state ->
-            state.copy(
-                name = name
-            )
+            state.copy(name = name)
         }
     }
 
-    private fun updateHide() {
-        _createPopupState.update { state ->
-            state.copy(
-                isShowed = false,
-                name = ""
-            )
-        }
+    private fun hideCategoryPopup() {
+        _createPopupState.update { CreateCategoryPopupState() }
     }
 }

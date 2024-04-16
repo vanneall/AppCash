@@ -25,8 +25,8 @@ data class Category(
     val icon: FolderIcon
 ) {
     enum class Discriminator {
-        TASKS,
-        NOTES,
-        FINANCES
+        Task,
+        Note,
+        Finance
     }
 }

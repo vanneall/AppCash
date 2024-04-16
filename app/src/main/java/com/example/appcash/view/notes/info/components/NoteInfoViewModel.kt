@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.point.domain.notes.implementations.UpsertNoteUseCaseImpl
 import ru.point.domain.notes.implementations.GetNoteByIdUseCaseImpl
+import ru.point.domain.notes.implementations.UpsertNoteUseCaseImpl
 
 class NoteInfoViewModel @AssistedInject constructor(
     @Assisted(ID_KEY)

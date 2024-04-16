@@ -13,7 +13,7 @@ import java.time.LocalDate
 @Dao
 interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun create(task: Task): Long
+    suspend fun create(task: Task): Long
 
     @Transaction
     @Query("SELECT id, text, isCompleted, is_bookmark, description, date from task where parent_id is null ")
@@ -28,7 +28,7 @@ interface TaskDao {
     fun readById(id: Long): Flow<List<TaskWithTask>>
 
     @Query("UPDATE task SET isCompleted = :isChecked WHERE id = :id")
-    fun update(id: Long, isChecked: Boolean)
+    suspend fun update(id: Long, isChecked: Boolean)
 
     @Query("SELECT COUNT(id) FROM task ")
     fun getAllTasksCount(): Flow<Int>
@@ -37,15 +37,15 @@ interface TaskDao {
     fun getBookmarksCount(): Flow<Int>
 
     @Query("DELETE FROM task WHERE id = :id ")
-    fun deleteById(id: Long)
+    suspend fun deleteById(id: Long)
 
     @Query("UPDATE task set is_bookmark = not is_bookmark where id = :id ")
-    fun updateBookmark(id: Long)
+    suspend fun updateBookmark(id: Long)
 
     @Transaction
     @Query("SELECT id, text, isCompleted, is_bookmark, description, date from task where parent_id is null and is_bookmark = 1 ")
     fun getBookmarksTasks(): Flow<List<TaskWithTask>>
 
     @Query("UPDATE task set text = :name, description = :description, date = :date where id = :id ")
-    fun updateTask(id: Long, name: String, description: String, date: LocalDate)
+    suspend fun updateTask(id: Long, name: String, description: String, date: LocalDate)
 }

@@ -20,8 +20,8 @@ import kotlinx.coroutines.launch
 import ru.point.data.data.entities.Category
 import ru.point.data.data.entities.Finance
 import ru.point.domain.finance.interfaces.InsertFinanceUseCase
-import ru.point.domain.notes.interfaces.GetCategoryByTypeUseCase
-import ru.point.domain.notes.interfaces.InsertFolderUseCase
+import ru.point.domain.category.interfaces.CreateCategoryUseCase
+import ru.point.domain.category.interfaces.GetCategoryByTypeUseCase
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -29,11 +29,11 @@ import javax.inject.Inject
 class AddFinanceViewModel @Inject constructor(
     getCategoryByTypeUseCase: GetCategoryByTypeUseCase,
     private val insertFinanceUseCase: Lazy<InsertFinanceUseCase>,
-    private val insertFolderUseCase: Lazy<InsertFolderUseCase>
+    private val createCategoryUseCase: Lazy<CreateCategoryUseCase>
 ) : ViewModel(), EventHandler {
 
     private val _list = getCategoryByTypeUseCase
-        .invoke(type = Category.Discriminator.FINANCES)
+        .invoke(type = Category.Discriminator.Finance)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val _price = MutableStateFlow("")
@@ -65,14 +65,14 @@ class AddFinanceViewModel @Inject constructor(
     override fun handle(event: Event) {
         when (event) {
 
-            is CreateCategoryPopupEvent.InsertFolder -> {
+            is CreateCategoryPopupEvent.CreateCategory -> {
                 insertFolder(
                     name = event.name,
                     color = event.color
                 )
             }
 
-            is CreateCategoryPopupEvent.SelectFolderIcon -> {
+            is CreateCategoryPopupEvent.SelectCategoryIcon -> {
                 selectFolderIcon(event.position)
             }
 
@@ -116,10 +116,10 @@ class AddFinanceViewModel @Inject constructor(
 
     private fun insertFolder(name: String, color: Int) {
         viewModelScope.launch(context = Dispatchers.IO) {
-            insertFolderUseCase.get().invoke(
+            createCategoryUseCase.get().invoke(
                 name = name,
                 colorIndex = color,
-                discriminator = Category.Discriminator.FINANCES,
+                discriminator = Category.Discriminator.Finance,
                 iconId = _createPopupState.value.selectedFolderIcon,
             )
             hideBottomSheet()

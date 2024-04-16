@@ -84,8 +84,7 @@ private fun TasksMain(
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             InfoCheep(
                 title = stringResource(id = R.string.all_tasks),
@@ -161,8 +160,7 @@ private fun TasksMain(
         ModalBottomSheet(
             onDismissRequest = { onEvent(CreateCategoryPopupEvent.HideCreatePopup) },
             containerColor = Color.White,
-            modifier = Modifier
-                .height(350.dp)
+            modifier = Modifier.height(350.dp)
         ) {
             CreateCategoryPopup(
                 state = state.createCategoryPopupState,

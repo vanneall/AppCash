@@ -1,13 +1,13 @@
-package ru.point.domain.notes.interfaces
+package ru.point.data.data.factory
 
 import ru.point.data.data.entities.Category
 import ru.point.data.data.entities.FolderIcon
 
-interface InsertFolderUseCase {
-    operator fun invoke(
+interface CategoryFactory {
+    fun create(
         name: String,
-        colorIndex: Int,
+        color: Int,
         discriminator: Category.Discriminator,
-        iconId: FolderIcon
-    )
+        icon: FolderIcon
+    ): Category
 }

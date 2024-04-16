@@ -1,9 +1,13 @@
 package ru.point.domain.tasks.interfaces
 
-import ru.point.data.data.entities.Task
+import java.time.LocalDate
 
 interface InsertTaskUseCase {
     operator fun invoke(
-        task: Task
+        text: String,
+        description: String,
+        parentTaskId: Long?,
+        categoryId: Long?,
+        date: LocalDate
     )
 }

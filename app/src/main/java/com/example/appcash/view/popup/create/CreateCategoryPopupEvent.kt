@@ -4,12 +4,12 @@ import com.example.appcash.utils.events.Event
 
 sealed class CreateCategoryPopupEvent() : Event {
 
-    data class InsertFolder(
+    data class CreateCategory(
         val name: String,
         val color: Int
     ) : CreateCategoryPopupEvent()
 
-    data class SelectFolderIcon(val position: Int) : CreateCategoryPopupEvent()
+    data class SelectCategoryIcon(val position: Int) : CreateCategoryPopupEvent()
 
     data class InputName(val name: String) : CreateCategoryPopupEvent()
 

@@ -80,7 +80,7 @@ fun TasksListScreenNavigation(
 
         val viewModel: TasksListViewModel = viewModel {
             assistedFactory.create(
-                folderId = folderIdArg,
+                categoryId = folderIdArg,
                 openMode = openModeHandledArg,
             )
         }

@@ -1,13 +1,18 @@
 package ru.point.domain.tasks.implementations
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.point.data.data.repository_interfaces.TasksRepository
 import ru.point.domain.tasks.interfaces.DeleteTaskByIdUseCase
 import javax.inject.Inject
 
 class DeleteTaskByIdUseCaseImpl @Inject constructor(
     private val repository: TasksRepository
-): DeleteTaskByIdUseCase {
+) : DeleteTaskByIdUseCase {
     override fun invoke(id: Long) {
-        repository.deleteTaskById(id = id)
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.deleteTaskById(id = id)
+        }
     }
 }

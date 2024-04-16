@@ -37,13 +37,13 @@ data class Task(
     val description: String = "",
 
     @ColumnInfo("parent_id")
-    val parentId: Long? = null,
+    val parentTaskId: Long? = null,
 
     @ColumnInfo("date")
     val date: LocalDate? = null,
 
     @ColumnInfo("category_id")
-    val folderId: Long? = null,
+    val categoryId: Long? = null,
 
     @ColumnInfo("is_bookmark")
     val isBookmark: Boolean = false

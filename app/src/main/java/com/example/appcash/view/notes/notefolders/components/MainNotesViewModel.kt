@@ -17,16 +17,16 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import ru.point.data.data.entities.Category
 import ru.point.data.data.entities.Category.Discriminator
+import ru.point.domain.category.interfaces.CreateCategoryUseCase
 import ru.point.domain.notes.interfaces.GetAllNotesCountUseCase
-import ru.point.domain.notes.interfaces.GetCategoryByTypeUseCase
-import ru.point.domain.notes.interfaces.InsertFolderUseCase
+import ru.point.domain.category.interfaces.GetCategoryByTypeUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class MainNotesViewModel @Inject constructor(
     private val getCategoryByTypeUseCase: GetCategoryByTypeUseCase,
     private val getAllNotesCountUseCase: GetAllNotesCountUseCase,
-    private val insertFolderUseCase: Lazy<InsertFolderUseCase>,
+    private val createCategoryUseCase: Lazy<CreateCategoryUseCase>,
 ) : ViewModel(), EventHandler {
 
     private val _allNotesCount = initializeAllNoteCount()
@@ -49,14 +49,14 @@ class MainNotesViewModel @Inject constructor(
 
     override fun handle(event: Event) {
         when (event) {
-            is CreateCategoryPopupEvent.InsertFolder -> {
+            is CreateCategoryPopupEvent.CreateCategory -> {
                 insertFolder(
                     name = event.name,
                     color = event.color
                 )
             }
 
-            is CreateCategoryPopupEvent.SelectFolderIcon -> {
+            is CreateCategoryPopupEvent.SelectCategoryIcon -> {
                 updateFolderIcon(position = event.position)
             }
 
@@ -76,7 +76,7 @@ class MainNotesViewModel @Inject constructor(
 
     private fun initializeCategoriesList(): Flow<List<Category>> {
         return getCategoryByTypeUseCase
-            .invoke(type = Discriminator.NOTES)
+            .invoke(type = Discriminator.Note)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
@@ -93,10 +93,10 @@ class MainNotesViewModel @Inject constructor(
     }
 
     private fun insertFolder(name: String, color: Int) {
-        insertFolderUseCase.get().invoke(
+        createCategoryUseCase.get().invoke(
             name = name,
             colorIndex = color,
-            discriminator = Discriminator.NOTES,
+            discriminator = Discriminator.Note,
             iconId = _popupState.value.selectedFolderIcon,
         )
         hideBottomSheet()

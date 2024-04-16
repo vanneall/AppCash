@@ -5,13 +5,13 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import ru.point.data.data.entities.Category
 import kotlinx.coroutines.flow.Flow
+import ru.point.data.data.entities.Category
 
 @Dao
 interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun create(value: Category): Long
+    suspend fun create(value: Category): Long
 
     @Query("SELECT * FROM category WHERE id = :id")
     fun readById(id: Long): Flow<Category>
@@ -25,8 +25,8 @@ interface CategoryDao {
                 "SET name = :name, color = :colorIndex " +
                 "WHERE id = :id"
     )
-    fun updateFolder(id: Long, name: String, colorIndex: Int)
+    suspend fun updateFolder(id: Long, name: String, colorIndex: Int)
 
     @Query("DELETE FROM category WHERE id = :value")
-    fun deleteById(value: Long)
+    suspend fun deleteById(value: Long)
 }

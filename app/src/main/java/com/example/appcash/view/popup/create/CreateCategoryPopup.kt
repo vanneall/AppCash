@@ -95,7 +95,7 @@ fun CreateCategoryPopup(
                         .background(color = LightGray, shape = CircleShape)
                         .clickable {
                             onEvent(
-                                CreateCategoryPopupEvent.SelectFolderIcon(index)
+                                CreateCategoryPopupEvent.SelectCategoryIcon(index)
                             )
                         }
                         .padding(5.dp)
@@ -116,7 +116,7 @@ fun CreateCategoryPopup(
                     .background(color = color, shape = CircleShape)
                     .clickable {
                         onEvent(
-                            CreateCategoryPopupEvent.InsertFolder(
+                            CreateCategoryPopupEvent.CreateCategory(
                                 state.name, color.toArgb()
                             )
                         )

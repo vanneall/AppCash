@@ -11,18 +11,18 @@ class RoomConverters {
     @TypeConverter
     fun fromStringToFolderType(value: String): Discriminator {
         return when (value) {
-            Discriminator.NOTES.name -> Discriminator.NOTES
-            Discriminator.FINANCES.name -> Discriminator.FINANCES
-            else -> Discriminator.TASKS
+            Discriminator.Note.name -> Discriminator.Note
+            Discriminator.Finance.name -> Discriminator.Finance
+            else -> Discriminator.Task
         }
     }
 
     @TypeConverter
     fun fromFolderTypeToString(value: Discriminator): String {
         return when (value) {
-            Discriminator.NOTES -> Discriminator.NOTES.name
-            Discriminator.FINANCES -> Discriminator.FINANCES.name
-            else -> Discriminator.TASKS.name
+            Discriminator.Note -> Discriminator.Note.name
+            Discriminator.Finance -> Discriminator.Finance.name
+            else -> Discriminator.Task.name
         }
     }
 

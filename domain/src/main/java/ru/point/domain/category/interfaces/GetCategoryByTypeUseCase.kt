@@ -1,4 +1,4 @@
-package ru.point.domain.notes.interfaces
+package ru.point.domain.category.interfaces
 
 import kotlinx.coroutines.flow.Flow
 import ru.point.data.data.entities.Category

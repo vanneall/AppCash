@@ -6,7 +6,7 @@ import ru.point.data.data.entities.TaskWithTask
 
 data class TasksListState(
     val screenTitle: String = "",
+    val tasks: List<TaskWithTask> = emptyList(),
     val taskControlPopupState: TaskControlPopupState = TaskControlPopupState(),
     val taskConfiguratorPopupState: TaskConfiguratorPopupState = TaskConfiguratorPopupState(),
-    val tasks: List<TaskWithTask> = emptyList(),
 )

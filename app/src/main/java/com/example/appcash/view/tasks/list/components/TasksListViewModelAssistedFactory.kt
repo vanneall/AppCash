@@ -9,15 +9,15 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 
 @AssistedFactory
-interface MyFactory {
+interface TaskListAssistedFactory {
     fun create(
         @Assisted(OPEN_MODE_KEY) openMode: TasksSelection,
-        @Assisted(CATEGORY_ID_KEY) folderId: Long?
+        @Assisted(CATEGORY_ID_KEY) categoryId: Long?
     ): TasksListViewModel
 }
 
 @EntryPoint
 @InstallIn(ActivityComponent::class)
 interface TasksViewModelFactoryProvider {
-    fun provideTasksViewModelFactory(): MyFactory
+    fun provideTasksViewModelFactory(): TaskListAssistedFactory
 }

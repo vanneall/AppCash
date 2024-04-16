@@ -261,13 +261,13 @@ private fun ScreenPreview() {
                 Category(
                     name = "Дом",
                     color = 0,
-                    discriminator = Category.Discriminator.NOTES,
+                    discriminator = Category.Discriminator.Note,
                     icon = FolderIcon.SERVICES,
                 ),
                 Category(
                     name = "Работа",
                     color = 0,
-                    discriminator = Category.Discriminator.NOTES,
+                    discriminator = Category.Discriminator.Note,
                     icon = FolderIcon.SERVICES,
                 )
             )
