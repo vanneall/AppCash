@@ -1,4 +1,4 @@
-package ru.point.data.data.datasource.repository.implementations
+package ru.point.data.data.datasource.repository.implementations.local
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

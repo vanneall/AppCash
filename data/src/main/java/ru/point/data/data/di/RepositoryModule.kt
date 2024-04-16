@@ -5,10 +5,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ru.point.data.data.datasource.local.database.AppCashDatabase
-import ru.point.data.data.datasource.repository.implementations.CategoriesRepositoryImpl
-import ru.point.data.data.datasource.repository.implementations.FinancesRepositoryImpl
-import ru.point.data.data.datasource.repository.implementations.NotesRepositoryImpl
-import ru.point.data.data.datasource.repository.implementations.TasksRepositoryImpl
+import ru.point.data.data.datasource.repository.implementations.local.CategoriesRepositoryImpl
+import ru.point.data.data.datasource.repository.implementations.local.FinancesRepositoryImpl
+import ru.point.data.data.datasource.repository.implementations.local.NotesRepositoryImpl
+import ru.point.data.data.datasource.repository.implementations.local.TasksRepositoryImpl
 import ru.point.data.data.datasource.repository.interfaces.CategoriesRepository
 import ru.point.data.data.datasource.repository.interfaces.FinancesRepository
 import ru.point.data.data.datasource.repository.interfaces.NotesRepository
