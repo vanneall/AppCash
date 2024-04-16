@@ -29,8 +29,10 @@ import com.example.appcash.navigation.Destinations
 import com.example.appcash.navigation.Destinations.FINANCE_ADD_SCREEN
 import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
+import com.example.appcash.utils.mode.convertToString
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
+import com.example.appcash.view.finance.chart.components.OpenMode
 import com.example.appcash.view.finance.general.FinanceRow
 import com.example.appcash.view.finance.main.components.FinanceMainState
 import com.example.appcash.view.finance.main.components.FinanceViewModel
@@ -86,9 +88,13 @@ fun MainMorda(
 
         item {
             NavigateAddButton(
-                onNavigate = {
-                    navigate(Destinations.FINANCE_CHART_SCREEN)
-                }, modifier = Modifier
+                onNavigateExpense = {
+                    navigate("${Destinations.FINANCE_CHART_SCREEN}/${OpenMode.EXPENSE.name}")
+                },
+                onNavigateIncome = {
+                    navigate("${Destinations.FINANCE_CHART_SCREEN}/${OpenMode.INCOME.name}")
+                },
+                modifier = Modifier
                     .fillMaxWidth()
             )
         }
@@ -97,21 +103,38 @@ fun MainMorda(
             Spacer(modifier = Modifier.height(40.dp))
         }
 
-        items(
-            items = state.transactionsByYearMonth
-        ) { financeSubset ->
-            FinanceRow(
-                icon = FolderIconMapper.mapToIcon(value = financeSubset.icon ?: FolderIcon.UNKNOWN),
-                financeSubset = financeSubset
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+        state.transactionsByYearMonth.forEach { dto ->
+            item {
+                Text(
+                    text = convertToString(dto.separator),
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 24.sp
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(28.dp))
+            }
+
+            items(
+                items = dto.list
+            ) { financeSubset ->
+                FinanceRow(
+                    financeSubset = financeSubset,
+                    icon = FolderIconMapper.mapToIcon(
+                        value = financeSubset.icon ?: FolderIcon.UNKNOWN
+                    )
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
     }
 }
 
 @Composable
 private fun NavigateAddButton(
-    onNavigate: () -> Unit,
+    onNavigateExpense: () -> Unit,
+    onNavigateIncome: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -120,7 +143,7 @@ private fun NavigateAddButton(
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         OutlinedButton(
-            onClick = { onNavigate() },
+            onClick = { onNavigateExpense() },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.weight(1f)
         ) {
@@ -135,7 +158,7 @@ private fun NavigateAddButton(
         }
 
         OutlinedButton(
-            onClick = { onNavigate() },
+            onClick = { onNavigateIncome() },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.weight(1f)
         ) {
@@ -156,7 +179,9 @@ private fun NavigateAddButton(
 @Composable
 private fun NavigateAddButtonPreview() {
     NavigateAddButton(
-        {}, modifier = Modifier
+        {},
+        {},
+        modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 18.dp, vertical = 10.dp)
     )

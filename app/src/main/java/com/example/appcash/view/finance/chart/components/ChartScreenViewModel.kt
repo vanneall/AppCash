@@ -4,10 +4,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.yml.charts.ui.piechart.models.PieChartData
+import com.example.appcash.utils.ArgsKeys
 import com.example.appcash.utils.events.Event
 import com.example.appcash.utils.events.EventHandler
 import com.example.appcash.view.finance.main.components.FinanceEvent
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.Lazy
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,15 +19,18 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import ru.point.data.data.entity.subset.FinanceCategorySubset
 import ru.point.domain.finance.implementations.FinanceSeparatorDto
-import ru.point.domain.finance.interfaces.GetFinancesByMonthUseCase
-import ru.point.domain.finance.interfaces.GetFinancesByYearMonthUseCase
+import ru.point.domain.finance.implementations.GetExpenseFinanceUseCaseImpl
+import ru.point.domain.finance.implementations.GetFinancesByMonthUseCaseImpl
+import ru.point.domain.finance.implementations.GetIncomeFinancesByYearMonthUseCaseImpl
 import java.time.LocalDate
-import javax.inject.Inject
 
-@HiltViewModel
-class ChartScreenViewModel @Inject constructor(
-    private val getFinancesByYearMonthUseCase: GetFinancesByYearMonthUseCase,
-    private val getCategoryFinancesByMonthUseCase: GetFinancesByMonthUseCase
+
+class ChartScreenViewModel @AssistedInject constructor(
+    @Assisted(ArgsKeys.OPEN_MODE_KEY)
+    private val openMode: OpenMode,
+    private val getIncomeFinancesByYearMonthUseCase: Lazy<GetIncomeFinancesByYearMonthUseCaseImpl>,
+    private val getExpenseFinanceUseCaseImpl: Lazy<GetExpenseFinanceUseCaseImpl>,
+    private val getCategoryFinancesByMonthUseCase: GetFinancesByMonthUseCaseImpl
 ) : ViewModel(), EventHandler {
 
     private var _date = MutableStateFlow(LocalDate.now())
@@ -90,9 +96,15 @@ class ChartScreenViewModel @Inject constructor(
     private fun initializeFinancesByMonth(
         date: LocalDate = _date.value
     ): Flow<List<FinanceSeparatorDto>> {
-        return getFinancesByYearMonthUseCase
-            .invoke(date)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+        return when (openMode) {
+            OpenMode.EXPENSE -> {
+                getExpenseFinanceUseCaseImpl.get().invoke(date)
+            }
+
+            OpenMode.INCOME -> {
+                getIncomeFinancesByYearMonthUseCase.get().invoke(date)
+            }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
     private fun initializeCategoryFinancesByMonth(): Flow<List<FinanceCategorySubset>> {

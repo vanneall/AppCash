@@ -7,24 +7,25 @@ import ru.point.data.data.datasource.repository.interfaces.FinancesRepository
 import ru.point.data.data.entity.entities.Finance
 import ru.point.data.data.entity.subset.FinanceCategorySubset
 import ru.point.data.data.entity.subset.FinanceSubset
-import java.time.LocalDate
 import javax.inject.Inject
 
 class FinancesRepositoryImpl @Inject constructor(
     private val financeDao: FinanceDao
 ) : FinancesRepository {
-    override fun getFinancesByMonthId(
+    override fun getIncomeFinancesByMonthId(
         startDate: String,
         endDate: String
     ): Flow<List<FinanceSubset>> {
-        return financeDao.readByMonthId(startDate, endDate).map { it.filterNot { item -> item.isValuesNull() } }
+        return financeDao.readIncomeByMonthId(startDate, endDate)
+            .map { it.filterNot { item -> item.isValuesNull() } }
     }
 
     override fun getFinancesByFolderId(
         startDate: String,
         endDate: String
     ): Flow<List<FinanceCategorySubset>> {
-        return financeDao.readByFolder(startDate, endDate).map { it.filterNot { item -> item.isValuesNull() } }
+        return financeDao.readByFolder(startDate, endDate)
+            .map { it.filterNot { item -> item.isValuesNull() } }
     }
 
     override fun insertFinance(value: Finance) {
@@ -39,7 +40,11 @@ class FinancesRepositoryImpl @Inject constructor(
         return financeDao.readFinancesSum()
     }
 
-    override fun getMinDate(): Flow<LocalDate> {
-        return financeDao.readMinDate()
+    override fun getExpenseFinancesByMonthId(
+        startDate: String,
+        endDate: String
+    ): Flow<List<FinanceSubset>> {
+        return financeDao.readExpenseByMonthId(startDate, endDate)
+            .map { it.filterNot { item -> item.isValuesNull() } }
     }
 }

@@ -7,11 +7,13 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import ru.point.data.data.datasource.repository.interfaces.FinancesRepository
 import ru.point.domain.finance.implementations.GetAllFinancesUseCaseImpl
+import ru.point.domain.finance.implementations.GetExpenseFinanceUseCaseImpl
 import ru.point.domain.finance.implementations.GetFinancesByMonthUseCaseImpl
-import ru.point.domain.finance.implementations.GetFinancesByYearMonthUseCaseImpl
+import ru.point.domain.finance.implementations.GetIncomeFinancesByYearMonthUseCaseImpl
 import ru.point.domain.finance.implementations.GetFinancesSumUseCaseImpl
 import ru.point.domain.finance.implementations.InsertFinanceUseCaseImpl
 import ru.point.domain.finance.interfaces.GetAllFinancesUseCase
+import ru.point.domain.finance.interfaces.GetExpenseFinanceUseCase
 import ru.point.domain.finance.interfaces.GetFinancesByMonthUseCase
 import ru.point.domain.finance.interfaces.GetFinancesByYearMonthUseCase
 import ru.point.domain.finance.interfaces.GetFinancesSumUseCase
@@ -23,7 +25,13 @@ class FinanceModule {
     @Provides
     @ViewModelScoped
     fun provideGetTransactionsByYearMonthUseCase(repository: FinancesRepository): GetFinancesByYearMonthUseCase {
-        return GetFinancesByYearMonthUseCaseImpl(repository = repository)
+        return GetIncomeFinancesByYearMonthUseCaseImpl(repository = repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetExpenseByYearMonthUseCase(repository: FinancesRepository): GetExpenseFinanceUseCase {
+        return GetExpenseFinanceUseCaseImpl(repository = repository)
     }
 
     @Provides

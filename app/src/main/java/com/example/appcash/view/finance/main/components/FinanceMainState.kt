@@ -1,8 +1,8 @@
 package com.example.appcash.view.finance.main.components
 
-import ru.point.data.data.entity.subset.FinanceSubset
+import ru.point.domain.finance.implementations.FinanceSeparatorDto
 
 data class FinanceMainState(
     val sum: Int = 0,
-    val transactionsByYearMonth: List<FinanceSubset> = emptyList(),
+    val transactionsByYearMonth: List<FinanceSeparatorDto> = emptyList(),
 )

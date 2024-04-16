@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.appcash.view.ui.theme.Gray
 
@@ -41,7 +42,7 @@ fun AppCashBottomNavigation(
                     icon = { /*TODO*/ }))
                 else {
                     BottomNavigationItem(
-                        selected = screenItem.route == currentDestination?.route,
+                        selected = currentDestination?.hierarchy?.any { screenItem.route == it.route } == true,
                         onClick = {
                             navController.navigate(screenItem.route)
                         },

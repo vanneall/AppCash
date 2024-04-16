@@ -52,6 +52,7 @@ import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.appcash.R
 import com.example.appcash.utils.FolderIconMapper
 import com.example.appcash.utils.events.Event
+import com.example.appcash.utils.mode.convertToString
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.finance.chart.components.ChartScreenViewModel
@@ -202,7 +203,7 @@ private fun FinanceChart(
                 span = { GridItemSpan(maxCurrentLineSpan) }
             ) {
                 Text(
-                    text = dto.separator.name,
+                    text = convertToString(dto.separator),
                     fontWeight = FontWeight.Medium,
                     fontSize = 24.sp
                 )
