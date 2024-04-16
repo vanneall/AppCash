@@ -1,17 +1,15 @@
 package ru.point.data.data.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
-import ru.point.data.data.entities.Note
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
+import ru.point.data.data.entities.Note
 
 @Dao
 interface NoteDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun create(value: Note): Long
+    @Upsert(entity = Note::class)
+    suspend fun upsert(value: Note): Long
 
     @Query("SELECT * FROM note")
     fun readAll(): Flow<List<Note>>
@@ -22,11 +20,8 @@ interface NoteDao {
     @Query("SELECT * FROM note WHERE note.category_id = :id ")
     fun readAllByFolderId(id: Long): Flow<List<Note>>
 
-    @Update
-    fun update(value: Note)
-
     @Query("DELETE FROM note WHERE id = :id")
-    fun delete(id: Long)
+    suspend fun delete(id: Long)
 
     @Query("SELECT COUNT(id) FROM category")
     fun getCount(): Flow<Int>

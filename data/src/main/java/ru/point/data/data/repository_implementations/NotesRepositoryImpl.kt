@@ -1,39 +1,49 @@
 package ru.point.data.data.repository_implementations
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import ru.point.data.data.dao.NoteDao
 import ru.point.data.data.entities.Note
 import ru.point.data.data.repository_interfaces.NotesRepository
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class NotesRepositoryImpl @Inject constructor(
     private val noteDao: NoteDao
 ) : NotesRepository {
-    override fun createNote(note: Note) {
-        noteDao.create(value = note)
+    override suspend fun upsert(note: Note) {
+        withContext(Dispatchers.IO) {
+            noteDao.upsert(value = note)
+        }
     }
 
-    override fun getNoteById(id: Long): Flow<Note> {
-        return noteDao.readById(id = id)
+    override suspend fun getNoteById(id: Long): Flow<Note> {
+        return withContext(Dispatchers.IO) {
+            noteDao.readById(id = id)
+        }
     }
 
-    override fun getNotes(): Flow<List<Note>> {
-        return noteDao.readAll()
+    override suspend fun getAllNotes(): Flow<List<Note>> {
+        return withContext(Dispatchers.IO) {
+            noteDao.readAll()
+        }
     }
 
-    override fun getNotes(folderId: Long): Flow<List<Note>> {
-        return noteDao.readAllByFolderId(folderId)
+    override suspend fun getNotesByFolderId(folderId: Long): Flow<List<Note>> {
+        return withContext(Dispatchers.IO) {
+            noteDao.readAllByFolderId(folderId)
+        }
     }
 
-    override fun updateNote(note: Note) {
-        noteDao.update(value = note)
+    override suspend fun delete(id: Long) {
+        withContext(Dispatchers.IO) {
+            noteDao.delete(id = id)
+        }
     }
 
-    override fun deleteNote(id: Long) {
-        noteDao.delete(id = id)
-    }
-
-    override fun getNoteCount(): Flow<Int> {
-        return noteDao.getCount()
+    override suspend fun getNoteCount(): Flow<Int> {
+        return withContext(Dispatchers.IO) {
+            noteDao.getCount()
+        }
     }
 }

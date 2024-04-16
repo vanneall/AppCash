@@ -9,15 +9,12 @@ import com.example.appcash.view.popup.create.CreateCategoryPopupEvent
 import com.example.appcash.view.popup.create.CreateCategoryPopupState
 import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import ru.point.data.data.entities.Category
 import ru.point.data.data.entities.Category.Discriminator
 import ru.point.domain.notes.interfaces.GetAllNotesCountUseCase
@@ -60,7 +57,7 @@ class MainNotesViewModel @Inject constructor(
             }
 
             is CreateCategoryPopupEvent.SelectFolderIcon -> {
-                selectFolderIcon(position = event.position)
+                updateFolderIcon(position = event.position)
             }
 
             is CreateCategoryPopupEvent.ShowCreatePopup -> {
@@ -72,7 +69,7 @@ class MainNotesViewModel @Inject constructor(
             }
 
             is CreateCategoryPopupEvent.InputName -> {
-                inputFolderName(name = event.name)
+                updateFolderName(name = event.name)
             }
         }
     }
@@ -89,25 +86,23 @@ class MainNotesViewModel @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
     }
 
-    private fun inputFolderName(name: String) {
+    private fun updateFolderName(name: String) {
         _popupState.update { state ->
             state.copy(name = name)
         }
     }
 
     private fun insertFolder(name: String, color: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            insertFolderUseCase.get().invoke(
-                name = name,
-                colorIndex = color,
-                discriminator = Discriminator.NOTES,
-                iconId = _popupState.value.selectedFolderIcon,
-            )
-            hideBottomSheet()
-        }
+        insertFolderUseCase.get().invoke(
+            name = name,
+            colorIndex = color,
+            discriminator = Discriminator.NOTES,
+            iconId = _popupState.value.selectedFolderIcon,
+        )
+        hideBottomSheet()
     }
 
-    private fun selectFolderIcon(position: Int) {
+    private fun updateFolderIcon(position: Int) {
         _popupState.update { state ->
             state.copy(
                 selectedFolderIcon = FolderIconMapper.mapToFolderIcon(position = position)

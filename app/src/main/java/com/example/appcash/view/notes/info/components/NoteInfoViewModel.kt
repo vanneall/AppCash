@@ -9,16 +9,14 @@ import com.example.appcash.utils.events.EventHandler
 import dagger.Lazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.point.domain.notes.implementations.GetNoteByIdUseCaseImpl
 import ru.point.domain.notes.implementations.UpsertNoteUseCaseImpl
+import ru.point.domain.notes.implementations.GetNoteByIdUseCaseImpl
 
 class NoteInfoViewModel @AssistedInject constructor(
     @Assisted(ID_KEY)
@@ -26,7 +24,7 @@ class NoteInfoViewModel @AssistedInject constructor(
     @Assisted(CATEGORY_ID_KEY)
     private val folderId: Long?,
     private val getNoteByIdUseCaseImpl: Lazy<GetNoteByIdUseCaseImpl>,
-    private val upsertNoteUseCaseImpl: Lazy<UpsertNoteUseCaseImpl>,
+    private val createNoteUseCaseImpl: Lazy<UpsertNoteUseCaseImpl>,
 ) : ViewModel(), EventHandler {
 
     private val _title = MutableStateFlow("")
@@ -71,10 +69,8 @@ class NoteInfoViewModel @AssistedInject constructor(
     }
 
     private fun saveNote() {
-        CoroutineScope(Dispatchers.IO).launch {
-            with(state.value) {
-                upsertNote(title = title, content = content)
-            }
+        with(state.value) {
+            upsertNote(title = title, content = content)
         }
     }
 
@@ -91,7 +87,7 @@ class NoteInfoViewModel @AssistedInject constructor(
     }
 
     private fun upsertNote(title: String, content: String) {
-        upsertNoteUseCaseImpl.get().invoke(
+        createNoteUseCaseImpl.get().invoke(
             id = noteId,
             title = title,
             content = content,

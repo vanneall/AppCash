@@ -1,5 +1,8 @@
 package ru.point.domain.notes.implementations
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.point.data.data.factory.NoteFactory
 import ru.point.data.data.repository_interfaces.NotesRepository
 import ru.point.domain.notes.interfaces.UpsertNoteUseCase
@@ -11,17 +14,20 @@ class UpsertNoteUseCaseImpl @Inject constructor(
 ) : UpsertNoteUseCase {
 
     override fun invoke(id: Long?, title: String, content: String, categoryId: Long?) {
-        val handledTitle = title.trim()
-        val handledContent = content.trim()
+        CoroutineScope(Dispatchers.Default).launch {
+            val handledTitle = title.trim()
+            val handledContent = content.trim()
 
-        if (handledTitle.isEmpty()) return
+            if (handledTitle.isEmpty()) return@launch
 
-        val note = noteFactory.create(
-            id = id,
-            title = handledTitle,
-            content = handledContent,
-            categoryId = categoryId
-        )
-        repository.createNote(note = note)
+            val note = noteFactory.create(
+                id = id,
+                title = handledTitle,
+                content = handledContent,
+                categoryId = categoryId
+            )
+
+            repository.upsert(note = note)
+        }
     }
 }
