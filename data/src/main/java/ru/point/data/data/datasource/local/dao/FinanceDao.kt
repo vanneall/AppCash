@@ -13,7 +13,7 @@ import ru.point.data.data.entity.subset.FinanceSubset
 interface FinanceDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun create(finance: Finance): Long
+    suspend fun create(finance: Finance): Long
 
     @Query(
         "SELECT fin.id as id, fol.name as name, fin.price as price, fol.icon as icon, fin.date as date " +
@@ -22,7 +22,7 @@ interface FinanceDao {
                 "ON fol.id = fin.category_id " +
                 "WHERE fin.date between :startDate and :endDate and price > 0"
     )
-    fun readIncomeByMonthId(startDate: String, endDate: String): Flow<List<FinanceSubset>>
+    fun readIncomeByMonthId(startDate: String, endDate: String): Flow<List<FinanceSubset?>>
 
     @Query(
         "SELECT fin.id as id, fol.name as name, fin.price as price, fol.icon as icon, fin.date as date " +
@@ -31,7 +31,7 @@ interface FinanceDao {
                 "ON fol.id = fin.category_id " +
                 "WHERE fin.date between :startDate and :endDate and price < 0 "
     )
-    fun readExpenseByMonthId(startDate: String, endDate: String): Flow<List<FinanceSubset>>
+    fun readExpenseByMonthId(startDate: String, endDate: String): Flow<List<FinanceSubset?>>
 
     @Query(
         " SELECT cat.name as name, cat.color as color, cat.icon as icon, SUM(fin.price) as sum " +
@@ -41,7 +41,7 @@ interface FinanceDao {
                 "WHERE fin.price > 0 and fin.date between :startDate and :endDate  " +
                 "GROUP BY name "
     )
-    fun readByFolderIncome(startDate: String, endDate: String): Flow<List<FinanceCategorySubset>>
+    fun readByFolderIncome(startDate: String, endDate: String): Flow<List<FinanceCategorySubset?>>
 
     @Query(
         " SELECT cat.name as name, cat.color as color, cat.icon as icon, SUM(fin.price) as sum " +
@@ -51,7 +51,7 @@ interface FinanceDao {
                 "WHERE fin.price < 0 and fin.date between :startDate and :endDate  " +
                 "GROUP BY name "
     )
-    fun readByFolderExpense(startDate: String, endDate: String): Flow<List<FinanceCategorySubset>>
+    fun readByFolderExpense(startDate: String, endDate: String): Flow<List<FinanceCategorySubset?>>
 
     @Query(
         "SELECT fin.id as id, fol.name as name, fin.price as price, fol.icon as icon, fin.date as date " +
@@ -60,7 +60,7 @@ interface FinanceDao {
                 "ON fol.id = fin.category_id " +
                 "ORDER BY fin.date DESC "
     )
-    fun readFinances(): Flow<List<FinanceSubset>>
+    fun readFinances(): Flow<List<FinanceSubset?>>
 
     @Query("select sum(price) from finance")
     fun readFinancesSum(): Flow<Int?>

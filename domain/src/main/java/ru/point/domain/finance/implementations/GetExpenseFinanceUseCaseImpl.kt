@@ -1,7 +1,10 @@
 package ru.point.domain.finance.implementations
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import ru.point.data.data.datasource.repository.interfaces.FinancesRepository
 import ru.point.domain.finance.interfaces.GetExpenseFinanceUseCase
 import ru.point.domain.finance.separate
@@ -16,10 +19,16 @@ class GetExpenseFinanceUseCaseImpl @Inject constructor(
         val startMonth = todayDate.with(TemporalAdjusters.firstDayOfMonth())
         val endMonth = todayDate.with(TemporalAdjusters.lastDayOfMonth())
 
-        return repository
-            .getExpenseFinancesByMonthId(startMonth.toString(), endMonth.toString())
-            .map { list ->
-                separate(todayDate, list)
-            }
+        return flow {
+            repository.getExpenseFinancesByMonthId(startMonth.toString(), endMonth.toString())
+                .map { list ->
+                    withContext(Dispatchers.Default) {
+                        separate(todayDate, list)
+                    }
+                }
+                .collect { list ->
+                    emit(list)
+                }
+        }
     }
 }

@@ -6,22 +6,25 @@ import ru.point.data.data.entity.subset.FinanceCategorySubset
 import ru.point.data.data.entity.subset.FinanceSubset
 
 interface FinancesRepository {
-    fun getIncomeFinancesByFolderId(
+    suspend fun getIncomeFinancesByFolderId(
         startDate: String,
         endDate: String
     ): Flow<List<FinanceCategorySubset>>
 
-    fun getExpenseFinancesByFolderId(
+    suspend fun getExpenseFinancesByFolderId(
         startDate: String,
         endDate: String
     ): Flow<List<FinanceCategorySubset>>
 
-    fun insertFinance(value: Finance)
-    fun getAllFinances(): Flow<List<FinanceSubset>>
-    fun getFinancesSum(): Flow<Int?>
-    fun getIncomeFinancesByMonthId(startDate: String, endDate: String): Flow<List<FinanceSubset>>
-    fun getExpenseFinancesByMonthId(
-        startDate: String,
-        endDate: String
-    ): Flow<List<FinanceSubset>>
+    suspend fun getAllFinances(): Flow<List<FinanceSubset>>
+
+    suspend fun getFinancesSum(): Flow<Int?>
+
+    suspend fun getIncomeFinancesByMonthId(startDate: String, endDate: String): Flow<List<FinanceSubset>>
+
+    suspend fun getExpenseFinancesByMonthId(startDate: String, endDate: String): Flow<List<FinanceSubset>>
+
+    suspend fun insertFinance(value: Finance)
+
+
 }

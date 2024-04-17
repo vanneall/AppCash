@@ -9,19 +9,16 @@ import com.example.appcash.view.popup.create.CreateCategoryPopupEvent
 import com.example.appcash.view.popup.create.CreateCategoryPopupState
 import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import ru.point.data.data.entity.entities.Category
 import ru.point.data.data.entity.entities.Finance
-import ru.point.domain.finance.interfaces.InsertFinanceUseCase
 import ru.point.domain.category.interfaces.CreateCategoryUseCase
 import ru.point.domain.category.interfaces.GetCategoryByTypeUseCase
+import ru.point.domain.finance.interfaces.InsertFinanceUseCase
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -115,15 +112,13 @@ class AddFinanceViewModel @Inject constructor(
     }
 
     private fun insertFolder(name: String, color: Int) {
-        viewModelScope.launch(context = Dispatchers.IO) {
-            createCategoryUseCase.get().invoke(
-                name = name,
-                colorIndex = color,
-                discriminator = Category.Discriminator.Finance,
-                iconId = _createPopupState.value.selectedFolderIcon,
-            )
-            hideBottomSheet()
-        }
+        createCategoryUseCase.get().invoke(
+            name = name,
+            colorIndex = color,
+            discriminator = Category.Discriminator.Finance,
+            iconId = _createPopupState.value.selectedFolderIcon,
+        )
+        hideBottomSheet()
     }
 
     private fun updateSearch(text: String) {
@@ -140,17 +135,13 @@ class AddFinanceViewModel @Inject constructor(
 
     private fun showBottomSheet() {
         _createPopupState.update { state ->
-            state.copy(
-                isShowed = true
-            )
+            state.copy(isShowed = true)
         }
     }
 
     private fun inputFolderName(name: String) {
         _createPopupState.update { state ->
-            state.copy(
-                name = name
-            )
+            state.copy(name = name)
         }
     }
 
@@ -172,17 +163,18 @@ class AddFinanceViewModel @Inject constructor(
 
 
     private fun createFinance(id: Long?) {
-        CoroutineScope(Dispatchers.IO).launch {
-            if (id == null || _price.value.isEmpty()) return@launch
-            var price = _price.value.toInt()
-            price *= if (!_isIncomeButtonSelected.value) -1 else 1
-            insertFinanceUseCase.get().invoke(
-                value = Finance(
-                    price = price,
-                    folderId = id,
-                    date = LocalDate.now()
-                )
+        if (id == null || _price.value.isEmpty()) return
+
+        var price = _price.value.toIntOrNull() ?: return
+
+        price *= if (!_isIncomeButtonSelected.value) -1 else 1
+
+        insertFinanceUseCase.get().invoke(
+            value = Finance(
+                price = price,
+                folderId = id,
+                date = LocalDate.now()
             )
-        }
+        )
     }
 }

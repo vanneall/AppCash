@@ -1,7 +1,9 @@
 package ru.point.data.data.datasource.repository.implementations.local
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import ru.point.data.data.datasource.local.dao.FinanceDao
 import ru.point.data.data.datasource.repository.interfaces.FinancesRepository
 import ru.point.data.data.entity.entities.Finance
@@ -12,47 +14,57 @@ import javax.inject.Inject
 class FinancesRepositoryImpl @Inject constructor(
     private val financeDao: FinanceDao
 ) : FinancesRepository {
-    override fun getIncomeFinancesByMonthId(
+    override suspend fun getIncomeFinancesByMonthId(
         startDate: String,
         endDate: String
     ): Flow<List<FinanceSubset>> {
-        return financeDao.readIncomeByMonthId(startDate, endDate)
-            .map { it.filterNot { item -> item.isValuesNull() } }
+        return withContext(Dispatchers.IO) {
+            financeDao.readIncomeByMonthId(startDate, endDate).map { it.filterNotNull() }
+        }
     }
 
-    override fun getIncomeFinancesByFolderId(
+    override suspend fun getIncomeFinancesByFolderId(
         startDate: String,
         endDate: String
     ): Flow<List<FinanceCategorySubset>> {
-        return financeDao.readByFolderIncome(startDate, endDate)
-            .map { it.filterNot { item -> item.isValuesNull() } }
+        return withContext(Dispatchers.IO) {
+            financeDao.readByFolderIncome(startDate, endDate).map { it.filterNotNull() }
+        }
     }
 
-    override fun insertFinance(value: Finance) {
-        financeDao.create(value)
+    override suspend fun insertFinance(value: Finance) {
+        withContext(Dispatchers.IO) {
+            financeDao.create(value)
+        }
     }
 
-    override fun getAllFinances(): Flow<List<FinanceSubset>> {
-        return financeDao.readFinances().map { it.filterNot { item -> item.isValuesNull() } }
+    override suspend fun getAllFinances(): Flow<List<FinanceSubset>> {
+        return withContext(Dispatchers.IO) {
+            financeDao.readFinances().map { it.filterNotNull() }
+        }
     }
 
-    override fun getFinancesSum(): Flow<Int?> {
-        return financeDao.readFinancesSum()
+    override suspend fun getFinancesSum(): Flow<Int?> {
+        return withContext(Dispatchers.IO) {
+            financeDao.readFinancesSum()
+        }
     }
 
-    override fun getExpenseFinancesByMonthId(
+    override suspend fun getExpenseFinancesByMonthId(
         startDate: String,
         endDate: String
     ): Flow<List<FinanceSubset>> {
-        return financeDao.readExpenseByMonthId(startDate, endDate)
-            .map { it.filterNot { item -> item.isValuesNull() } }
+        return withContext(Dispatchers.IO) {
+            financeDao.readExpenseByMonthId(startDate, endDate).map { it.filterNotNull() }
+        }
     }
 
-    override fun getExpenseFinancesByFolderId(
+    override suspend fun getExpenseFinancesByFolderId(
         startDate: String,
         endDate: String
     ): Flow<List<FinanceCategorySubset>> {
-        return financeDao.readByFolderExpense(startDate, endDate)
-            .map { it.filterNot { item -> item.isValuesNull() } }
+        return withContext(Dispatchers.IO) {
+            financeDao.readByFolderExpense(startDate, endDate).map { it.filterNotNull() }
+        }
     }
 }

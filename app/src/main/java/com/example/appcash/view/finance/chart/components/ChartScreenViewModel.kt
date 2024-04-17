@@ -41,16 +41,8 @@ class ChartScreenViewModel @AssistedInject constructor(
     private val _categories = MutableStateFlow<List<FinanceCategorySubset>>(emptyList())
 
     init {
-        viewModelScope.launch {
-            initializeCategoryFinancesByMonth().collect {
-                _categories.value = it
-            }
-        }
-        viewModelScope.launch {
-            initializeFinancesByMonth().collect {
-                _transactions.value = it
-            }
-        }
+        initializeTransactions()
+        initializeCategories()
     }
 
     val state = combine(
@@ -61,12 +53,12 @@ class ChartScreenViewModel @AssistedInject constructor(
         ChartState(
             transactionsByYearMonth = transaction,
             categories = categories,
-            categoriesForChart = categories.map { mapFinanceCategorySubset(it) }
+            categoriesForChart = categories.map { category -> mapFinanceCategorySubset(category) }
                 .takeIf { it.isNotEmpty() } ?: listOf(
                 PieChartData.Slice(
                     label = "",
                     value = 1f,
-                    color = Color.Gray
+                    color = Color.White
                 )
             ),
             selectedDate = date,
@@ -95,15 +87,25 @@ class ChartScreenViewModel @AssistedInject constructor(
 
     private fun updateDate(monthsSwitched: Int) {
         _date.update { state.value.availableLocalDate[monthsSwitched] }
+
+        initializeTransactions()
+        initializeCategories()
+
+
+    }
+
+    private fun initializeTransactions() {
         viewModelScope.launch {
-            initializeCategoryFinancesByMonth().collect {
-                _categories.value = it
+            initializeFinancesByMonth().collect { list ->
+                _transactions.value = list
             }
         }
+    }
 
+    private fun initializeCategories() {
         viewModelScope.launch {
-            initializeFinancesByMonth().collect {
-                _transactions.value = it
+            initializeCategoryFinancesByMonth().collect { list ->
+                _categories.value = list
             }
         }
     }
