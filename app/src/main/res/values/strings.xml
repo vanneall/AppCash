@@ -54,4 +54,13 @@
     <string name="today">Сегодня</string>
     <string name="yesterday">Вчера</string>
     <string name="previosly_in_month">Ранее в этом месяце</string>
+
+    <!-- Settings -->
+    <string name="extension_version">Расширенная версия</string>
+    <string name="theme">Тема</string>
+    <string name="password">Пароль</string>
+    <string name="currancy">Валюта</string>
+    <string name="restore_purchase">Восстановление покупки</string>
+    <string name="confidentiality">Конфиденциальность</string>
+    <string name="delete_all_data">Удалить все данные</string>
 </resources>

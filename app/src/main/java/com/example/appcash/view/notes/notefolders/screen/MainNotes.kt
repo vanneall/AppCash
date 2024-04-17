@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -62,7 +63,19 @@ fun MainNotesScreen(
     fabState: MutableState<FabState>
 ) {
     topAppBarState.value = TopAppBarState(
-        title = stringResource(id = R.string.note_screen)
+        title = stringResource(id = R.string.note_screen),
+        navigationIcon = {
+            IconButton(
+                onClick = { navigateTo(Destinations.MAIN_SETTINGS_SCREEN) },
+                modifier = Modifier.size(36.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.settings_icon),
+                    contentDescription = null,
+                    modifier = Modifier
+                )
+            }
+        }
     )
 
     fabState.value = FabState {

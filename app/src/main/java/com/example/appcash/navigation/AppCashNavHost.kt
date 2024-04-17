@@ -12,6 +12,7 @@ import com.example.appcash.navigation.screens.FinanceChartScreenNavigation
 import com.example.appcash.navigation.screens.MainCalendarScreenNavigation
 import com.example.appcash.navigation.screens.MainFinanceScreenNavigation
 import com.example.appcash.navigation.screens.MainNotesScreenNavigation
+import com.example.appcash.navigation.screens.MainSettingScreen
 import com.example.appcash.navigation.screens.MainTasksScreenNavigation
 import com.example.appcash.navigation.screens.NoteInfoScreenNavigation
 import com.example.appcash.navigation.screens.NotesListScreenNavigation
@@ -96,6 +97,13 @@ fun AppCashNavHost(
         ErrorScreenNavigation(
             navGraphBuilder = this,
             navHostController = navHostController
+        )
+
+        MainSettingScreen(
+            navGraphBuilder = this,
+            navHostController = navHostController,
+            topAppBarState = topAppBarState,
+            fabState = fabState
         )
     }
 }

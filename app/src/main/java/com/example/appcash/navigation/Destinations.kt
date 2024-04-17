@@ -23,7 +23,7 @@ object Destinations {
 
     const val ERROR_SCREEN = "ERROR_SCREEN"
 
-    const val ADD_FINANCE_OPERATION_SCREEN = "ADD_FINANCE_OPERATION_SCREEN"
+    const val MAIN_SETTINGS_SCREEN = "MAIN_SETTINGS_SCREEN"
 }
 
 val screenBottomItems = listOf(
