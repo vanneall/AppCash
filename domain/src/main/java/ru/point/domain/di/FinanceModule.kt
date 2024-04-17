@@ -8,7 +8,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 import ru.point.data.data.datasource.repository.interfaces.FinancesRepository
 import ru.point.domain.finance.implementations.GetAllFinancesUseCaseImpl
 import ru.point.domain.finance.implementations.GetExpenseFinanceUseCaseImpl
-import ru.point.domain.finance.implementations.GetFinancesByMonthUseCaseImpl
+import ru.point.domain.finance.implementations.GetFinancesByMonthAndOpenModeUseCaseImpl
 import ru.point.domain.finance.implementations.GetIncomeFinancesByYearMonthUseCaseImpl
 import ru.point.domain.finance.implementations.GetFinancesSumUseCaseImpl
 import ru.point.domain.finance.implementations.InsertFinanceUseCaseImpl
@@ -37,7 +37,7 @@ class FinanceModule {
     @Provides
     @ViewModelScoped
     fun provideGetTransactionsByFolderUseCase(repository: FinancesRepository): GetFinancesByMonthUseCase {
-        return GetFinancesByMonthUseCaseImpl(repository = repository)
+        return GetFinancesByMonthAndOpenModeUseCaseImpl(repository = repository)
     }
 
     @Provides

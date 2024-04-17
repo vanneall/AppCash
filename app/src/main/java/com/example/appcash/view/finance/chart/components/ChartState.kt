@@ -10,7 +10,7 @@ data class ChartState(
     val selectedDate: LocalDate = LocalDate.now(),
     val categories: List<FinanceCategorySubset> = emptyList(),
     val transactionsByYearMonth: List<FinanceSeparatorDto> = emptyList(),
-    val isError: Boolean = false,
+    val isIncome: Boolean = true,
     val categoriesForChart: List<PieChartData.Slice> = listOf(
         PieChartData.Slice(
             label = "",
@@ -18,4 +18,18 @@ data class ChartState(
             color = Color.Transparent
         )
     ),
+    val availableLocalDate: List<LocalDate> = listOf(
+        LocalDate.now().minusMonths(11),
+        LocalDate.now().minusMonths(10),
+        LocalDate.now().minusMonths(9),
+        LocalDate.now().minusMonths(8),
+        LocalDate.now().minusMonths(7),
+        LocalDate.now().minusMonths(6),
+        LocalDate.now().minusMonths(5),
+        LocalDate.now().minusMonths(4),
+        LocalDate.now().minusMonths(3),
+        LocalDate.now().minusMonths(2),
+        LocalDate.now().minusMonths(1),
+        LocalDate.now(),
+    )
 )

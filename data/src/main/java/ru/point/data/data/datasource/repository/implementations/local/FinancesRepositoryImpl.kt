@@ -20,11 +20,11 @@ class FinancesRepositoryImpl @Inject constructor(
             .map { it.filterNot { item -> item.isValuesNull() } }
     }
 
-    override fun getFinancesByFolderId(
+    override fun getIncomeFinancesByFolderId(
         startDate: String,
         endDate: String
     ): Flow<List<FinanceCategorySubset>> {
-        return financeDao.readByFolder(startDate, endDate)
+        return financeDao.readByFolderIncome(startDate, endDate)
             .map { it.filterNot { item -> item.isValuesNull() } }
     }
 
@@ -45,6 +45,14 @@ class FinancesRepositoryImpl @Inject constructor(
         endDate: String
     ): Flow<List<FinanceSubset>> {
         return financeDao.readExpenseByMonthId(startDate, endDate)
+            .map { it.filterNot { item -> item.isValuesNull() } }
+    }
+
+    override fun getExpenseFinancesByFolderId(
+        startDate: String,
+        endDate: String
+    ): Flow<List<FinanceCategorySubset>> {
+        return financeDao.readByFolderExpense(startDate, endDate)
             .map { it.filterNot { item -> item.isValuesNull() } }
     }
 }

@@ -38,10 +38,20 @@ interface FinanceDao {
                 "FROM category cat " +
                 "JOIN finance fin " +
                 "ON cat.id = fin.category_id " +
-                "WHERE fin.date between :startDate and :endDate " +
+                "WHERE fin.price > 0 and fin.date between :startDate and :endDate  " +
                 "GROUP BY name "
     )
-    fun readByFolder(startDate: String, endDate: String): Flow<List<FinanceCategorySubset>>
+    fun readByFolderIncome(startDate: String, endDate: String): Flow<List<FinanceCategorySubset>>
+
+    @Query(
+        " SELECT cat.name as name, cat.color as color, cat.icon as icon, SUM(fin.price) as sum " +
+                "FROM category cat " +
+                "JOIN finance fin " +
+                "ON cat.id = fin.category_id " +
+                "WHERE fin.price < 0 and fin.date between :startDate and :endDate  " +
+                "GROUP BY name "
+    )
+    fun readByFolderExpense(startDate: String, endDate: String): Flow<List<FinanceCategorySubset>>
 
     @Query(
         "SELECT fin.id as id, fol.name as name, fin.price as price, fol.icon as icon, fin.date as date " +

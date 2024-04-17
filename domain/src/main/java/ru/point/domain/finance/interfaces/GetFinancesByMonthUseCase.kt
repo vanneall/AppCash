@@ -5,5 +5,5 @@ import ru.point.data.data.entity.subset.FinanceCategorySubset
 import java.time.LocalDate
 
 interface GetFinancesByMonthUseCase {
-    fun invoke(date: LocalDate): Flow<List<FinanceCategorySubset>>
+    fun invoke(date: LocalDate, isIncome: Boolean): Flow<List<FinanceCategorySubset>>
 }

@@ -17,10 +17,11 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import ru.point.data.data.entity.subset.FinanceCategorySubset
 import ru.point.domain.finance.implementations.FinanceSeparatorDto
 import ru.point.domain.finance.implementations.GetExpenseFinanceUseCaseImpl
-import ru.point.domain.finance.implementations.GetFinancesByMonthUseCaseImpl
+import ru.point.domain.finance.implementations.GetFinancesByMonthAndOpenModeUseCaseImpl
 import ru.point.domain.finance.implementations.GetIncomeFinancesByYearMonthUseCaseImpl
 import java.time.LocalDate
 
@@ -30,23 +31,33 @@ class ChartScreenViewModel @AssistedInject constructor(
     private val openMode: OpenMode,
     private val getIncomeFinancesByYearMonthUseCase: Lazy<GetIncomeFinancesByYearMonthUseCaseImpl>,
     private val getExpenseFinanceUseCaseImpl: Lazy<GetExpenseFinanceUseCaseImpl>,
-    private val getCategoryFinancesByMonthUseCase: GetFinancesByMonthUseCaseImpl
+    private val getCategoryFinancesByMonthAndOpenModeUseCase: GetFinancesByMonthAndOpenModeUseCaseImpl
 ) : ViewModel(), EventHandler {
 
     private var _date = MutableStateFlow(LocalDate.now())
 
-    private val _transactions = initializeFinancesByMonth()
+    private val _transactions = MutableStateFlow<List<FinanceSeparatorDto>>(emptyList())
 
-    private val _categories = initializeCategoryFinancesByMonth()
+    private val _categories = MutableStateFlow<List<FinanceCategorySubset>>(emptyList())
 
-    private val _error = MutableStateFlow(false)
+    init {
+        viewModelScope.launch {
+            initializeCategoryFinancesByMonth().collect {
+                _categories.value = it
+            }
+        }
+        viewModelScope.launch {
+            initializeFinancesByMonth().collect {
+                _transactions.value = it
+            }
+        }
+    }
 
     val state = combine(
         _transactions,
         _categories,
-        _error,
         _date,
-    ) { transaction, categories, isError, date ->
+    ) { transaction, categories, date ->
         ChartState(
             transactionsByYearMonth = transaction,
             categories = categories,
@@ -59,7 +70,7 @@ class ChartScreenViewModel @AssistedInject constructor(
                 )
             ),
             selectedDate = date,
-            isError = isError
+            isIncome = openMode == OpenMode.INCOME
         )
     }.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(),
@@ -77,19 +88,23 @@ class ChartScreenViewModel @AssistedInject constructor(
     override fun handle(event: Event) {
         when (event) {
             is FinanceEvent.SwitchEvent -> {
-                updateDate(event.newMonthIndex.toLong())
+                updateDate(event.newMonthIndex)
             }
         }
     }
 
-    private fun updateDate(monthsSwitched: Long) {
-        _date.update { date ->
-            if (monthsSwitched > 0L) {
-                date.minusMonths(monthsSwitched)
-            } else {
-                date.plusDays(monthsSwitched)
+    private fun updateDate(monthsSwitched: Int) {
+        _date.update { state.value.availableLocalDate[monthsSwitched] }
+        viewModelScope.launch {
+            initializeCategoryFinancesByMonth().collect {
+                _categories.value = it
             }
+        }
 
+        viewModelScope.launch {
+            initializeFinancesByMonth().collect {
+                _transactions.value = it
+            }
         }
     }
 
@@ -108,8 +123,8 @@ class ChartScreenViewModel @AssistedInject constructor(
     }
 
     private fun initializeCategoryFinancesByMonth(): Flow<List<FinanceCategorySubset>> {
-        return getCategoryFinancesByMonthUseCase
-            .invoke(_date.value)
+        return getCategoryFinancesByMonthAndOpenModeUseCase
+            .invoke(_date.value, openMode == OpenMode.INCOME)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 }

@@ -24,6 +24,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -65,16 +66,6 @@ import com.example.appcash.view.ui.theme.Turquoise
 import com.kizitonwose.calendar.core.yearMonth
 import ru.point.data.data.entity.entities.FolderIcon
 
-const val CURRENT_MONTH_INDEX = 11
-
-val financesDaysSeparatorStringResource: List<String>
-    @Composable
-    get() = listOf(
-        stringResource(id = R.string.today),
-        stringResource(id = R.string.yesterday),
-        stringResource(id = R.string.previosly_in_month),
-    )
-
 @Composable
 fun FinanceChartScreen(
     viewModel: ChartScreenViewModel,
@@ -94,7 +85,7 @@ fun FinanceChartScreen(
                     .background(color = LightGray, shape = CircleShape)
                     .padding(4.dp)
             ) {
-                androidx.compose.material.Icon(
+                Icon(
                     imageVector = Icons.Default.ArrowBackIosNew,
                     contentDescription = null,
                     modifier = Modifier
@@ -103,14 +94,14 @@ fun FinanceChartScreen(
         }
     )
 
-    fabState.value = FabState {  }
+    fabState.value = FabState { }
 
     FinanceChart(
         state = viewModel.state.collectAsState().value,
         onEvent = viewModel::handle,
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
     )
 }
 
@@ -123,16 +114,16 @@ private fun FinanceChart(
 ) {
     val pagerState = rememberPagerState(
         pageCount = {
-            12
+            state.availableLocalDate.size
         },
-        initialPage = 11
+        initialPage = state.availableLocalDate.size - 1
     )
     val gridState = rememberLazyGridState()
 
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(100.dp),
+        columns = GridCells.Adaptive(minSize = 120.dp),
         state = gridState,
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.Absolute.Left,
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier
     ) {
@@ -150,7 +141,7 @@ private fun FinanceChart(
                 )
 
                 Text(
-                    text = "Расходы за ${state.selectedDate.yearMonth}",
+                    text = (if (state.isIncome) "Доходы за " else "Расходы за ") + state.selectedDate.yearMonth,
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp
                 )
@@ -180,14 +171,14 @@ private fun FinanceChart(
         }
 
         items(
-            items = state.categories,
-        ) { financeCategoryVo ->
+            items = state.categories
+        ) { categorySubset ->
             ChartCheep(
-                name = financeCategoryVo.name ?: "",
-                price = financeCategoryVo.sum.toString(),
-                color = Color(financeCategoryVo.color ?: 0x000000),
+                name = categorySubset.name ?: "",
+                price = categorySubset.sum.toString() + " ₽",
+                color = Color(categorySubset.color ?: 0x000000),
                 icon = FolderIconMapper.mapToIcon(
-                    value = financeCategoryVo.icon ?: FolderIcon.UNKNOWN
+                    value = categorySubset.icon ?: FolderIcon.UNKNOWN
                 )
             )
         }
@@ -228,7 +219,7 @@ private fun FinanceChart(
         snapshotFlow { pagerState.currentPage }.collect { monthIndex ->
             onEvent(
                 FinanceEvent.SwitchEvent(
-                    newMonthIndex = CURRENT_MONTH_INDEX - monthIndex
+                    newMonthIndex = monthIndex
                 )
             )
         }
@@ -250,9 +241,9 @@ private fun ChartCheep(
             .height(28.dp)
             .wrapContentWidth()
             .background(color = LightGray, shape = RoundedCornerShape(20.dp))
-            .padding(start = 2.dp, top = 2.dp, bottom = 2.dp, end = 20.dp)
+            .padding(start = 2.dp, top = 2.dp, bottom = 2.dp, end = 8.dp)
     ) {
-        androidx.compose.material3.Icon(
+        Icon(
             painter = icon,
             contentDescription = null,
             tint = Color.White,

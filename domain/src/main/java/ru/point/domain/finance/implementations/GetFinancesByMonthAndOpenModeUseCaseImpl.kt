@@ -8,14 +8,19 @@ import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
 
-class GetFinancesByMonthUseCaseImpl @Inject constructor(
+class GetFinancesByMonthAndOpenModeUseCaseImpl @Inject constructor(
     private val repository: FinancesRepository
 ) : GetFinancesByMonthUseCase {
     override fun invoke(
         date: LocalDate,
+        isIncome: Boolean
     ): Flow<List<FinanceCategorySubset>> {
         val startMonth = date.with(TemporalAdjusters.firstDayOfMonth());
         val endMonth = date.with(TemporalAdjusters.lastDayOfMonth());
-        return repository.getFinancesByFolderId(startMonth.toString(), endMonth.toString())
+        return if (isIncome) {
+            repository.getIncomeFinancesByFolderId(startMonth.toString(), endMonth.toString())
+        } else {
+            repository.getExpenseFinancesByFolderId(startMonth.toString(), endMonth.toString())
+        }
     }
 }
