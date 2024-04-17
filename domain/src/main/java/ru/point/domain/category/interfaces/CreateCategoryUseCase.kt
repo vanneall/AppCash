@@ -6,7 +6,7 @@ import ru.point.data.data.entity.entities.FolderIcon
 interface CreateCategoryUseCase {
     operator fun invoke(
         name: String,
-        colorIndex: Int,
+        color: Int,
         discriminator: Category.Discriminator,
         iconId: FolderIcon
     )

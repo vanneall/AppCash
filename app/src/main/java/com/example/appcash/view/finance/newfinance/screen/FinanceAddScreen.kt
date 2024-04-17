@@ -229,8 +229,6 @@ private fun FinanceAdd(
         ModalBottomSheet(
             onDismissRequest = { onEvent(CreateCategoryPopupEvent.HideCreatePopup) },
             containerColor = Color.White,
-            modifier = Modifier
-                .height(350.dp)
         ) {
             CreateCategoryPopup(
                 state = state.createCategoryPopupState,

@@ -4,12 +4,11 @@ import com.example.appcash.utils.events.Event
 
 sealed class CreateCategoryPopupEvent() : Event {
 
-    data class CreateCategory(
-        val name: String,
-        val color: Int
-    ) : CreateCategoryPopupEvent()
+    object CreateCategory: CreateCategoryPopupEvent()
 
-    data class SelectCategoryIcon(val position: Int) : CreateCategoryPopupEvent()
+    data class SelectIcon(val position: Int) : CreateCategoryPopupEvent()
+
+    data class SelectColor(val color: Int, val index: Int) : CreateCategoryPopupEvent()
 
     data class InputName(val name: String) : CreateCategoryPopupEvent()
 

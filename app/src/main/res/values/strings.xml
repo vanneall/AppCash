@@ -8,7 +8,7 @@
 
     <!-- FolderListScreen -->
     <string name="my_categories">Мои списки</string>
-    <string name="create_folder">Создайте папку</string>
+    <string name="create_folder">Создайте категорию</string>
     <string name="new_folder">Новая папка</string>
     <string name="folder_name">Название папки</string>
     <string name="name">Название</string>

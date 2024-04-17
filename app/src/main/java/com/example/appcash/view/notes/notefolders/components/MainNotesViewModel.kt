@@ -18,8 +18,8 @@ import kotlinx.coroutines.flow.update
 import ru.point.data.data.entity.entities.Category
 import ru.point.data.data.entity.entities.Category.Discriminator
 import ru.point.domain.category.interfaces.CreateCategoryUseCase
-import ru.point.domain.notes.interfaces.GetAllNotesCountUseCase
 import ru.point.domain.category.interfaces.GetCategoryByTypeUseCase
+import ru.point.domain.notes.interfaces.GetAllNotesCountUseCase
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,12 +33,12 @@ class MainNotesViewModel @Inject constructor(
 
     private val _categoriesList = initializeCategoriesList()
 
-    private val _popupState = MutableStateFlow(CreateCategoryPopupState())
+    private val _categoryCreatePopupState = MutableStateFlow(CreateCategoryPopupState())
 
     val state = combine(
         _categoriesList,
         _allNotesCount,
-        _popupState,
+        _categoryCreatePopupState,
     ) { list, notesCount, popupState ->
         MainNotesState(
             categoryList = list,
@@ -50,14 +50,18 @@ class MainNotesViewModel @Inject constructor(
     override fun handle(event: Event) {
         when (event) {
             is CreateCategoryPopupEvent.CreateCategory -> {
-                insertFolder(
-                    name = event.name,
-                    color = event.color
-                )
+                createCategory()
             }
 
-            is CreateCategoryPopupEvent.SelectCategoryIcon -> {
+            is CreateCategoryPopupEvent.SelectIcon -> {
                 updateFolderIcon(position = event.position)
+            }
+
+            is CreateCategoryPopupEvent.SelectColor -> {
+                updateFolderColor(
+                    color = event.color,
+                    index = event.index
+                )
             }
 
             is CreateCategoryPopupEvent.ShowCreatePopup -> {
@@ -87,37 +91,53 @@ class MainNotesViewModel @Inject constructor(
     }
 
     private fun updateFolderName(name: String) {
-        _popupState.update { state ->
+        _categoryCreatePopupState.update { state ->
             state.copy(name = name)
         }
     }
 
-    private fun insertFolder(name: String, color: Int) {
-        createCategoryUseCase.get().invoke(
-            name = name,
-            colorIndex = color,
-            discriminator = Discriminator.Note,
-            iconId = _popupState.value.selectedFolderIcon,
-        )
-        hideBottomSheet()
-    }
-
     private fun updateFolderIcon(position: Int) {
-        _popupState.update { state ->
+        _categoryCreatePopupState.update { state ->
             state.copy(
-                selectedFolderIcon = FolderIconMapper.mapToFolderIcon(position = position)
+                selectedFolderIcon = FolderIconMapper.mapToFolderIcon(position = position),
+                selectedIconIndex = position
             )
         }
     }
 
+    private fun updateFolderColor(color: Int, index: Int) {
+        _categoryCreatePopupState.update { state ->
+            state.copy(
+                selectedColor = color,
+                selectedColorIndex = index
+            )
+        }
+    }
+
+    private fun createCategory() {
+        with(_categoryCreatePopupState.value) {
+            if (name.isEmpty()) {
+                _categoryCreatePopupState.update { state -> state.copy(isNameTextFieldError = true) }
+            } else {
+                createCategoryUseCase.get().invoke(
+                    name = name,
+                    color = selectedColor,
+                    discriminator = Discriminator.Note,
+                    iconId = selectedFolderIcon,
+                )
+                hideBottomSheet()
+            }
+        }
+    }
+
     private fun showBottomSheet() {
-        _popupState.update { state ->
+        _categoryCreatePopupState.update { state ->
             state.copy(isShowed = true)
         }
     }
 
     private fun hideBottomSheet() {
-        _popupState.update {
+        _categoryCreatePopupState.update {
             CreateCategoryPopupState()
         }
     }

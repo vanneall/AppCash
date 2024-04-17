@@ -29,8 +29,7 @@ class AddFinanceViewModel @Inject constructor(
     private val createCategoryUseCase: Lazy<CreateCategoryUseCase>
 ) : ViewModel(), EventHandler {
 
-    private val _list = getCategoryByTypeUseCase
-        .invoke(type = Category.Discriminator.Finance)
+    private val _list = getCategoryByTypeUseCase.invoke(type = Category.Discriminator.Finance)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val _price = MutableStateFlow("")
@@ -39,7 +38,7 @@ class AddFinanceViewModel @Inject constructor(
 
     private val _isIncomeButtonSelected = MutableStateFlow(false)
 
-    private val _createPopupState = MutableStateFlow(CreateCategoryPopupState())
+    private val _categoryCreatePopupState = MutableStateFlow(CreateCategoryPopupState())
 
     private val _selectedId = MutableStateFlow<Long>(0)
 
@@ -48,7 +47,7 @@ class AddFinanceViewModel @Inject constructor(
         _price,
         _search,
         _isIncomeButtonSelected,
-        _createPopupState,
+        _categoryCreatePopupState,
     ) { list, price, search, isIncome, popupState ->
         AddFinanceState(
             price = price,
@@ -63,14 +62,15 @@ class AddFinanceViewModel @Inject constructor(
         when (event) {
 
             is CreateCategoryPopupEvent.CreateCategory -> {
-                insertFolder(
-                    name = event.name,
-                    color = event.color
-                )
+                createCategory()
             }
 
-            is CreateCategoryPopupEvent.SelectCategoryIcon -> {
+            is CreateCategoryPopupEvent.SelectIcon -> {
                 selectFolderIcon(event.position)
+            }
+
+            is CreateCategoryPopupEvent.SelectColor -> {
+                updateFolderColor(event.color, event.index)
             }
 
             is CreateCategoryPopupEvent.ShowCreatePopup -> {
@@ -111,14 +111,29 @@ class AddFinanceViewModel @Inject constructor(
         }
     }
 
-    private fun insertFolder(name: String, color: Int) {
-        createCategoryUseCase.get().invoke(
-            name = name,
-            colorIndex = color,
-            discriminator = Category.Discriminator.Finance,
-            iconId = _createPopupState.value.selectedFolderIcon,
-        )
-        hideBottomSheet()
+    private fun createCategory() {
+        with(_categoryCreatePopupState.value) {
+            if (name.isEmpty()) {
+                _categoryCreatePopupState.update { state -> state.copy(isNameTextFieldError = true) }
+            } else {
+                createCategoryUseCase.get().invoke(
+                    name = name,
+                    color = selectedColor,
+                    discriminator = Category.Discriminator.Finance,
+                    iconId = selectedFolderIcon,
+                )
+                hideBottomSheet()
+            }
+        }
+    }
+
+    private fun updateFolderColor(color: Int, index: Int) {
+        _categoryCreatePopupState.update { state ->
+            state.copy(
+                selectedColor = color,
+                selectedColorIndex = index
+            )
+        }
     }
 
     private fun updateSearch(text: String) {
@@ -126,7 +141,7 @@ class AddFinanceViewModel @Inject constructor(
     }
 
     private fun selectFolderIcon(position: Int) {
-        _createPopupState.update { state ->
+        _categoryCreatePopupState.update { state ->
             state.copy(
                 selectedFolderIcon = FolderIconMapper.mapToFolderIcon(position = position)
             )
@@ -134,19 +149,19 @@ class AddFinanceViewModel @Inject constructor(
     }
 
     private fun showBottomSheet() {
-        _createPopupState.update { state ->
+        _categoryCreatePopupState.update { state ->
             state.copy(isShowed = true)
         }
     }
 
     private fun inputFolderName(name: String) {
-        _createPopupState.update { state ->
+        _categoryCreatePopupState.update { state ->
             state.copy(name = name)
         }
     }
 
     private fun hideBottomSheet() {
-        _createPopupState.update { CreateCategoryPopupState() }
+        _categoryCreatePopupState.update { CreateCategoryPopupState() }
     }
 
     private fun selectIncome() {
@@ -171,9 +186,7 @@ class AddFinanceViewModel @Inject constructor(
 
         insertFinanceUseCase.get().invoke(
             value = Finance(
-                price = price,
-                folderId = id,
-                date = LocalDate.now()
+                price = price, folderId = id, date = LocalDate.now()
             )
         )
     }

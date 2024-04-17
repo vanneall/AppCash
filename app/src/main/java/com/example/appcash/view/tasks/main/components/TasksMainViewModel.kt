@@ -31,7 +31,7 @@ class TasksMainViewModel @Inject constructor(
     private val createCategoryUseCase: Lazy<CreateCategoryUseCase>,
 ) : ViewModel(), EventHandler {
 
-    private val _createPopupState = MutableStateFlow(CreateCategoryPopupState())
+    private val _categoryCreatePopupState = MutableStateFlow(CreateCategoryPopupState())
 
     private val _categories = initializeCategoriesList()
 
@@ -41,7 +41,7 @@ class TasksMainViewModel @Inject constructor(
 
     val state = combine(
         _categories,
-        _createPopupState,
+        _categoryCreatePopupState,
         _allTasksCount,
         _bookmarkTasksCount
     ) { list, popupState, allTasks, bookMarksTask ->
@@ -56,14 +56,15 @@ class TasksMainViewModel @Inject constructor(
     override fun handle(event: Event) {
         when (event) {
             is CreateCategoryPopupEvent.CreateCategory -> {
-                createCategory(
-                    name = event.name,
-                    color = event.color
-                )
+                createCategory()
             }
 
-            is CreateCategoryPopupEvent.SelectCategoryIcon -> {
+            is CreateCategoryPopupEvent.SelectIcon -> {
                 updateFolderIcon(event.position)
+            }
+
+            is CreateCategoryPopupEvent.SelectColor -> {
+                updateFolderColor(event.color, event.index)
             }
 
             is CreateCategoryPopupEvent.InputName -> {
@@ -98,37 +99,53 @@ class TasksMainViewModel @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
     }
 
-    private fun createCategory(name: String, color: Int) {
-        createCategoryUseCase.get().invoke(
-            name = name,
-            colorIndex = color,
-            discriminator = Discriminator.Task,
-            iconId = _createPopupState.value.selectedFolderIcon,
-        )
-        hideCategoryPopup()
+    private fun createCategory() {
+        with(_categoryCreatePopupState.value) {
+            if (name.isEmpty()) {
+                _categoryCreatePopupState.update { state -> state.copy(isNameTextFieldError = true) }
+            } else {
+                createCategoryUseCase.get().invoke(
+                    name = name,
+                    color = selectedColor,
+                    discriminator = Discriminator.Task,
+                    iconId = selectedFolderIcon,
+                )
+                hideCategoryPopup()
+            }
+        }
     }
 
     private fun updateFolderIcon(position: Int) {
-        _createPopupState.update { state ->
+        _categoryCreatePopupState.update { state ->
             state.copy(
-                selectedFolderIcon = FolderIconMapper.mapToFolderIcon(position = position)
+                selectedFolderIcon = FolderIconMapper.mapToFolderIcon(position = position),
+                selectedIconIndex = position
+            )
+        }
+    }
+
+    private fun updateFolderColor(color: Int, index: Int) {
+        _categoryCreatePopupState.update { state ->
+            state.copy(
+                selectedColor = color,
+                selectedColorIndex = index
             )
         }
     }
 
     private fun showCreatePopup() {
-        _createPopupState.update { state ->
+        _categoryCreatePopupState.update { state ->
             state.copy(isShowed = true)
         }
     }
 
     private fun updateCategoryName(name: String) {
-        _createPopupState.update { state ->
+        _categoryCreatePopupState.update { state ->
             state.copy(name = name)
         }
     }
 
     private fun hideCategoryPopup() {
-        _createPopupState.update { CreateCategoryPopupState() }
+        _categoryCreatePopupState.update { CreateCategoryPopupState() }
     }
 }

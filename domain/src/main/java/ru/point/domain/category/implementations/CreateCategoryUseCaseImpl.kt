@@ -16,7 +16,7 @@ class CreateCategoryUseCaseImpl @Inject constructor(
 ) : CreateCategoryUseCase {
     override fun invoke(
         name: String,
-        colorIndex: Int,
+        color: Int,
         discriminator: Category.Discriminator,
         iconId: FolderIcon
     ) {
@@ -25,7 +25,7 @@ class CreateCategoryUseCaseImpl @Inject constructor(
             if (nameTrimmed.isEmpty()) return@launch
 
             val category = factory.create(
-                name = name, color = colorIndex,
+                name = name, color = color,
                 discriminator = discriminator,
                 icon = iconId
             )
