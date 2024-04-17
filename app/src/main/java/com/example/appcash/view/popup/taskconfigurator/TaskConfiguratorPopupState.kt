@@ -7,8 +7,8 @@ data class TaskConfiguratorPopupState(
     val isShowed: Boolean = false,
     val isDatePickerShowed: Boolean = false,
     val name: String = "",
+    val isNameError: Boolean = false,
     val description: String = "",
-    val folderId: Long? = null,
     val parentId: Long? = null,
     val date: LocalDate? = null
 )

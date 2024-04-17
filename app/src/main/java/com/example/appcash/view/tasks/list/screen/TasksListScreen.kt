@@ -27,6 +27,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -149,12 +150,13 @@ private fun TasksList(
         }
     }
 
+    val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     if (state.taskConfiguratorPopupState.isShowed) {
         ModalBottomSheet(
+            sheetState = modalBottomSheetState,
             onDismissRequest = { onEvent(TaskConfiguratorPopupEvent.HidePopup) },
             containerColor = Color.White,
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             TaskConfiguratorPopup(
                 state = state.taskConfiguratorPopupState,

@@ -88,16 +88,7 @@ class TasksListViewModel @AssistedInject constructor(
     private fun handleEditPopupEvent(event: TaskConfiguratorPopupEvent) {
         when (event) {
             is TaskConfiguratorPopupEvent.CreateTask -> {
-                with(_editPopupState.value) {
-                    upsertTask(
-                        id = id,
-                        text = name,
-                        description = description,
-                        parentId = event.parentTaskId,
-                        folderId = this@TasksListViewModel.folderId,
-                        date = date
-                    )
-                }
+                upsertTask(parentId = event.parentTaskId,)
             }
 
             is TaskConfiguratorPopupEvent.ShowPopup -> {
@@ -184,30 +175,31 @@ class TasksListViewModel @AssistedInject constructor(
     }
 
     private fun upsertTask(
-        id: Long?,
-        text: String,
-        description: String,
-        parentId: Long?,
-        folderId: Long?,
-        date: LocalDate?,
+        parentId: Long?
     ) {
-        if (id == null) {
-            insertTaskUseCaseImpl.get().invoke(
-                text = text,
-                description = description,
-                parentTaskId = parentId,
-                categoryId = folderId,
-                date = date ?: LocalDate.now()
-            )
-        } else {
-            updateTaskUseCaseImpl.get().invoke(
-                id = id,
-                text = text,
-                description = description,
-                date = date ?: LocalDate.now()
-            )
+        with(_editPopupState.value) {
+            if (name.isEmpty()) {
+                _editPopupState.update { state -> state.copy(isNameError = true) }
+                return
+            }
+            if (id == null) {
+                insertTaskUseCaseImpl.get().invoke(
+                    text = name,
+                    description = description,
+                    parentTaskId = parentId,
+                    categoryId = folderId,
+                    date = date ?: LocalDate.now()
+                )
+            } else {
+                updateTaskUseCaseImpl.get().invoke(
+                    id = id,
+                    text = name,
+                    description = description,
+                    date = date ?: LocalDate.now()
+                )
+            }
+            hideEditPopup()
         }
-        hideEditPopup()
     }
 
     private fun showEditPopup(

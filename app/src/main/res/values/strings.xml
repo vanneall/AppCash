@@ -42,6 +42,7 @@
     <!-- EditPopup -->
     <string name="folder">Папка</string>
     <string name="task_name">Название задачи</string>
+    <string name="subtask_name">Название подзадачи</string>
     <string name="task_name_hint">Название</string>
     <string name="task_description">Описание задачи</string>
     <string name="task_description_hint">Описание</string>

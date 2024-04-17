@@ -59,24 +59,31 @@ fun TaskConfiguratorPopup(
         )
 
         TextFieldOption(
-            name = stringResource(id = R.string.task_name),
+            name = if (state.parentId == null) stringResource(id = R.string.task_name) else stringResource(
+                id = R.string.subtask_name
+            ),
             hint = stringResource(id = R.string.task_name_hint),
             value = state.name,
+            error = state.isNameError,
             onEvent = { value -> onEvent(TaskConfiguratorPopupEvent.InsertName(value)) }
         )
 
-        TextFieldOption(
-            name = stringResource(id = R.string.task_description),
-            hint = stringResource(id = R.string.task_description_hint),
-            value = state.description,
-            onEvent = { value -> onEvent(TaskConfiguratorPopupEvent.InsertDescription(value)) }
-        )
+        if (state.parentId == null) {
+            TextFieldOption(
+                name = stringResource(id = R.string.task_description),
+                hint = stringResource(id = R.string.task_description_hint),
+                value = state.description,
+                onEvent = { value -> onEvent(TaskConfiguratorPopupEvent.InsertDescription(value)) }
+            )
+        }
 
-        DialogOption(
-            name = stringResource(id = R.string.date_of_end),
-            value = state.date.toString(),
-            onClick = { onEvent(TaskConfiguratorPopupEvent.ShowDatePickerDialog) },
-        )
+        if (state.parentId == null) {
+            DialogOption(
+                name = stringResource(id = R.string.date_of_end),
+                value = state.date.toString(),
+                onClick = { onEvent(TaskConfiguratorPopupEvent.ShowDatePickerDialog) },
+            )
+        }
 
         IconButton(
             onClick = { onEvent(TaskConfiguratorPopupEvent.CreateTask(state.parentId)) },
@@ -117,7 +124,8 @@ private fun TextFieldOption(
     value: String,
     hint: String,
     onEvent: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    error: Boolean = false,
 ) {
     Column(
         modifier = modifier,
@@ -134,9 +142,10 @@ private fun TextFieldOption(
             value = value,
             onValueChange = { onEvent(it) },
             maxLines = 1,
+            isError = error,
             singleLine = true,
             textStyle = TextStyle(fontSize = 14.sp),
-            label = { Text(text = hint) },
+            placeholder = { Text(text = hint) },
             shape = RoundedCornerShape(15.dp),
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
