@@ -35,7 +35,7 @@ class CategoryDaoTest {
 
     @Test
     fun shouldCreateAndReturnByIdCategory() = runBlocking {
-        val expectedData = CategoryFactoryTest.factory(discriminator = Category.Discriminator.NOTES)
+        val expectedData = CategoryFactoryTest.factory(discriminator = Category.Discriminator.Note)
 
         categoryDao.create(expectedData)
         val actualData = categoryDao.readById(1)
@@ -61,11 +61,11 @@ class CategoryDaoTest {
     @Test
     fun shouldDeleteCategoryById() = runBlocking {
         val expectedCount = 0
-        val category = CategoryFactoryTest.factory(Category.Discriminator.NOTES)
+        val category = CategoryFactoryTest.factory(Category.Discriminator.Note)
 
         categoryDao.create(category)
         categoryDao.deleteById(category.id)
-        val actualCount = categoryDao.readByDiscriminator(Category.Discriminator.NOTES).first().size
+        val actualCount = categoryDao.readByDiscriminator(Category.Discriminator.Note).first().size
 
         assertEquals(expectedCount, actualCount)
     }

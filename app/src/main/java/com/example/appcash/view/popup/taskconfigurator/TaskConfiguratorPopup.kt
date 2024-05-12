@@ -59,9 +59,8 @@ fun TaskConfiguratorPopup(
         )
 
         TextFieldOption(
-            name = if (state.parentId == null) stringResource(id = R.string.task_name) else stringResource(
-                id = R.string.subtask_name
-            ),
+            name = if (state.parentId == null) stringResource(id = R.string.task_name)
+            else stringResource(id = R.string.subtask_name),
             hint = stringResource(id = R.string.task_name_hint),
             value = state.name,
             error = state.isNameError,
