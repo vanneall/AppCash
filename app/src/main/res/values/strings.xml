@@ -64,4 +64,5 @@
     <string name="restore_purchase">Восстановление покупки</string>
     <string name="confidentiality">Конфиденциальность</string>
     <string name="delete_all_data">Удалить все данные</string>
+    <string name="currency_screen">Валюта</string>
 </resources>

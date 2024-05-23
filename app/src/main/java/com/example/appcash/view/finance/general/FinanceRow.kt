@@ -29,6 +29,7 @@ import ru.point.data.data.entity.subset.FinanceSubset
 fun FinanceRow(
     icon: Painter,
     financeSubset: FinanceSubset,
+    currency: String,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -55,7 +56,7 @@ fun FinanceRow(
         )
         Text(
             fontSize = 18.sp,
-            text = financeSubset.price.toString() + " ₽",
+            text = financeSubset.price.toString() + " $currency",
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.End,
             modifier = Modifier.fillMaxWidth(),

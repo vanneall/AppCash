@@ -135,7 +135,7 @@ private fun FinanceChart(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = state.categories.fastSumBy { item -> item.sum ?: 0 }.toString() + " ₽",
+                    text = state.categories.fastSumBy { item -> item.sum ?: 0 }.toString() + "  ${state.currency}",
                     fontWeight = FontWeight.Medium,
                     fontSize = 30.sp
                 )
@@ -175,7 +175,7 @@ private fun FinanceChart(
         ) { categorySubset ->
             ChartCheep(
                 name = categorySubset.name ?: "",
-                price = categorySubset.sum.toString() + " ₽",
+                price = categorySubset.sum.toString() + " ${state.currency}",
                 color = Color(categorySubset.color ?: 0x000000),
                 icon = FolderIconMapper.mapToIcon(
                     value = categorySubset.icon ?: FolderIcon.UNKNOWN
@@ -208,7 +208,8 @@ private fun FinanceChart(
                     financeSubset = financeSubset,
                     icon = FolderIconMapper.mapToIcon(
                         value = financeSubset.icon ?: FolderIcon.UNKNOWN
-                    )
+                    ),
+                    currency = state.currency
                 )
                 Spacer(modifier = Modifier.height(24.dp))
             }

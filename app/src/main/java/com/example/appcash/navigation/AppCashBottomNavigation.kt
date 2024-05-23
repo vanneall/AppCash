@@ -44,7 +44,9 @@ fun AppCashBottomNavigation(
                     BottomNavigationItem(
                         selected = currentDestination?.hierarchy?.any { screenItem.route == it.route } == true,
                         onClick = {
-                            navController.navigate(screenItem.route)
+                            navController.navigate(screenItem.route) {
+                                launchSingleTop = true
+                            }
                         },
                         icon = {
                             Icon(

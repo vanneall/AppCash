@@ -24,5 +24,5 @@ interface FolderApi {
     ): List<Category>
 
     @POST("folder/create")
-    suspend fun createFolder(@Body category: Category)
+    suspend fun createFolder( @Body category: Category, @Query("user") userId: Int = 2)
 }

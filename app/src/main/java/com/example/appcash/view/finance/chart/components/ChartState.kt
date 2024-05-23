@@ -18,6 +18,7 @@ data class ChartState(
             color = Color.Transparent
         )
     ),
+    val currency: String = "",
     val availableLocalDate: List<LocalDate> = listOf(
         LocalDate.now().minusMonths(11),
         LocalDate.now().minusMonths(10),

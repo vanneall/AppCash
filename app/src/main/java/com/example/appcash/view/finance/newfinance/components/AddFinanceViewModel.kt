@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import ru.point.data.data.datasource.settings.SettingsStore
 import ru.point.data.data.entity.entities.Category
 import ru.point.data.data.entity.entities.Finance
 import ru.point.domain.category.interfaces.CreateCategoryUseCase
@@ -25,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddFinanceViewModel @Inject constructor(
     getCategoryByTypeUseCase: GetCategoryByTypeUseCase,
+    settingsStore: SettingsStore,
     private val insertFinanceUseCase: Lazy<InsertFinanceUseCase>,
     private val createCategoryUseCase: Lazy<CreateCategoryUseCase>
 ) : ViewModel(), EventHandler {
@@ -54,7 +56,8 @@ class AddFinanceViewModel @Inject constructor(
             search = search,
             categories = list.filter { it.name.contains(search) },
             isIncomeButtonSelected = isIncome,
-            createCategoryPopupState = popupState
+            createCategoryPopupState = popupState,
+            currency = settingsStore.currency
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), AddFinanceState())
 

@@ -88,7 +88,7 @@ fun MainMorda(
 
         item {
             Text(
-                text = state.sum.toString() + " ₽",
+                text = state.sum.toString() + " ${state.currency}",
                 fontSize = 36.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Medium,
@@ -139,7 +139,8 @@ fun MainMorda(
                     financeSubset = financeSubset,
                     icon = FolderIconMapper.mapToIcon(
                         value = financeSubset.icon ?: FolderIcon.UNKNOWN
-                    )
+                    ),
+                    currency = state.currency
                 )
                 Spacer(modifier = Modifier.height(24.dp))
             }

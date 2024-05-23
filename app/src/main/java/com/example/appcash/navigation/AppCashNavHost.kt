@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.example.appcash.navigation.Destinations.MAIN_CALENDAR_SCREEN
+import com.example.appcash.navigation.screens.CurrencySelectsScreen
 import com.example.appcash.navigation.screens.ErrorScreenNavigation
 import com.example.appcash.navigation.screens.FinanceAddScreenNavigation
 import com.example.appcash.navigation.screens.FinanceChartScreenNavigation
@@ -100,6 +101,13 @@ fun AppCashNavHost(
         )
 
         MainSettingScreen(
+            navGraphBuilder = this,
+            navHostController = navHostController,
+            topAppBarState = topAppBarState,
+            fabState = fabState
+        )
+
+        CurrencySelectsScreen(
             navGraphBuilder = this,
             navHostController = navHostController,
             topAppBarState = topAppBarState,

@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.point.data.data.datasource.settings.SettingsStore
 import ru.point.data.data.entity.subset.FinanceCategorySubset
 import ru.point.domain.finance.implementations.FinanceSeparatorDto
 import ru.point.domain.finance.implementations.GetExpenseFinanceUseCaseImpl
@@ -31,7 +32,8 @@ class ChartScreenViewModel @AssistedInject constructor(
     private val openMode: OpenMode,
     private val getIncomeFinancesByYearMonthUseCase: Lazy<GetIncomeFinancesByYearMonthUseCaseImpl>,
     private val getExpenseFinanceUseCaseImpl: Lazy<GetExpenseFinanceUseCaseImpl>,
-    private val getCategoryFinancesByMonthAndOpenModeUseCase: GetFinancesByMonthAndOpenModeUseCaseImpl
+    private val getCategoryFinancesByMonthAndOpenModeUseCase: GetFinancesByMonthAndOpenModeUseCaseImpl,
+    private val settingsStore: SettingsStore,
 ) : ViewModel(), EventHandler {
 
     private var _date = MutableStateFlow(LocalDate.now())
@@ -62,7 +64,8 @@ class ChartScreenViewModel @AssistedInject constructor(
                 )
             ),
             selectedDate = date,
-            isIncome = openMode == OpenMode.INCOME
+            isIncome = openMode == OpenMode.INCOME,
+            currency = settingsStore.currency
         )
     }.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(),

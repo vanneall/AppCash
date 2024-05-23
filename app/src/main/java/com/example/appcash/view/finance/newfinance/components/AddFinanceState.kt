@@ -10,4 +10,5 @@ data class AddFinanceState(
     val isIncomeButtonSelected: Boolean = false,
     val createCategoryPopupState: CreateCategoryPopupState = CreateCategoryPopupState(),
     val categories: List<Category> = emptyList(),
+    val currency: String = "",
 )

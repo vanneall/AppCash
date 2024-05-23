@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import ru.point.data.data.datasource.settings.SettingsStore
 import ru.point.domain.finance.interfaces.GetAllFinancesUseCase
 import ru.point.domain.finance.interfaces.GetFinancesSumUseCase
 import javax.inject.Inject
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FinanceViewModel @Inject constructor(
     getAllFinancesUseCase: GetAllFinancesUseCase,
-    getFinancesSumUseCase: GetFinancesSumUseCase
+    getFinancesSumUseCase: GetFinancesSumUseCase,
+    settingsStore: SettingsStore
 ) : ViewModel(), EventHandler {
 
     private val _transactions = getAllFinancesUseCase.invoke().stateIn(
@@ -32,7 +34,8 @@ class FinanceViewModel @Inject constructor(
     ) { finance, sum ->
         FinanceMainState(
             transactionsByYearMonth = finance,
-            sum = sum ?: 0
+            sum = sum ?: 0,
+            currency = settingsStore.currency
         )
     }
 

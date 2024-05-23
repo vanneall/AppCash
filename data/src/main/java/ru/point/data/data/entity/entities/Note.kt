@@ -31,5 +31,8 @@ data class Note(
 
     @SerializedName(value = "folder_id")
     @ColumnInfo("category_id")
-    val folderId: Long? = null
+    val folderId: Long? = null,
+
+    @SerializedName(value = "folder_name")
+    val folderName: String = ""
 )

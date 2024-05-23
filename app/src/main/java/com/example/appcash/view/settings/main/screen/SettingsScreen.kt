@@ -1,4 +1,4 @@
-package com.example.appcash.view.settings.screen
+package com.example.appcash.view.settings.main.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appcash.R
+import com.example.appcash.navigation.Destinations
 import com.example.appcash.view.FabState
 import com.example.appcash.view.TopAppBarState
 import com.example.appcash.view.ui.theme.DarkRed
@@ -60,11 +61,10 @@ fun SettingsScreen(
             }
         }
     )
-    fabState.value =
-        FabState { }
+    fabState.value = FabState { }
 
     Settings(
-        onNavigate = navigateTo,
+        navigateTo = navigateTo,
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
@@ -73,7 +73,7 @@ fun SettingsScreen(
 
 @Composable
 private fun Settings(
-    onNavigate: (String) -> Unit,
+    navigateTo: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -109,7 +109,7 @@ private fun Settings(
 
         SingleOption(
             text = stringResource(id = R.string.currancy),
-            onNavigate = {},
+            onNavigate = { navigateTo(Destinations.SETTINGS_CURRENCY_SCREEN) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(24.dp)
