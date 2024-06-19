@@ -49,7 +49,7 @@ class RemoteFinanceRepository @Inject constructor(
         return channelFlow {
             withContext(Dispatchers.IO) {
                 val date = startDate.substringBeforeLast("-")
-                val data = api.getIncome(date).execute().body()
+                val data = api.getExpense(date).execute().body()
                 data?.let { finance ->
                     val financeCategory = finance.map {
                         FinanceCategorySubset(
