@@ -18,7 +18,7 @@ class TaskFactoryImpl : TaskFactory {
             description = description ?: "",
             parentTaskId = parentTaskId,
             categoryId = categoryId,
-            date = date
+            date = date.toString()
         )
     }
 }

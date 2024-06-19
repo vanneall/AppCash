@@ -7,14 +7,19 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
 import ru.point.data.data.datasource.remote.api.NoteApi
 import ru.point.data.data.datasource.repository.interfaces.NotesRepository
+import ru.point.data.data.entity.dto.toNoteDto
 import ru.point.data.data.entity.entities.Note
 import javax.inject.Inject
 
 class RemoteNoteRepository @Inject constructor(
     private val api: NoteApi
-): NotesRepository{
+) : NotesRepository {
     override suspend fun getNoteById(id: Long): Flow<Note> {
-        TODO()
+       return channelFlow {
+           withContext(Dispatchers.IO) {
+
+           }
+       }
     }
 
     override suspend fun getAllNotes(): Flow<List<Note>> {
@@ -39,7 +44,9 @@ class RemoteNoteRepository @Inject constructor(
 
     override suspend fun upsert(note: Note) {
         withContext(Dispatchers.IO) {
-            api.createNote(note)
+            val noteDto = note.toNoteDto()
+            println(noteDto)
+            api.createNote(noteDto)
         }
     }
 

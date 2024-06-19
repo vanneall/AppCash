@@ -32,7 +32,10 @@ data class Category(
     val color: Int,
 
     @SerializedName(value = "user_id")
-    val userId: Int = 2
+    val userId: Int = 2,
+
+    @SerializedName(value = "folder_count")
+    val folderCount: Int = 1
 ) {
     enum class Discriminator {
         Task,

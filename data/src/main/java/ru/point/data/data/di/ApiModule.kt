@@ -1,31 +1,42 @@
 package ru.point.data.data.di
 
-import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import ru.point.data.data.datasource.remote.api.FinanceApi
 import ru.point.data.data.datasource.remote.api.FolderApi
 import ru.point.data.data.datasource.remote.api.NoteApi
-import ru.point.data.data.datasource.settings.SettingsStore
+import ru.point.data.data.datasource.remote.api.TaskApi
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 class ApiModule {
 
     @Provides
-    @ViewModelScoped
+    @Singleton
     fun provideFolderApi(retrofit: Retrofit): FolderApi {
         return retrofit.create(FolderApi::class.java)
     }
 
     @Provides
-    @ViewModelScoped
+    @Singleton
     fun provideNoteApi(retrofit: Retrofit): NoteApi {
         return retrofit.create(NoteApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTaskApi(retrofit: Retrofit): TaskApi {
+        return retrofit.create(TaskApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFinanceApi(retrofit: Retrofit): FinanceApi {
+        return retrofit.create(FinanceApi::class.java)
     }
 
 }

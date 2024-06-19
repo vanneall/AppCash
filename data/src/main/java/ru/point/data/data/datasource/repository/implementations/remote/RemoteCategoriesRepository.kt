@@ -30,10 +30,7 @@ class RemoteCategoriesRepository @Inject constructor(
     override suspend fun getCategoryNameById(id: Long): Flow<String> {
         return channelFlow {
             withContext(Dispatchers.IO) {
-                send((api.getFolders(userId = 2)
-                    .find { category -> category.id == id }
-                    ?.name ?: ""
-                        ))
+                send((api.getFolderById(folderId = id, userId = 2).first().name))
             }
         }
     }

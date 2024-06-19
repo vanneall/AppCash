@@ -300,7 +300,7 @@ fun TaskBlockListItem(
             subtext = task.description.takeIf { text -> text.isNotEmpty() },
             checkboxSize = 24,
             isCompleted = task.isCompleted,
-            date = task.date?.toString(),
+            date = task.date,
             onEvent = onEvent,
             options = true,
             isBookmarked = task.isBookmarked
@@ -308,7 +308,7 @@ fun TaskBlockListItem(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        task.subtasks.forEach { subtask ->
+        task.subtasks?.forEach { subtask ->
             TaskListItem(
                 id = subtask.id,
                 text = subtask.text,

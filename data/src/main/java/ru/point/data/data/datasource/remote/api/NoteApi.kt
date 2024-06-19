@@ -4,6 +4,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+import ru.point.data.data.entity.dto.NoteDto
 import ru.point.data.data.entity.entities.Note
 
 interface NoteApi {
@@ -24,6 +25,6 @@ interface NoteApi {
     ): List<Note>
 
     @POST("note/create")
-    suspend fun createNote(@Body note: Note)
+    suspend fun createNote(@Body noteDto: NoteDto)
 
 }

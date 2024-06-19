@@ -23,6 +23,12 @@ interface FolderApi {
         @Query("end") end: Int = 10,
     ): List<Category>
 
+    @GET("folder/fetch-by-id")
+    suspend fun getFolderById(
+        @Query("folder_id") folderId: Long,
+        @Query("user_id") userId: Int = 2,
+    ): List<Category>
+
     @POST("folder/create")
     suspend fun createFolder( @Body category: Category, @Query("user") userId: Int = 2)
 }

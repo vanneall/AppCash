@@ -54,7 +54,7 @@ fun TaskConfiguratorPopup(
         TextFieldOption(
             name = stringResource(id = R.string.folder),
             value = "",
-            hint = "Пока недоступно",
+            hint = "",
             onEvent = { }
         )
 

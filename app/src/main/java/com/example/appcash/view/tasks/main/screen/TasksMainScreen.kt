@@ -152,7 +152,7 @@ private fun TasksMain(
             ) { item ->
                 CategoryListItem(
                     text = item.name,
-                    count = "недоступно",
+                    count = "",
                     icon = FolderIconMapper.mapToIcon(value = item.icon),
                     iconBackgroundColor = Color(item.color),
                     modifier = Modifier
