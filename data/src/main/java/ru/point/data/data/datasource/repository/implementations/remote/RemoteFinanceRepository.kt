@@ -60,7 +60,6 @@ class RemoteFinanceRepository @Inject constructor(
                                 .sumOf { el -> el.price ?: 0 }
                         )
                     }
-
                     send(financeCategory)
                 }
 
